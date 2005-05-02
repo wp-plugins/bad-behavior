@@ -1,7 +1,12 @@
 === Bad Behavior ===
-Tags: spam,robot,antispam
+Tags: comment,trackback,referrer,spam,robot,antispam
 Contributors: MichaelHampton,MarkJaquith,FirasDurri
 SeeAlso: http://www.ioerror.us/software/bad-behavior/
+
+This README.txt file applies to WordPress installations. For other types of
+installations, please see the documentation at
+http://www.ioerror.us/software/bad-behavior/installing-and-using-bad-behavior/
+.
 
 Bad Behavior is a set of PHP scripts which prevents spambots from accessing your site by analyzing their actual HTTP requests and comparing them to profiles from known spambots. It goes far beyond User-Agent and Referer, however.
 

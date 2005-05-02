@@ -39,7 +39,10 @@ $wp_bb_request_method = $_SERVER['REQUEST_METHOD'];
 $wp_bb_http_host = $_SERVER['HTTP_HOST'];
 $wp_bb_request_uri = $_SERVER['REQUEST_URI'];
 $wp_bb_server_protocol = $_SERVER['SERVER_PROTOCOL'];
-$wp_bb_http_referer = $_SERVER['HTTP_REFERER'];
+if (array_key_exists('HTTP_REFERER', $_SERVER))
+	$wp_bb_http_referer = $_SERVER['HTTP_REFERER'];
+else
+	$wp_bb_http_referer = '';
 $wp_bb_http_user_agent = $_SERVER['HTTP_USER_AGENT'];
 $wp_bb_server_signature = $_SERVER['SERVER_SIGNATURE'];
 
