@@ -39,7 +39,7 @@ badbots AT ioerror DOT us
 $wp_bb_logging = TRUE;
 
 // Log all requests to the database, not just failed requests.
-$wp_bb_verbose_logging = TRUE;
+$wp_bb_verbose_logging = FALSE;
 
 // How long to keep the logs around (in days).
 $wp_bb_logging_duration = 7;
@@ -66,6 +66,8 @@ function wp_bb_date() {
 	return get_gmt_from_date(current_time('mysql'));
 }
 
+// Returns the number of rows returned by the query or number of rows affected.
+// Returns FALSE on error.
 function wp_bb_db_query($query) {
 	global $wpdb;
 
