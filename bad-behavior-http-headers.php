@@ -9,7 +9,10 @@
 // FIXME: whitelist whois.sc netblocks when rwhoisd.ccom.net becomes available
 if (array_key_exists('Range', $wp_bb_http_headers_mixed) &&
 		strpos($wp_bb_http_headers_mixed['Range'], "=0-") !== FALSE) {
-	wp_bb_spammer();
+	// Skip this check for MovableType
+	if (strncmp($wp_bb_http_user_agent, "MovableType/", 12)) {
+		wp_bb_spammer();
+	}
 }
 
 // Lowercase via is used by open proxies/referrer spammers

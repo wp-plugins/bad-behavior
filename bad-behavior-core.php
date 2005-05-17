@@ -89,6 +89,9 @@ elseif (stripos($wp_bb_http_user_agent, "Safari") !== FALSE) {
 elseif (stripos($wp_bb_http_user_agent, "Lynx") !== FALSE) {
 	require_once($wp_bb_cwd . "/bad-behavior-lynx.php");
 }
+elseif (stripos($wp_bb_http_user_agent, "MovableType") !== FALSE) {
+	require_once($wp_bb_cwd . "/bad-behavior-movabletype.php");
+}
 elseif (stripos($wp_bb_http_user_agent, "Mozilla") !== FALSE) {
 	require_once($wp_bb_cwd . "/bad-behavior-mozilla.php");
 }
