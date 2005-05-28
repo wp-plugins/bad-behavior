@@ -39,7 +39,7 @@ badbots AT ioerror DOT us
 $wp_bb_logging = TRUE;
 
 // Log all requests to the database, not just failed requests.
-$wp_bb_verbose_logging = TRUE;
+$wp_bb_verbose_logging = FALSE;
 
 // How long to keep the logs around (in days).
 $wp_bb_logging_duration = 7;
