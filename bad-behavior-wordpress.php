@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Bad Behavior
-Version: 1.0.0
+$ersion: 1.0.1
 Plugin URI: http://www.ioerror.us/software/bad-behavior/
 Description: Stop comment spam before it starts by trapping and blocking spambots before they have a chance to post comments.
 Author: Michael Hampton
