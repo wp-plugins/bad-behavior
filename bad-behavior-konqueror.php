@@ -4,7 +4,7 @@
 // (or some variant thereof).  We check the HTTP headers to see if it really
 // is Konqueror.
 
-require_once($wp_bb_cwd . "/bad-behavior-accept.php");
+require_once(WP_BB_CWD . "/bad-behavior-accept.php");
 
 // CafeKelsa is a dev project at Yahoo which indexes job listings for
 // Yahoo! HotJobs. It identifies as Konqueror so we skip these checks.

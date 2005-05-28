@@ -53,7 +53,7 @@ $wp_bb_email = "badbots@ioerror.us";
 
 ###############################################################################
 
-$wp_bb_cwd = dirname(__FILE__);
+define('WP_BB_CWD', dirname(__FILE__));
 
 // Callbacks
 
@@ -71,6 +71,6 @@ function wp_bb_db_query($query) {
 }
 
 // Load core functions and do initial checks
-require_once($wp_bb_cwd . "/bad-behavior-core.php");
+require_once(WP_BB_CWD . "/bad-behavior-core.php");
 
 ?>
