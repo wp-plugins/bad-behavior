@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Bad Behavior
-Version: 1.0.0
+Version: 1.0.1
 Plugin URI: http://www.ioerror.us/software/bad-behavior/
 Description: Stop comment spam before it starts by trapping and blocking spambots before they have a chance to post comments.
 Author: Michael Hampton
@@ -58,7 +58,7 @@ $wp_bb_email = "badbots@ioerror.us";
 
 $wp_bb_mtime = explode(' ', microtime());
 $wp_bb_timer_start = $wp_bb_mtime[1] + $wp_bb_mtime[0];
-$wp_bb_cwd = dirname(__FILE__);
+define('WP_BB_CWD', dirname(__FILE__));
 
 // WordPress-specific code
 
@@ -66,8 +66,6 @@ function wp_bb_date() {
 	return get_gmt_from_date(current_time('mysql'));
 }
 
-// Returns the number of rows returned by the query or number of rows affected.
-// Returns FALSE on error.
 function wp_bb_db_query($query) {
 	global $wpdb;
 
@@ -79,7 +77,7 @@ function wp_bb_db_query($query) {
 }
 
 // Load core functions and do initial checks
-require_once($wp_bb_cwd . "/bad-behavior-core.php");
+require_once(WP_BB_CWD . "/bad-behavior-core.php");
 
 $wp_bb_mtime = explode(' ', microtime());
 $wp_bb_timer_stop = $wp_bb_mtime[1] + $wp_bb_mtime[0];

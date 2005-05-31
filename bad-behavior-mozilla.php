@@ -5,7 +5,7 @@
 // Bots:
 // Yahoo! Slurp passes these checks
 
-require_once($wp_bb_cwd . "/bad-behavior-accept.php");
+require_once(WP_BB_CWD . "/bad-behavior-accept.php");
 
 wp_bb_check_accept();
 // AvantGo mobile browser needs a different check
