@@ -2,6 +2,9 @@
 
 // Analyze user agents claiming to be MovableType
 
+if (!defined('WP_BB_CWD'))
+	die('');
+
 // Is it a trackback? If so, do a quick check on the URI
 // It must resolve to the same IP as the blog sending it.
 // TODO: DNS lookups take too long; skip the check for now :(

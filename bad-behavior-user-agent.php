@@ -1,5 +1,8 @@
 <?php
 
+if (!defined('WP_BB_CWD'))
+	die('');
+
 // Is the user-agent a known spambot?
 // Occurs at the beginning of the string
 $wp_bb_spambots_str0 = array(

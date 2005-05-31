@@ -2,6 +2,9 @@
 
 // Check for various Accept: headers
 
+if (!defined('WP_BB_CWD'))
+	die('');
+
 function wp_bb_check_accept() {
 	global $wp_bb_http_headers_mixed;
 	if (!array_key_exists('Accept', $wp_bb_http_headers_mixed)) {

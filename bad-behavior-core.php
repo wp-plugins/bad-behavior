@@ -1,5 +1,8 @@
 <?php
 
+if (!defined('WP_BB_CWD'))
+	die('');
+
 require_once(WP_BB_CWD . "/bad-behavior-functions.php");
 
 // Write to the log file.

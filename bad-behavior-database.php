@@ -3,10 +3,16 @@
 // Database functions. This needs review to ensure it isn't MySQL specific;
 // it certainly is right now.
 
+if (!defined('WP_BB_CWD'))
+	die('');
+
 $wp_bb_log = "bad_behavior_log";
 
 function wp_bb_db_create_tables() {
 	global $wp_bb_log, $wp_bb_db_failure;
+
+	if (defined("WP_BB_NO_CREATE"))
+		return;
 
 	$query = "CREATE TABLE IF NOT EXISTS `$wp_bb_log` (
 		`id` int(11) NOT NULL auto_increment,
@@ -48,15 +54,20 @@ function wp_bb_db_log($response) {
 	global $wp_bb_http_user_agent, $wp_bb_headers, $wp_bb_log;
 
 	// Sanitize input
+	$remote_addr = wp_bb_db_sanitize($wp_bb_remote_addr);
+	$request_method = wp_bb_db_sanitize($wp_bb_request_method);
+	$host = wp_bb_db_sanitize($wp_bb_http_host);
 	$request_uri = wp_bb_db_sanitize($wp_bb_request_uri);
+	$server_protocol = wp_bb_db_sanitize($wp_bb_server_protocol);
 	$referer = wp_bb_db_sanitize($wp_bb_http_referer);
 	$user_agent = wp_bb_db_sanitize($wp_bb_http_user_agent);
 	$headers = wp_bb_db_sanitize($wp_bb_headers);
+	$response = intval($response);
 
 	$date = wp_bb_date();
 	$query = "INSERT INTO `$wp_bb_log`
 		(`ip`, `date`, `request_method`, `http_host`, `request_uri`, `server_protocol`, `http_referer`, `http_user_agent`, `http_headers`, `http_response`) VALUES
-		('$wp_bb_remote_addr', '$date', '$wp_bb_request_method', '$wp_bb_http_host', '$request_uri', '$wp_bb_server_protocol', '$referer', '$user_agent', '$headers', '$response')";
+		('$remote_addr', '$date', '$request_method', '$host', '$request_uri', '$server_protocol', '$referer', '$user_agent', '$headers', '$response')";
 	if (wp_bb_db_query($query) === FALSE) {
 		$wp_bb_db_failure = TRUE;
 	}

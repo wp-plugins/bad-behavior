@@ -1,5 +1,8 @@
 <?php
 
+if (!defined('WP_BB_CWD'))
+	die('');
+
 // Analyze the Referer: field
 
 function wp_bb_referer() {

@@ -17,7 +17,7 @@ function wp_bb_banned() {
 <body>
 <h1>Precondition Failed</h1>
 <p>We're sorry, but we could not fulfill your request for
-<?php echo $wp_bb_request_uri ?> on this server.</p>
+<?php echo htmlspecialchars($wp_bb_request_uri) ?> on this server.</p>
 <p>We have established rules for access to this server, and any person or robot
 that violates these rules will be unable to access this site.</p>
 <p>To resolve this problem, please try the following steps:</p>
@@ -37,7 +37,7 @@ your downloads anyway; in most cases, they actually run slower!</li>
 <li>If all else fails, try using a different Web browser, such as
 <a href="http://www.spreadfirefox.com/?q=affiliates&amp;id=32135&amp;t=71">Firefox</a>.</li>
 </ul>
-<p>If you still need assistance, please contact <a href="mailto:<?php echo str_replace("@", "%40", $wp_bb_email); ?>"><?php echo str_replace("@", " at ", $wp_bb_email); ?></a>.</p>
+<p>If you still need assistance, please contact <a href="mailto:<?php echo htmlspecialchars(str_replace("@", "%40", $wp_bb_email)); ?>"><?php echo htmlspecialchars(str_replace("@", " at ", $wp_bb_email)); ?></a>.</p>
 <h2>More Information</h2>
 <p>For your reference, the conditions for access to this server are:</p>
 <h3>Robots:</h3>
@@ -60,9 +60,9 @@ malicious software.</li>
 <li>MUST NOT use excessive amounts of bandwidth or other server resources.</li>
 </ul>
 <p>The precondition on the request for the URL
-<?php echo $wp_bb_request_uri; ?> evaluated to false.</p>
+<?php echo htmlspecialchars($wp_bb_request_uri); ?> evaluated to false.</p>
 <hr>
-<?php echo $wp_bb_server_signature; ?>
+<?php echo htmlspecialchars($wp_bb_server_signature); ?>
 </body>
 </html>
 <?php

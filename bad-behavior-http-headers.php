@@ -1,5 +1,8 @@
 <?php
 
+if (!defined('WP_BB_CWD'))
+	die('');
+
 // Analyze the headers of all user-agents
 // These checks apply to any user-agent regardless of identification
 

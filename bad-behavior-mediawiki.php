@@ -26,11 +26,21 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 // be initialized, but no output sent to the browser.  If output has been
 // sent, Bad Behavior will fail.
 
+if (!defined('MEDIAWIKI'))
+	die('');
+
 ###############################################################################
 ###############################################################################
 
 // Configuration
-// Nothing will be written to a DB unless you implement DB queries below
+// To change the following settings, override them in MediaWiki's
+// LocalSettings.php after including this file.
+
+// In some configurations the automatic table creation may fail.
+// You can create the table manually (see query in bad-behavior-database.php)
+// and add this line to your LocalSettings.php:
+//
+//   define('WP_BB_NO_CREATE', true);
 
 // Log failed requests to the database.
 $wp_bb_logging = TRUE;
@@ -71,6 +81,23 @@ function wp_bb_db_query($query) {
 }
 
 // Load core functions and do initial checks
-require_once(WP_BB_CWD . "/bad-behavior-core.php");
+// This will be run during extension initialization at the end of Setup.php
+function wp_bb_mediawiki_run() {
+	// globals defined here
+	global $wp_bb_logging, $wp_bb_verbose_logging, $wp_bb_logging_duration, $wp_bb_email;
+	
+	// globals defined in core
+	global $wp_bb_approved, $wp_bb_db_failure, $wp_bb_log;
+	global $wp_bb_remote_addr, $wp_bb_request_method, $wp_bb_http_host;
+	global $wp_bb_request_uri, $wp_bb_server_protocol, $wp_bb_http_referer;
+	global $wp_bb_http_user_agent, $wp_bb_server_signature;
+	global $wp_bb_headers, $wp_bb_http_headers, $wp_bb_http_headers_mixed;
+	
+	// Don't try to run for command-line maintenance scripts.
+	if (php_sapi_name() != 'cli')
+		require_once(WP_BB_CWD . "/bad-behavior-core.php");
+}
+
+$wgExtensionFunctions[] = 'wp_bb_mediawiki_run';
 
 ?>

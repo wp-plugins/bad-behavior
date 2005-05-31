@@ -4,6 +4,9 @@
 // (or some variant thereof).  We check the HTTP headers to see if it really
 // is MSIE.
 
+if (!defined('WP_BB_CWD'))
+	die('');
+
 require_once(WP_BB_CWD . "/bad-behavior-accept.php");
 
 // MSIE always sends the Accept: header.
