@@ -30,6 +30,14 @@ function wp_bb_db_create_tables() {
 	if (wp_bb_db_query($query) === FALSE) {
 		$wp_bb_db_failure = TRUE;
 	}
+	// Upgrades from 1.0
+	$query = "DESCRIBE `bad_behavior_log` `request_entity`;";
+	if (wp_bb_db_query($query) == 0) {
+		$query = "ALTER TABLE `bad_behavior_log` ADD `request_entity` TEXT AFTER `http_headers`;";
+		if (wp_bb_db_query($query) === FALSE) {
+			$wp_bb_db_failure = TRUE;
+		}
+	}
 }
 
 function wp_bb_db_clear_old_entries() {
@@ -52,6 +60,7 @@ function wp_bb_db_log($response) {
 	global $wp_bb_remote_addr, $wp_bb_request_method, $wp_bb_http_host;
 	global $wp_bb_request_uri, $wp_bb_server_protocol, $wp_bb_http_referer;
 	global $wp_bb_http_user_agent, $wp_bb_headers, $wp_bb_log;
+	global $wp_bb_request_entity;
 
 	// Sanitize input
 	$remote_addr = wp_bb_db_sanitize($wp_bb_remote_addr);
@@ -62,12 +71,13 @@ function wp_bb_db_log($response) {
 	$referer = wp_bb_db_sanitize($wp_bb_http_referer);
 	$user_agent = wp_bb_db_sanitize($wp_bb_http_user_agent);
 	$headers = wp_bb_db_sanitize($wp_bb_headers);
+	$request_entity = wp_bb_db_sanitize($wp_bb_request_entity);
 	$response = intval($response);
 
 	$date = wp_bb_date();
 	$query = "INSERT INTO `$wp_bb_log`
-		(`ip`, `date`, `request_method`, `http_host`, `request_uri`, `server_protocol`, `http_referer`, `http_user_agent`, `http_headers`, `http_response`) VALUES
-		('$remote_addr', '$date', '$request_method', '$host', '$request_uri', '$server_protocol', '$referer', '$user_agent', '$headers', '$response')";
+		(`ip`, `date`, `request_method`, `http_host`, `request_uri`, `server_protocol`, `http_referer`, `http_user_agent`, `http_headers`, `request_entity`, `http_response`) VALUES
+		('$remote_addr', '$date', '$request_method', '$host', '$request_uri', '$server_protocol', '$referer', '$user_agent', '$headers', '$request_entity', '$response')";
 	if (wp_bb_db_query($query) === FALSE) {
 		$wp_bb_db_failure = TRUE;
 	}

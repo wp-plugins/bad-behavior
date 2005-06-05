@@ -55,6 +55,13 @@ foreach ($wp_bb_http_headers as $wp_bb_header => $wp_bb_value) {
 	$wp_bb_headers .= "$wp_bb_header: $wp_bb_value\n";
 }
 
+// Reconstruct the HTTP entity, if present.
+if (!strcasecmp($wp_bb_request_method, "POST")) {
+	foreach ($_POST as $wp_bb_header => $wp_bb_value) {
+		$wp_bb_request_entity .= "$wp_bb_header: $wp_bb_value\n";
+	}
+}
+
 // Postprocess the headers to mixed-case
 // FIXME: get the world to stop using PHP as CGI
 foreach ($wp_bb_http_headers as $h=>$v)
