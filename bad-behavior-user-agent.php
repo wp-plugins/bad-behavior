@@ -26,7 +26,7 @@ $wp_bb_spambots_str0 = array(
 $wp_bb_spambots_str = array(
 	"compatible ; MSIE",	// misc comment/email spam
 	"DTS Agent",		// misc comment/email spam
-	"grub-client",		// spam harvester
+	"grub-client",		// search engine ignores robots.txt
 	"Indy Library",		// misc comment/email spam
 	"POE-Component-Client",	// free poker, etc.
 	"WISEbot",		// spam harvester

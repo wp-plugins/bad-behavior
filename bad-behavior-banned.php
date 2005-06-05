@@ -37,7 +37,7 @@ your downloads anyway; in most cases, they actually run slower!</li>
 <li>If all else fails, try using a different Web browser, such as
 <a href="http://www.spreadfirefox.com/?q=affiliates&amp;id=32135&amp;t=71">Firefox</a>.</li>
 </ul>
-<p>If you still need assistance, please contact <a href="mailto:<?php echo htmlspecialchars(str_replace("@", "%40", $wp_bb_email)); ?>"><?php echo htmlspecialchars(str_replace("@", " at ", $wp_bb_email)); ?></a>.</p>
+<p>If you still need assistance, please contact <a href="mailto:<?php echo htmlspecialchars(str_replace("@", "+nospam@nospam.", $wp_bb_email)); ?>"><?php echo htmlspecialchars(str_replace("@", " at ", $wp_bb_email)); ?></a>.</p>
 <h2>More Information</h2>
 <p>For your reference, the conditions for access to this server are:</p>
 <h3>Robots:</h3>
