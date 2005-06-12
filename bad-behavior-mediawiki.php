@@ -92,6 +92,7 @@ function wp_bb_mediawiki_run() {
 	global $wp_bb_request_uri, $wp_bb_server_protocol, $wp_bb_http_referer;
 	global $wp_bb_http_user_agent, $wp_bb_server_signature;
 	global $wp_bb_headers, $wp_bb_http_headers, $wp_bb_http_headers_mixed;
+	global $wp_bb_request_entity;
 	
 	// Don't try to run for command-line maintenance scripts.
 	if (php_sapi_name() != 'cli')

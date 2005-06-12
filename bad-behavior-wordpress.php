@@ -48,7 +48,8 @@ $wp_bb_logging_duration = 7;
 // This will be shown to users on the error page, which means it will
 // be exposed to spammers! Bad Behavior will munge it automatically; you
 // should NOT munge it here!
-$wp_bb_email = "badbots@ioerror.us";
+$wp_bb_email = get_bloginfo('admin_email');
+//$wp_bb_email = "badbots@ioerror.us";
 
 ###############################################################################
 
