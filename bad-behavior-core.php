@@ -83,7 +83,7 @@ elseif (stripos($wp_bb_http_user_agent, "msnbot") !== FALSE) {
 }
 elseif (stripos($wp_bb_http_user_agent, "Googlebot") !== FALSE ||
 	stripos($wp_bb_http_user_agent, "Mediapartners-Google") !== FALSE) {
-	require_once(WP_BB_CWD . "/bad-behavior-googlebot.php");
+	require_once(WP_BB_CWD . "/bad-behavior-google.php");
 }
 // Now analyze requests coming from "Konqueror"
 elseif (stripos($wp_bb_http_user_agent, "Konqueror") !== FALSE) {
