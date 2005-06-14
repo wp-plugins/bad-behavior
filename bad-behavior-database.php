@@ -6,8 +6,6 @@
 if (!defined('WP_BB_CWD'))
 	die('');
 
-$wp_bb_log = "bad_behavior_log";
-
 function wp_bb_db_create_tables() {
 	global $wp_bb_log, $wp_bb_db_failure;
 
@@ -31,9 +29,9 @@ function wp_bb_db_create_tables() {
 		$wp_bb_db_failure = TRUE;
 	}
 	// Upgrades from 1.0
-	$query = "DESCRIBE `bad_behavior_log` `request_entity`;";
+	$query = "DESCRIBE `$wp_bb_log` `request_entity`;";
 	if (wp_bb_db_query($query) == 0) {
-		$query = "ALTER TABLE `bad_behavior_log` ADD `request_entity` TEXT AFTER `http_headers`;";
+		$query = "ALTER TABLE `$wp_bb_log` ADD `request_entity` TEXT AFTER `http_headers`;";
 		if (wp_bb_db_query($query) === FALSE) {
 			$wp_bb_db_failure = TRUE;
 		}
