@@ -27,11 +27,6 @@ if (version_compare(phpversion(), "5.0.0") < 0) {
 	require_once(WP_BB_CWD . "/bad-behavior-php4.php");
 }
 
-// Load up database stuff only if requested
-if ($wp_bb_verbose_logging || $wp_bb_logging) {
-	require_once(WP_BB_CWD . "/bad-behavior-database.php");
-}
-
 // Set up some initial variables.
 $wp_bb_approved = 2;
 $wp_bb_db_failure = FALSE;
@@ -47,6 +42,11 @@ else
 	$wp_bb_http_referer = '';
 $wp_bb_http_user_agent = $_SERVER['HTTP_USER_AGENT'];
 $wp_bb_server_signature = $_SERVER['SERVER_SIGNATURE'];
+
+// Load up database stuff only if requested
+if ($wp_bb_verbose_logging || $wp_bb_logging) {
+	require_once(WP_BB_CWD . "/bad-behavior-database.php");
+}
 
 // Reconstruct the entire HTTP headers as received.
 $wp_bb_headers = "$wp_bb_request_method $wp_bb_request_uri $wp_bb_server_protocol\n";
