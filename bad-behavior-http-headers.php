@@ -21,9 +21,11 @@ if (array_key_exists('via', $wp_bb_http_headers)) {
 	wp_bb_spammer();
 }
 // pinappleproxy is used by referrer spammers
-if (array_key_exists('Via', $wp_bb_http_headers_mixed) &&
-		stripos($wp_bb_http_headers['Via'], "pinappleproxy") !== FALSE) {
-	wp_bb_spammer();
+if (array_key_exists('Via', $wp_bb_http_headers_mixed)) {
+	if (stripos($wp_bb_http_headers_mixed['Via'], "pinappleproxy") !== FALSE ||
+	    stripos($wp_bb_http_headers_mixed['Via'], "PCNETSERVER") !== FALSE) {
+		wp_bb_spammer();
+	}
 }
 
 // Headers which are not seen from normal user agents; only malicious bots
