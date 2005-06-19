@@ -38,4 +38,4 @@ If you continue to have trouble, contact me and provide a copy of the logs which
 
 = How can I view Bad Behavior's log files? =
 
-To view the Bad Behavior log, you will need a copy of phpMyAdmin installed, or some other way to view the database. Bad Behavior stores its log in the bad_behavior_log table in your WordPress database. Browse or search through it with phpMyAdmin, the MySQL command line, or another tool. At this time Bad Behavior does not come with a built-in log viewer, though this feature is planned.
+To view the Bad Behavior log, you will need a copy of phpMyAdmin installed, or some other way to view the database. Bad Behavior stores its log in the wp_bad_behavior_log table in your WordPress database. Browse or search through it with phpMyAdmin, the MySQL command line, or another tool. At this time Bad Behavior does not come with a built-in log viewer, though this feature is planned.
