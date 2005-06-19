@@ -7,12 +7,12 @@ if (!defined('WP_BB_CWD'))
 	die('');
 
 function wp_bb_db_create_tables() {
-	global $wp_bb_log, $wp_bb_db_failure;
+	global $wp_bb_db_failure;
 
 	if (defined("WP_BB_NO_CREATE"))
 		return;
 
-	$query = "CREATE TABLE IF NOT EXISTS `$wp_bb_log` (
+	$query = "CREATE TABLE IF NOT EXISTS `" . WP_BB_LOG . "` (
 		`id` int(11) NOT NULL auto_increment,
 		`ip` text NOT NULL,
 		`date` datetime NOT NULL default '0000-00-00 00:00:00',
@@ -29,9 +29,9 @@ function wp_bb_db_create_tables() {
 		$wp_bb_db_failure = TRUE;
 	}
 	// Upgrades from 1.0
-	$query = "DESCRIBE `$wp_bb_log` `request_entity`;";
+	$query = "DESCRIBE `" . WP_BB_LOG . "` `request_entity`;";
 	if (wp_bb_db_query($query) == 0) {
-		$query = "ALTER TABLE `$wp_bb_log` ADD `request_entity` TEXT AFTER `http_headers`;";
+		$query = "ALTER TABLE `" . WP_BB_LOG . "` ADD `request_entity` TEXT AFTER `http_headers`;";
 		if (wp_bb_db_query($query) === FALSE) {
 			$wp_bb_db_failure = TRUE;
 		}
@@ -39,9 +39,9 @@ function wp_bb_db_create_tables() {
 }
 
 function wp_bb_db_clear_old_entries() {
-	global $wp_bb_log, $wp_bb_logging_duration;
+	global $wp_bb_logging_duration;
 
-	$query = "DELETE FROM `$wp_bb_log` WHERE
+	$query = "DELETE FROM `" . WP_BB_LOG . "` WHERE
 		`date` < DATE_SUB('" . gmstrftime("%Y-%m-%d %H:%M:%S") .
 		"', INTERVAL $wp_bb_logging_duration DAY)";
 	if (wp_bb_db_query($query) === FALSE) {
@@ -57,7 +57,7 @@ function wp_bb_db_sanitize($untrusted_input) {
 function wp_bb_db_log($response) {
 	global $wp_bb_remote_addr, $wp_bb_request_method, $wp_bb_http_host;
 	global $wp_bb_request_uri, $wp_bb_server_protocol, $wp_bb_http_referer;
-	global $wp_bb_http_user_agent, $wp_bb_headers, $wp_bb_log;
+	global $wp_bb_http_user_agent, $wp_bb_headers;
 	global $wp_bb_request_entity;
 
 	// Sanitize input
@@ -73,7 +73,7 @@ function wp_bb_db_log($response) {
 	$response = intval($response);
 
 	$date = wp_bb_date();
-	$query = "INSERT INTO `$wp_bb_log`
+	$query = "INSERT INTO `" . WP_BB_LOG . "`
 		(`ip`, `date`, `request_method`, `http_host`, `request_uri`, `server_protocol`, `http_referer`, `http_user_agent`, `http_headers`, `request_entity`, `http_response`) VALUES
 		('$remote_addr', '$date', '$request_method', '$host', '$request_uri', '$server_protocol', '$referer', '$user_agent', '$headers', '$request_entity', '$response')";
 	if (wp_bb_db_query($query) === FALSE) {

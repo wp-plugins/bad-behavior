@@ -30,7 +30,6 @@ if (version_compare(phpversion(), "5.0.0") < 0) {
 // Set up some initial variables.
 $wp_bb_approved = 2;
 $wp_bb_db_failure = FALSE;
-$wp_bb_log = 'bad_behavior_log';
 $wp_bb_remote_addr = $_SERVER['REMOTE_ADDR'];
 $wp_bb_request_method = $_SERVER['REQUEST_METHOD'];
 $wp_bb_http_host = $_SERVER['HTTP_HOST'];

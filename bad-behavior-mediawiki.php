@@ -57,6 +57,10 @@ $wp_bb_logging_duration = 7;
 // should NOT munge it here!
 $wp_bb_email = $wgEmergencyContact;
 
+// The database table name to use.
+// You can customize the table name if necessary.
+define('WP_BB_LOG', $wgDBprefix . 'bad_behavior_log');
+
 ###############################################################################
 
 #                          DO NOT EDIT BELOW THIS LINE
@@ -87,7 +91,7 @@ function wp_bb_mediawiki_run() {
 	global $wp_bb_logging, $wp_bb_verbose_logging, $wp_bb_logging_duration, $wp_bb_email;
 	
 	// globals defined in core
-	global $wp_bb_approved, $wp_bb_db_failure, $wp_bb_log;
+	global $wp_bb_approved, $wp_bb_db_failure;
 	global $wp_bb_remote_addr, $wp_bb_request_method, $wp_bb_http_host;
 	global $wp_bb_request_uri, $wp_bb_server_protocol, $wp_bb_http_referer;
 	global $wp_bb_http_user_agent, $wp_bb_server_signature;
