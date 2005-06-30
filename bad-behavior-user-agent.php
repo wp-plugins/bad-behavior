@@ -20,6 +20,8 @@ $wp_bb_spambots_str0 = array(
 	"Microsoft URL",	// spam harvester
 	"Missigua",		// spam harvester
 	"Mozilla ",		// forum exploits
+	"Shockwave Flash",	// spam harvester
+	"Wordpress Hash Grabber",// malicious software
 	"www.weblogs.com",	// referrer spam (not the real www.weblogs.com)
 );
 // Occurs anywhere in the string
