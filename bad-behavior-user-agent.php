@@ -30,6 +30,7 @@ $wp_bb_spambots_str = array(
 	"grub-client",		// search engine ignores robots.txt
 	"Indy Library",		// misc comment/email spam
 	"libwww-perl",		// exploited boxes
+	".NET CLR 1)",		// free poker, etc.
 	"POE-Component-Client",	// free poker, etc.
 	"WISEbot",		// spam harvester
 	"WISEnutbot",		// spam harvester
