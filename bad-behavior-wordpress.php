@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Bad Behavior
-Version: 1.0.1
+Version: 1.1.3
 Plugin URI: http://www.ioerror.us/software/bad-behavior/
 Description: Stop comment spam before it starts by trapping and blocking spambots before they have a chance to post comments.
 Author: Michael Hampton
@@ -48,7 +48,12 @@ $wp_bb_logging_duration = 7;
 // This will be shown to users on the error page, which means it will
 // be exposed to spammers! Bad Behavior will munge it automatically; you
 // should NOT munge it here!
-$wp_bb_email = "badbots@ioerror.us";
+$wp_bb_email = get_bloginfo('admin_email');
+//$wp_bb_email = "badbots@ioerror.us";
+
+// The database table name to use.
+// You can customize the table name if necessary.
+define('WP_BB_LOG', $table_prefix . 'bad_behavior_log');
 
 ###############################################################################
 

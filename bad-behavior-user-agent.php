@@ -15,11 +15,12 @@ $wp_bb_spambots_str0 = array(
 	"Email Siphon",		// spam harvester
 	"grub crawler",		// misc comment/email spam
 //	"Java 1.",		// Some doubt about this one
-	"libwww-perl",		// exploited boxes
 	"LWP",			// exploited boxes
 	"Microsoft URL",	// spam harvester
 	"Missigua",		// spam harvester
 	"Mozilla ",		// forum exploits
+	"Shockwave Flash",	// spam harvester
+	"Wordpress Hash Grabber",// malicious software
 	"www.weblogs.com",	// referrer spam (not the real www.weblogs.com)
 );
 // Occurs anywhere in the string
@@ -28,6 +29,8 @@ $wp_bb_spambots_str = array(
 	"DTS Agent",		// misc comment/email spam
 	"grub-client",		// search engine ignores robots.txt
 	"Indy Library",		// misc comment/email spam
+	"libwww-perl",		// exploited boxes
+	".NET CLR 1)",		// free poker, etc.
 	"POE-Component-Client",	// free poker, etc.
 	"WISEbot",		// spam harvester
 	"WISEnutbot",		// spam harvester
