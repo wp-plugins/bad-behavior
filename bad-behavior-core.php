@@ -27,15 +27,9 @@ if (version_compare(phpversion(), "5.0.0") < 0) {
 	require_once(WP_BB_CWD . "/bad-behavior-php4.php");
 }
 
-// Load up database stuff only if requested
-if ($wp_bb_verbose_logging || $wp_bb_logging) {
-	require_once(WP_BB_CWD . "/bad-behavior-database.php");
-}
-
 // Set up some initial variables.
 $wp_bb_approved = 2;
 $wp_bb_db_failure = FALSE;
-$wp_bb_log = 'bad_behavior_log';
 $wp_bb_remote_addr = $_SERVER['REMOTE_ADDR'];
 $wp_bb_request_method = $_SERVER['REQUEST_METHOD'];
 $wp_bb_http_host = $_SERVER['HTTP_HOST'];
@@ -47,6 +41,11 @@ else
 	$wp_bb_http_referer = '';
 $wp_bb_http_user_agent = $_SERVER['HTTP_USER_AGENT'];
 $wp_bb_server_signature = $_SERVER['SERVER_SIGNATURE'];
+
+// Load up database stuff only if requested
+if ($wp_bb_verbose_logging || $wp_bb_logging) {
+	require_once(WP_BB_CWD . "/bad-behavior-database.php");
+}
 
 // Reconstruct the entire HTTP headers as received.
 $wp_bb_headers = "$wp_bb_request_method $wp_bb_request_uri $wp_bb_server_protocol\n";
@@ -83,7 +82,7 @@ elseif (stripos($wp_bb_http_user_agent, "msnbot") !== FALSE) {
 }
 elseif (stripos($wp_bb_http_user_agent, "Googlebot") !== FALSE ||
 	stripos($wp_bb_http_user_agent, "Mediapartners-Google") !== FALSE) {
-	require_once(WP_BB_CWD . "/bad-behavior-googlebot.php");
+	require_once(WP_BB_CWD . "/bad-behavior-google.php");
 }
 // Now analyze requests coming from "Konqueror"
 elseif (stripos($wp_bb_http_user_agent, "Konqueror") !== FALSE) {
@@ -101,7 +100,8 @@ elseif (stripos($wp_bb_http_user_agent, "Lynx") !== FALSE) {
 elseif (stripos($wp_bb_http_user_agent, "MovableType") !== FALSE) {
 	require_once(WP_BB_CWD . "/bad-behavior-movabletype.php");
 }
-elseif (stripos($wp_bb_http_user_agent, "Mozilla") !== FALSE) {
+elseif (stripos($wp_bb_http_user_agent, "Mozilla") !== FALSE &&
+	stripos($wp_bb_http_user_agent, "Mozilla") == 0) {
 	require_once(WP_BB_CWD . "/bad-behavior-mozilla.php");
 }
 

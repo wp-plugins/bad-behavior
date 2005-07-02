@@ -47,6 +47,10 @@ $wp_bb_logging_duration = 7;
 // should NOT munge it here!
 $wp_bb_email = "badbots@ioerror.us";
 
+// The database table name to use.
+// You can customize the table name if necessary.
+define('WP_BB_LOG', /* $software_specific_prefix . */ 'bad_behavior_log');
+
 ###############################################################################
 
 #                          DO NOT EDIT BELOW THIS LINE

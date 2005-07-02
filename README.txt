@@ -17,11 +17,11 @@ As the operator of a Web site, this can cause you several problems. First, the s
 Bad Behavior intends to target any malicious software directed at a Web site, whether it be a spambot, ill-designed search engine bot, or system crackers. In that spirit, it is not limited to WordPress users; a generic interface has been provided whereby it can be integrated into virtually any PHP-based software.
 
 == Installation ==
-SeeAlso: http://www.ioerror.us/software/bad-behavior/installing-and-using-bad-behavior/
+SeeAlso: http://www.ioerror.us/software/bad-behavior/installing-and-using-bad-behavior/on-wordpress/
 
 1. Bad Behavior installs like any other multi-file WordPress plugin. Unzip the bad-behavior.zip file, and you will have a bad-behavior folder containing all the Bad Behavior files.
 
-2. Before uploading, edit the bad-behavior/bad-behavior-wordpress-plugin.php file and customize the configuration variables there. When logging is on, all blocked requests will be logged. When verbose logging is on, all requests - successful or not - will be logged. And the logging duration specifies how many days worth of logs will be stored in the database. I recommend not using verbose logging without a really good reason, as your database will fill up fast.
+2. Before uploading, edit the bad-behavior/bad-behavior-wordpress.php file and customize the configuration variables there. When logging is on, all blocked requests will be logged. When verbose logging is on, all requests - successful or not - will be logged. And the logging duration specifies how many days worth of logs will be stored in the database. I recommend not using verbose logging without a really good reason, as your database will fill up fast.
 
 3. Upload the folder and its contents to your wp-content/plugins directory, taking care to use ASCII mode. Once on the server, activate the plugin from your admin page.
 
@@ -38,4 +38,4 @@ If you continue to have trouble, contact me and provide a copy of the logs which
 
 = How can I view Bad Behavior's log files? =
 
-To view the Bad Behavior log, you will need a copy of phpMyAdmin installed, or some other way to view the database. Bad Behavior stores its log in the bad_behavior_log table in your WordPress database. Browse or search through it with phpMyAdmin, the MySQL command line, or another tool. At this time Bad Behavior does not come with a built-in log viewer, though this feature is planned.
+To view the Bad Behavior log, you will need a copy of phpMyAdmin installed, or some other way to view the database. Bad Behavior stores its log in the wp_bad_behavior_log table in your WordPress database. Browse or search through it with phpMyAdmin, the MySQL command line, or another tool. At this time Bad Behavior does not come with a built-in log viewer, though this feature is planned.
