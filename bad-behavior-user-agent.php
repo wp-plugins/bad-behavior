@@ -28,6 +28,7 @@ $wp_bb_spambots_str0 = array(
 $wp_bb_spambots_str = array(
 	"compatible ; MSIE",	// misc comment/email spam
 	"DTS Agent",		// misc comment/email spam
+	"Gecko/25",		// revisit this in 500 years
 	"grub-client",		// search engine ignores robots.txt
 	"Indy Library",		// misc comment/email spam
 	".NET CLR 1)",		// free poker, etc.
