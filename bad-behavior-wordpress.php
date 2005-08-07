@@ -74,7 +74,9 @@ function wp_bb_date() {
 function wp_bb_db_query($query) {
 	global $wpdb;
 
+	$wpdb->hide_errors();
 	$result = $wpdb->query($query);
+	$wpdb->show_errors();
 	if (mysql_error()) {
 		return FALSE;
 	}
