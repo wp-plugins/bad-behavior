@@ -3,7 +3,7 @@
 if (!defined('WP_BB_CWD'))
 	die('');
 
-define(WP_BB_VERSION, "1.1.69");
+define(WP_BB_VERSION, "1.1.70");
 
 require_once(WP_BB_CWD . "/bad-behavior-functions.php");
 

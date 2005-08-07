@@ -30,15 +30,15 @@ function wp_bb_blackhole_ping($response, $denied_reason) {
 
 	$query = "remote_addr=$remote_addr&request_method=$request_method&http_host=$http_host&request_uri=$request_uri&server_protocol=$server_protocol&http_referer=$http_referer&user_agent=$user_agent&headers=$headers&request_entity=$request_entity&denied_reason=$denied&http_response=$response";
 
+	$ping_url = parse_url($ping);
+	if ('' == $ping_url['port']) $ping_url['port'] = 80;
+
 	$post_request = "POST " . $ping_url['path'] . ($ping_url['query'] ? "?".$ping_url['query'] : "") . " HTTP/1.0\r\n";
 	$post_request .= "Host: " . $ping_url['host'] . "\r\n";
 	$post_request .= "Content-Type: application/x-www-form-urlencoded; charset=utf-8\r\n";
 	$post_request .= "Content-Length: " . strlen($query) . "\r\n";
 	$post_request .= "User-Agent: Bad Behavior/" . WP_BB_VERSION . "\r\n";
 	$post_request .= "\r\n" . $query;
-
-	$ping_url = parse_url($ping);
-	if ('' == $ping_url['port']) $ping_url['port'] = 80;
 
 	// Now determine HOW to send the ping
 	$ping_sent = false;
