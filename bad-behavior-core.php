@@ -6,20 +6,20 @@ if (!defined('WP_BB_CWD'))
 require_once(WP_BB_CWD . "/bad-behavior-functions.php");
 
 // Write to the log file.
-function wp_bb_log($response) {
+function wp_bb_log($response, $denied_reason) {
 	global $wp_bb_logging, $wp_bb_verbose_logging;
 
 	if (($wp_bb_verbose_logging) || ($wp_bb_logging && $response == 403)) {
 		require_once(WP_BB_CWD . "/bad-behavior-database.php");
-		wp_bb_db_log($response);
+		wp_bb_db_log($response, $denied_reason);
 	}
 }
 
 // This function is called when there is absolutely no hope for redemption for
 // the offending spammer.
-function wp_bb_spammer() {
+function wp_bb_spammer($denied_reason) {
 	require_once(WP_BB_CWD . "/bad-behavior-banned.php");
-	wp_bb_banned();
+	wp_bb_banned($denied_reason);
 }
 
 // Load up PHP4 specific stuff if needed

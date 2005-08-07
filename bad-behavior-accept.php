@@ -8,7 +8,7 @@ if (!defined('WP_BB_CWD'))
 function wp_bb_check_accept() {
 	global $wp_bb_http_headers_mixed;
 	if (!array_key_exists('Accept', $wp_bb_http_headers_mixed)) {
-		wp_bb_spammer();
+		wp_bb_spammer("Required header 'Accept' missing");
 	}
 }
 
@@ -33,7 +33,7 @@ function wp_bb_check_accept_encoding() {
 	    !array_key_exists('~~~~~~~~~~~~~~~', $wp_bb_http_headers) &&
 	    !array_key_exists('---------------', $wp_bb_http_headers) &&
 	    !array_key_exists('XXXXXXXXXXXXXXX', $wp_bb_http_headers)) {
-		wp_bb_spammer();
+		wp_bb_spammer("Required header 'Accept-Encoding' missing");
 	}
 }
 

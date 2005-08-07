@@ -8,7 +8,7 @@ if (!defined('WP_BB_CWD'))
 // require_once(WP_BB_CWD . "/bad-behavior-accept.php");
 
 if (matchCIDR($wp_bb_remote_addr, "66.249.64.0/19") === FALSE) {
-	wp_bb_spammer();
+	wp_bb_spammer("User-Agent claimed to be Googlebot, claim appears to be false");
 }
 
 ?>

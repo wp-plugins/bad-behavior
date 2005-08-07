@@ -1,7 +1,5 @@
 <?php
 
-// Analyze user agents claiming to be Opera
-
 if (!defined('WP_BB_CWD'))
 	die('');
 
@@ -39,10 +37,10 @@ if (!defined('WP_BB_CWD'))
 // Includes four examples of whitelisting by IP address and netblock.
 // All are commented out.
 $wp_bb_whitelist_ip_ranges = array(
-	"10.0.0.0/8",
-	"172.16.0.0/12",
-	"192.168.0.0/16",
-	"127.0.0.1",
+//	"10.0.0.0/8",
+//	"172.16.0.0/12",
+//	"192.168.0.0/16",
+//	"127.0.0.1",
 );
 
 // DANGER! DANGER! DANGER! DANGER! DANGER! DANGER! DANGER! DANGER! DANGER!
@@ -113,9 +111,15 @@ $wp_bb_whitelist_user_agents = array(
 // Do not edit below this line
 
 function wp_bb_check_whitelist() {
-	if (matchCIDR($wp_bb_remote_addr, $wp_bb_whitelist_ip_ranges)) return true;
-	foreach ($wp_bb_whitelist_user_agents as $wp_bb_whitelist_user_agent) {
-		if (!strcmp($wp_bb_http_user_agent, $wp_bb_whitelist_user_agent)) return true;
+	if (!empty($wp_bb_whitelist_ip_ranges)) {
+		foreach ($wp_bb_whitelist_ip_ranges as $wp_bb_whitelist_ip_range) {
+			 if (matchCIDR($wp_bb_remote_addr, $wp_bb_whitelist_ip_range)) return true;
+		}
+	}
+	if (!empty($wp_bb_whitelist_user_agents)) {
+		foreach ($wp_bb_whitelist_user_agents as $wp_bb_whitelist_user_agent) {
+			if (!strcmp($wp_bb_http_user_agent, $wp_bb_whitelist_user_agent)) return true;
+		}
 	}
 	return false;
 }

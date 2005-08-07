@@ -46,17 +46,17 @@ $wp_bb_spambots_reg = array(
 foreach ($wp_bb_spambots_str0 as $wp_bb_spambot) {
 	$pos = stripos($wp_bb_http_user_agent, $wp_bb_spambot);
 	if ($pos !== FALSE && $pos == 0) {
-		wp_bb_spammer();	// does not return
+		wp_bb_spammer("User-Agent beginning with '" . $wp_bb_spambot . "' prohibited");	// does not return
 	}
 }
 foreach ($wp_bb_spambots_str as $wp_bb_spambot) {
 	if (stripos($wp_bb_http_user_agent, $wp_bb_spambot) !== FALSE) {
-		wp_bb_spammer();	// does not return
+		wp_bb_spammer("User-Agent containing '" . $wp_bb_spambot . "' prohibited");	// does not return
 	}
 }
 foreach ($wp_bb_spambots_reg as $wp_bb_spambot) {
 	if (preg_match($wp_bb_spambot, $wp_bb_http_user_agent)) {
-		wp_bb_spammer();	// does not return
+		wp_bb_spammer("User-Agent matching regex '" . $wp_bb_spambot . "' prohibited");	// does not return
 	}
 }
 

@@ -25,7 +25,7 @@ if (strpos($wp_bb_http_user_agent, "MSIE 6") !== FALSE) {
 if (strpos($wp_bb_http_user_agent, "Windows ME") !== FALSE ||
     strpos($wp_bb_http_user_agent, "Windows XP") !== FALSE ||
     strpos($wp_bb_http_user_agent, "Windows 2000") !== FALSE) {
-	wp_bb_spammer();
+	wp_bb_spammer("User-Agent claimed to be MSIE, with invalid Windows version");
 }
 
 ?>
