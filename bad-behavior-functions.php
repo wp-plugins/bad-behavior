@@ -14,6 +14,7 @@ function uc_all($string) {
 // headers
 function getheaders() {
 	if (!is_callable('getallheaders')) {
+		$headers = array();
 		foreach($_SERVER as $h=>$v)
 			if(ereg('HTTP_(.+)',$h,$hp))
 				$headers[str_replace("_", "-", uc_all($hp[1]))]=$v;

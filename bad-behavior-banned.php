@@ -66,8 +66,6 @@ malicious software.</li>
 </body>
 </html>
 <?php
-	require_once(WP_BB_CWD . "/bad-behavior-blackhole.php");
-	wp_bb_blackhole_ping();
 	die('');
 }
 ?>
