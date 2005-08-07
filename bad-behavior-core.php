@@ -121,5 +121,5 @@ endif; // whitelist
 
 // If we get this far, the client is probably OK
 wp_bb_log(200);
-}
+
 ?>
