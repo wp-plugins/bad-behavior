@@ -3,7 +3,7 @@
 if (!defined('WP_BB_CWD'))
 	die('');
 
-define(WP_BB_VERSION, "1.1.70");
+define(WP_BB_VERSION, "1.1.71");
 
 require_once(WP_BB_CWD . "/bad-behavior-functions.php");
 
@@ -62,6 +62,7 @@ foreach ($wp_bb_http_headers as $wp_bb_header => $wp_bb_value) {
 }
 
 // Reconstruct the HTTP entity, if present.
+$wp_bb_request_entity = "";
 if (!strcasecmp($wp_bb_request_method, "POST")) {
 	foreach ($_POST as $wp_bb_header => $wp_bb_value) {
 		$wp_bb_request_entity .= "$wp_bb_header: $wp_bb_value\n";

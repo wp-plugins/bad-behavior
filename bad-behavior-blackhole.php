@@ -13,9 +13,9 @@ if (!defined('WP_BB_CWD'))
 function wp_bb_blackhole_ping($response, $denied_reason) {
 	global $wp_bb_remote_addr, $wp_bb_request_method, $wp_bb_http_host;
 	global $wp_bb_request_uri, $wp_bb_server_protocol, $wp_bb_http_referer;
-	global $wp_bb_user_agent, $wp_bb_headers_mixed, $wp_bb_request_entity;
+	global $wp_bb_http_user_agent, $wp_bb_headers, $wp_bb_request_entity;
 
-	$ping = "http://ping.ioerror.us/ping";
+	$ping = "http://gw.ioerror.us/ping";
 
 	$remote_addr = urlencode($wp_bb_remote_addr);
 	$request_method = urlencode($wp_bb_request_method);
@@ -23,8 +23,8 @@ function wp_bb_blackhole_ping($response, $denied_reason) {
 	$request_uri = urlencode($wp_bb_request_uri);
 	$server_protocol = urlencode($wp_bb_server_protocol);
 	$http_referer = urlencode($wp_bb_http_referer);
-	$user_agent = urlencode($wp_bb_user_agent);
-	$headers = urlencode($wp_bb_headers_mixed);
+	$user_agent = urlencode($wp_bb_http_user_agent);
+	$headers = urlencode($wp_bb_headers);
 	$request_entity = urlencode($wp_bb_request_entity);
 	$denied = urlencode($denied_reason);
 

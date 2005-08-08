@@ -26,6 +26,7 @@ $wp_bb_spambots_str0 = array(
 );
 // Occurs anywhere in the string
 $wp_bb_spambots_str = array(
+	"Bad Behavior Test",	// Add this to your user-agent to test BB
 	"compatible ; MSIE",	// misc comment/email spam
 	"DTS Agent",		// misc comment/email spam
 	"Gecko/25",		// revisit this in 500 years

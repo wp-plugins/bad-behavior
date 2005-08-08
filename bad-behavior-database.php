@@ -86,6 +86,7 @@ function wp_bb_db_log($response, $denied_reason = '') {
 	$user_agent = wp_bb_db_sanitize($wp_bb_http_user_agent);
 	$headers = wp_bb_db_sanitize($wp_bb_headers);
 	$request_entity = wp_bb_db_sanitize($wp_bb_request_entity);
+	$denied_reason = wp_bb_db_sanitize($denied_reason);
 	$response = intval($response);
 
 	$date = wp_bb_date();
