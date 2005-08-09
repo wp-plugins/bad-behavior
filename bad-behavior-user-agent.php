@@ -13,6 +13,7 @@ $wp_bb_spambots_str0 = array(
 	"EmailCollector",	// spam harvester
 	"Email Extractor",	// spam harvester
 	"Email Siphon",		// spam harvester
+	"EmailSiphon",		// spam harvester
 	"grub crawler",		// misc comment/email spam
 //	"Java 1.",		// Some doubt about this one
 	"libwww-perl",		// spambot scripts
