@@ -15,7 +15,7 @@ function wp_bb_blackhole_ping($response, $denied_reason) {
 	global $wp_bb_request_uri, $wp_bb_server_protocol, $wp_bb_http_referer;
 	global $wp_bb_http_user_agent, $wp_bb_headers, $wp_bb_request_entity;
 
-	$ping = "http://gw.ioerror.us/ping";
+	$ping = "http://ping.ioerror.us/ping";
 
 	$remote_addr = urlencode($wp_bb_remote_addr);
 	$request_method = urlencode($wp_bb_request_method);

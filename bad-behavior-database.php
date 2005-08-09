@@ -98,6 +98,14 @@ function wp_bb_db_log($response, $denied_reason = '') {
 	}
 }
 
+// See if we've seen this spammer before.
+function wp_bb_db_search() {
+	global $wp_bb_remote_addr;
+
+	$query = "SELECT `ip` FROM `" . WP_BB_LOG . "` WHERE `ip` LIKE `" . $wp_bb_remote_addr . "` AND `http_response` = 403";
+	return wp_bb_db_query($query);
+}
+
 wp_bb_db_create_tables();
 wp_bb_db_clear_old_entries();
 ?>

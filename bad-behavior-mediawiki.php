@@ -46,7 +46,7 @@ if (!defined('MEDIAWIKI'))
 $wp_bb_logging = TRUE;
 
 // Log all requests to the database, not just failed requests.
-$wp_bb_verbose_logging = FALSE;
+$wp_bb_verbose_logging = TRUE;
 
 // How long to keep the logs around (in days).
 $wp_bb_logging_duration = 7;

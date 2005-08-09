@@ -3,7 +3,7 @@
 if (!defined('WP_BB_CWD'))
 	die('');
 
-define(WP_BB_VERSION, "1.1.71");
+define(WP_BB_VERSION, "1.1.72");
 
 require_once(WP_BB_CWD . "/bad-behavior-functions.php");
 
@@ -78,7 +78,12 @@ foreach ($wp_bb_http_headers as $h=>$v)
 // First check the whitelist
 require_once(WP_BB_CWD . "/bad-behavior-whitelist.php");
 if (!wp_bb_check_whitelist()):
-	
+
+	// First see if it's a spammer we know about
+	if ($wp_bb_logging && wp_bb_db_search()) {
+		wp_bb_spammer("I know you and I don't like you, dirty spammer.");
+	}
+
 	// Easy stuff: Ban known bad user-agents
 	require_once(WP_BB_CWD . "/bad-behavior-user-agent.php");
 	
