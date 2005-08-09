@@ -102,7 +102,7 @@ function wp_bb_db_log($response, $denied_reason = '') {
 function wp_bb_db_search() {
 	global $wp_bb_remote_addr;
 
-	$query = "SELECT `ip` FROM `" . WP_BB_LOG . "` WHERE `ip` LIKE `" . $wp_bb_remote_addr . "` AND `http_response` = 403";
+	$query = "SELECT `ip` FROM `" . WP_BB_LOG . "` WHERE `ip` LIKE '" . $wp_bb_remote_addr . "' AND `http_response` = 403";
 	return wp_bb_db_query($query);
 }
 
