@@ -25,8 +25,8 @@ function wp_bb_log($response, $denied_reason) {
 // This function is called when there is absolutely no hope for redemption for
 // the offending spammer.
 function wp_bb_spammer($denied_reason) {
-	require_once(WP_BB_CWD . "/bad-behavior-banned.php");
 	wp_bb_log(403, $denied_reason);
+	require_once(WP_BB_CWD . "/bad-behavior-banned.php");
 	wp_bb_banned($denied_reason);
 }
 
@@ -83,8 +83,8 @@ if (!wp_bb_check_whitelist()):
 	// First see if it's a spammer we know about
 	if ($wp_bb_logging && wp_bb_db_search()) {
 		$denied_reason = "I know you and I don't like you, dirty spammer.";
-		require_once(WP_BB_CWD . "/bad-behavior-banned.php");
 		wp_bb_log(412, $denied_reason);
+		require_once(WP_BB_CWD . "/bad-behavior-banned.php");
 		wp_bb_banned($denied_reason);
 	}
 
