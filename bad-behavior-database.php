@@ -107,5 +107,6 @@ function wp_bb_db_search() {
 }
 
 wp_bb_db_create_tables();
-wp_bb_db_clear_old_entries();
+register_shutdown_function('wp_bb_db_clear_old_entries');
+// wp_bb_db_clear_old_entries();
 ?>

@@ -3,7 +3,7 @@
 if (!defined('WP_BB_CWD'))
 	die('');
 
-define(WP_BB_VERSION, "1.1.72");
+define(WP_BB_VERSION, "1.1.74");
 
 require_once(WP_BB_CWD . "/bad-behavior-functions.php");
 
@@ -11,12 +11,12 @@ require_once(WP_BB_CWD . "/bad-behavior-functions.php");
 function wp_bb_log($response, $denied_reason) {
 	global $wp_bb_logging, $wp_bb_verbose_logging;
 
-	if ($response == 403) {
+	if ($response == 403 || $response == 412) {
 		require_once(WP_BB_CWD . "/bad-behavior-blackhole.php");
 		wp_bb_blackhole_ping($response, $denied_reason);	// FIXME: could be time consuming
 	}
 
-	if (($wp_bb_verbose_logging) || ($wp_bb_logging && $response == 403)) {
+	if (($wp_bb_verbose_logging) || ($wp_bb_logging && ($response == 403 || $response == 412))) {
 		require_once(WP_BB_CWD . "/bad-behavior-database.php");
 		wp_bb_db_log($response, $denied_reason);
 	}
@@ -27,6 +27,7 @@ function wp_bb_log($response, $denied_reason) {
 function wp_bb_spammer($denied_reason) {
 	require_once(WP_BB_CWD . "/bad-behavior-banned.php");
 	wp_bb_banned($denied_reason);
+	wp_bb_log(403, $denied_reason);
 }
 
 // Load up PHP4 specific stuff if needed
@@ -81,7 +82,10 @@ if (!wp_bb_check_whitelist()):
 
 	// First see if it's a spammer we know about
 	if ($wp_bb_logging && wp_bb_db_search()) {
-		wp_bb_spammer("I know you and I don't like you, dirty spammer.");
+		$denied_reason = "I know you and I don't like you, dirty spammer.";
+		require_once(WP_BB_CWD . "/bad-behavior-banned.php");
+		wp_bb_banned("I know you and I don't like you, dirty spammer.");
+		wp_bb_log(412, "I know you and I don't like you, dirty spammer.");
 	}
 
 	// Easy stuff: Ban known bad user-agents
