@@ -11,11 +11,6 @@ require_once(WP_BB_CWD . "/bad-behavior-functions.php");
 function wp_bb_log($response, $denied_reason) {
 	global $wp_bb_logging, $wp_bb_verbose_logging;
 
-	if ($response == 403 || $response == 412) {
-		require_once(WP_BB_CWD . "/bad-behavior-blackhole.php");
-		wp_bb_blackhole_ping($response, $denied_reason);	// FIXME: could be time consuming
-	}
-
 	if (($wp_bb_verbose_logging) || ($wp_bb_logging && ($response == 403 || $response == 412))) {
 		require_once(WP_BB_CWD . "/bad-behavior-database.php");
 		wp_bb_db_log($response, $denied_reason);

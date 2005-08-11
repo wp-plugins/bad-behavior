@@ -2,7 +2,7 @@
 
 // Set to false to NOT notify Bad Behavior Blackhole
 // You would do this if it's being slow or whatever
-$wp_bb_ping_blackhole = true;
+$wp_bb_ping_blackhole = false;
 
 // Set the connection timeout in seconds.
 $wp_bb_ping_timeout = 15;
