@@ -26,8 +26,8 @@ function wp_bb_log($response, $denied_reason) {
 // the offending spammer.
 function wp_bb_spammer($denied_reason) {
 	require_once(WP_BB_CWD . "/bad-behavior-banned.php");
-	wp_bb_banned($denied_reason);
 	wp_bb_log(403, $denied_reason);
+	wp_bb_banned($denied_reason);
 }
 
 // Load up PHP4 specific stuff if needed
@@ -84,8 +84,8 @@ if (!wp_bb_check_whitelist()):
 	if ($wp_bb_logging && wp_bb_db_search()) {
 		$denied_reason = "I know you and I don't like you, dirty spammer.";
 		require_once(WP_BB_CWD . "/bad-behavior-banned.php");
-		wp_bb_banned("I know you and I don't like you, dirty spammer.");
-		wp_bb_log(412, "I know you and I don't like you, dirty spammer.");
+		wp_bb_log(412, $denied_reason);
+		wp_bb_banned($denied_reason);
 	}
 
 	// Easy stuff: Ban known bad user-agents

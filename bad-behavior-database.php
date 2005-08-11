@@ -98,11 +98,11 @@ function wp_bb_db_log($response, $denied_reason = '') {
 	}
 }
 
-// See if we've seen this spammer before.
+// See if we've seen this spammer recently.
 function wp_bb_db_search() {
 	global $wp_bb_remote_addr;
 
-	$query = "SELECT `ip` FROM `" . WP_BB_LOG . "` WHERE `ip` LIKE '" . $wp_bb_remote_addr . "' AND `http_response` = 403";
+	$query = "SELECT `ip` FROM `" . WP_BB_LOG . "` WHERE `ip` LIKE '" . $wp_bb_remote_addr . "' AND `http_response` = 403 AND `date` > DATE_SUB('" . gmstrftime("%Y-%m-%d %H:%M:%S") . "', INTERVAL 2 DAY)";
 	return wp_bb_db_query($query);
 }
 
