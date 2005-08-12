@@ -36,18 +36,18 @@ function wp_bb_db_create_tables() {
 	if (wp_bb_db_query($query) === FALSE) {
 		$wp_bb_db_failure = TRUE;
 	}
-	// Upgrades from 1.1
-	$query = "DESCRIBE `" . WP_BB_LOG . "` `denied_reason`;";
-	if (wp_bb_db_query($query) == 0) {
-		$query = "ALTER TABLE `" . WP_BB_LOG . "` ADD `denied_reason` TEXT AFTER `request_entity`;";
-		if (wp_bb_db_query($query) === FALSE) {
-			$wp_bb_db_failure = TRUE;
-		}
-	}
 	// Upgrades from 1.0
 	$query = "DESCRIBE `" . WP_BB_LOG . "` `request_entity`;";
 	if (wp_bb_db_query($query) == 0) {
 		$query = "ALTER TABLE `" . WP_BB_LOG . "` ADD `request_entity` TEXT AFTER `http_headers`;";
+		if (wp_bb_db_query($query) === FALSE) {
+			$wp_bb_db_failure = TRUE;
+		}
+	}
+	// Upgrades from 1.1
+	$query = "DESCRIBE `" . WP_BB_LOG . "` `denied_reason`;";
+	if (wp_bb_db_query($query) == 0) {
+		$query = "ALTER TABLE `" . WP_BB_LOG . "` ADD `denied_reason` TEXT AFTER `request_entity`;";
 		if (wp_bb_db_query($query) === FALSE) {
 			$wp_bb_db_failure = TRUE;
 		}
