@@ -92,7 +92,7 @@ $wp_bb_timer_total = $wp_bb_timer_stop - $wp_bb_timer_start;
 
 function wp_bb_timer_display() {
 	global $wp_bb_timer_total;
-	echo "\n<!-- Bad Behavior run time: " . number_format($wp_bb_timer_total, 3) . " seconds -->\n";
+	echo "\n<!-- Bad Behavior " . WP_BB_VERSION . " run time: " . number_format($wp_bb_timer_total, 3) . " seconds -->\n";
 }
 
 add_action('wp_head', 'wp_bb_timer_display');
