@@ -14,8 +14,8 @@ function wp_bb_db_create_tables() {
 
 	// Determine if we can skip all this
 	// If this exists, table structure is presumed up to date
-	$query = "DESCRIBE `" . WP_BB_LOG . "` `denied_reason`;";
-	if (wp_bb_db_query($query) != 0) return;
+//	$query = "DESCRIBE `" . WP_BB_LOG . "` `denied_reason`;";
+//	if (wp_bb_db_query($query) != 0) return;
 
 	// Create everything
 	$query = "CREATE TABLE IF NOT EXISTS `" . WP_BB_LOG . "` (
