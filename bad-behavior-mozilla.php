@@ -10,7 +10,11 @@ if (!defined('WP_BB_CWD'))
 
 require_once(WP_BB_CWD . "/bad-behavior-accept.php");
 
-wp_bb_check_accept();
+// First off, workaround for Google Desktop, until they fix it FIXME
+// Always check accept header for Mozilla user agents
+if (strpos($wp_bb_http_user_agent, "Google Desktop") !== FALSE)
+	wp_bb_check_accept();
+
 // AvantGo mobile browser needs a different check
 if (strpos($wp_bb_http_user_agent, "AvantGo") !== FALSE) {
 	if (!array_key_exists('X-Avantgo-Screensize', $wp_bb_http_headers_mixed)) {
