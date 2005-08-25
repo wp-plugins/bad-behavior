@@ -111,6 +111,9 @@ $wp_bb_whitelist_user_agents = array(
 // Do not edit below this line
 
 function wp_bb_check_whitelist() {
+	global $wp_bb_whitelist_ip_ranges, $wp_bb_whitelist_user_agents;;
+	global $wp_bb_remote_addr;
+
 	if (!empty($wp_bb_whitelist_ip_ranges)) {
 		foreach ($wp_bb_whitelist_ip_ranges as $wp_bb_whitelist_ip_range) {
 			 if (matchCIDR($wp_bb_remote_addr, $wp_bb_whitelist_ip_range)) return true;
