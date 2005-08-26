@@ -12,7 +12,7 @@ require_once(WP_BB_CWD . "/bad-behavior-accept.php");
 
 // First off, workaround for Google Desktop, until they fix it FIXME
 // Always check accept header for Mozilla user agents
-if (strpos($wp_bb_http_user_agent, "Google Desktop") !== FALSE)
+if (strpos($wp_bb_http_user_agent, "Google Desktop") === FALSE)
 	wp_bb_check_accept();
 
 // AvantGo mobile browser needs a different check
