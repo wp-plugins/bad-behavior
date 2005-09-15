@@ -22,6 +22,7 @@ $wp_bb_spambots_str0 = array(
 	"Missigua",		// spam harvester
 	"Mozilla ",		// forum exploits
 	"Shockwave Flash",	// spam harvester
+	"User-Agent: ",		// spam harvester
 	"Wordpress Hash Grabber",// malicious software
 	"www.weblogs.com",	// referrer spam (not the real www.weblogs.com)
 );
