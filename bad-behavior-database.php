@@ -99,10 +99,19 @@ function wp_bb_db_log($response, $denied_reason = '') {
 }
 
 // See if we've seen this spammer recently.
+// Interval is 10 minutes for 1 spam attempt, double it for each additional
 function wp_bb_db_search() {
 	global $wp_bb_remote_addr;
 
-	$query = "SELECT `ip` FROM `" . WP_BB_LOG . "` WHERE `ip` LIKE '" . $wp_bb_remote_addr . "' AND `http_response` = 403 AND `date` > DATE_SUB('" . gmstrftime("%Y-%m-%d %H:%M:%S") . "', INTERVAL 2 DAY)";
+	$query = "SELECT `ip` FROM `" . WP_BB_LOG . "` WHERE `ip` LIKE '" . $wp_bb_remote_addr . "' AND `http_response` = 403";
+	$count = wp_bb_db_query($query);
+
+	if ($count === FALSE)
+		return FALSE;
+
+	$interval = pow(2, ($count - 1)) * 10;
+
+	$query = "SELECT `ip` FROM `" . WP_BB_LOG . "` WHERE `ip` LIKE '" . $wp_bb_remote_addr . "' AND `http_response` = 403 AND `date` > DATE_SUB('" . gmstrftime("%Y-%m-%d %H:%M:%S") . "', INTERVAL $interval MINUTE)";
 	return wp_bb_db_query($query);
 }
 

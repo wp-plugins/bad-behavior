@@ -77,14 +77,6 @@ foreach ($wp_bb_http_headers as $h=>$v)
 require_once(WP_BB_CWD . "/bad-behavior-whitelist.php");
 if (!wp_bb_check_whitelist()):
 
-	// First see if it's a spammer we know about
-	if ($wp_bb_logging && wp_bb_db_search()) {
-		$denied_reason = "I know you and I don't like you, dirty spammer.";
-		wp_bb_log(412, $denied_reason);
-		require_once(WP_BB_CWD . "/bad-behavior-banned.php");
-		wp_bb_banned($denied_reason);
-	}
-
 	// Easy stuff: Ban known bad user-agents
 	require_once(WP_BB_CWD . "/bad-behavior-user-agent.php");
 	
@@ -131,6 +123,14 @@ if (!wp_bb_check_whitelist()):
 	
 	// Now analyze all other requests
 	require_once(WP_BB_CWD . "/bad-behavior-http-headers.php");
+
+	// Finally see if it's a spammer we know about
+	if ($wp_bb_logging && wp_bb_db_search()) {
+		$denied_reason = "I know you and I don't like you, dirty spammer.";
+		wp_bb_log(412, $denied_reason);
+		require_once(WP_BB_CWD . "/bad-behavior-banned.php");
+		wp_bb_banned($denied_reason);
+	}
 	
 endif; // whitelist
 

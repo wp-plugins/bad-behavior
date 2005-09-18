@@ -42,6 +42,7 @@ $wp_bb_logging = TRUE;
 $wp_bb_verbose_logging = TRUE;
 
 // How long to keep the logs around (in days).
+// Lowering this may have profound negative effects!
 $wp_bb_logging_duration = 7;
 
 // Email address to contact you in case of problems
