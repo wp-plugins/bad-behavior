@@ -3,7 +3,7 @@
 if (!defined('WP_BB_CWD'))
 	die('');
 
-die("Do NOT check Bad Behavior out of svn! Install the <a href=\"http://www.ioerror.us/software/bad-behavior/\">current version</a>.");
+// die("Do NOT check Bad Behavior out of svn! Install the <a href=\"http://www.ioerror.us/software/bad-behavior/\">current version</a>.");
 
 define(WP_BB_VERSION, "1.2.2");
 
