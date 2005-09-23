@@ -3,9 +3,9 @@
 if (!defined('WP_BB_CWD'))
 	die('');
 
-die("Do NOT check Bad Behavior out of svn! Install the <a href=\"http://www.ioerror.us/software/bad-behavior/\">current version</a>.");
+// die("Do NOT check Bad Behavior out of svn! Install the <a href=\"http://www.ioerror.us/software/bad-behavior/\">current version</a>.");
 
-define(WP_BB_VERSION, "1.2.1");
+define(WP_BB_VERSION, "1.2.2");
 
 require_once(WP_BB_CWD . "/bad-behavior-functions.php");
 
@@ -22,6 +22,11 @@ function wp_bb_log($response, $denied_reason) {
 // This function is called when there is absolutely no hope for redemption for
 // the offending spammer.
 function wp_bb_spammer($denied_reason) {
+	global $wp_bb_http_headers_mixed;
+	
+	if (is_callable('wp_bb_denied_callback')) {
+		wp_bb_denied_callback($wp_bb_http_headers_mixed, 403, $denied_reason);
+	}
 	wp_bb_log(403, $denied_reason);
 	require_once(WP_BB_CWD . "/bad-behavior-banned.php");
 	wp_bb_banned($denied_reason);
@@ -77,14 +82,6 @@ foreach ($wp_bb_http_headers as $h=>$v)
 require_once(WP_BB_CWD . "/bad-behavior-whitelist.php");
 if (!wp_bb_check_whitelist()):
 
-	// First see if it's a spammer we know about
-	if ($wp_bb_logging && wp_bb_db_search()) {
-		$denied_reason = "I know you and I don't like you, dirty spammer.";
-		wp_bb_log(412, $denied_reason);
-		require_once(WP_BB_CWD . "/bad-behavior-banned.php");
-		wp_bb_banned($denied_reason);
-	}
-
 	// Easy stuff: Ban known bad user-agents
 	require_once(WP_BB_CWD . "/bad-behavior-user-agent.php");
 	
@@ -131,10 +128,24 @@ if (!wp_bb_check_whitelist()):
 	
 	// Now analyze all other requests
 	require_once(WP_BB_CWD . "/bad-behavior-http-headers.php");
+
+	// Finally see if it's a spammer we know about
+	if ($wp_bb_logging && wp_bb_db_search()) {
+		$denied_reason = "I know you and I don't like you, dirty spammer.";
+		if (is_callable('wp_bb_denied_callback')) {
+			wp_bb_denied_callback($wp_bb_http_headers_mixed, 412, $denied_reason);
+		}
+		wp_bb_log(412, $denied_reason);
+		require_once(WP_BB_CWD . "/bad-behavior-banned.php");
+		wp_bb_banned($denied_reason);
+	}
 	
 endif; // whitelist
 
 // If we get this far, the client is probably OK
+if (is_callable('wp_bb_approved_callback')) {
+	wp_bb_approved_callback($wp_bb_http_headers_mixed);
+}
 wp_bb_log(200, '');
 
 ?>
