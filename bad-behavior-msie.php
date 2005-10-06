@@ -28,4 +28,9 @@ if (strpos($wp_bb_http_user_agent, "Windows ME") !== FALSE ||
 	wp_bb_spammer("User-Agent claimed to be MSIE, with invalid Windows version");
 }
 
+// MSIE does NOT send Connection: TE
+if (preg_match('/\bTE\b/i', $wp_bb_http_headers_mixed['Connection'])) {
+	wp_bb_spammer("Connection: TE present, not supported by MSIE");
+}
+
 ?>

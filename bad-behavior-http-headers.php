@@ -40,6 +40,13 @@ if (array_key_exists('Te', $wp_bb_http_headers_mixed)) {
 }
 */
 
+// Connection: keep-alive and close are mutually exclusive
+if (array_key_exists('Connection', $wp_bb_http_headers_mixed)) {
+	if (preg_match('/\bKeep-Alive\b/i', $wp_bb_http_headers_mixed['Connection']) && preg_match('/\bClose\b/i', $wp_bb_http_headers_mixed['Connection'])) {
+		wp_bb_spammer("Header 'Connection' contains invalid values");
+	}
+}
+
 // Headers which are not seen from normal user agents; only malicious bots
 if (array_key_exists('X-Aaaaaaaaaaaa', $wp_bb_http_headers_mixed) ||
     array_key_exists('X-Aaaaaaaaaa', $wp_bb_http_headers_mixed)) {
