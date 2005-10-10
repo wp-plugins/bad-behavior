@@ -126,3 +126,5 @@ function wp_bb_check_whitelist() {
 	}
 	return false;
 }
+
+?>
