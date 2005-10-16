@@ -15,6 +15,7 @@ $wp_bb_spambots_str0 = array(
 	"Email Siphon",		// spam harvester
 	"EmailSiphon",		// spam harvester
 	"grub crawler",		// misc comment/email spam
+	"Jakarta Commons",	// custommised spambots
 //	"Java 1.",		// Some doubt about this one
 	"libwww-perl",		// spambot scripts
 	"LWP",			// exploited boxes
