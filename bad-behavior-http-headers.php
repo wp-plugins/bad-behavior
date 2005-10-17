@@ -31,14 +31,12 @@ if (array_key_exists('Via', $wp_bb_http_headers_mixed)) {
 
 // TE: if present must have Connection: TE
 // RFC 2616 14.39
-// FIXME: This check is temporarily disabled due to bug in Opera 8
-/*
+// Opera 8.01 has a bug which causes it to be blocked. Use 8.02 or later.
 if (array_key_exists('Te', $wp_bb_http_headers_mixed)) {
 	if (!preg_match('/\bTE\b/', $wp_bb_http_headers_mixed['Connection'])) {
 		wp_bb_spammer("Header 'TE' present but TE not specified in 'Connection' header");
 	}
 }
-*/
 
 // Connection: keep-alive and close are mutually exclusive
 if (array_key_exists('Connection', $wp_bb_http_headers_mixed)) {
@@ -51,6 +49,9 @@ if (array_key_exists('Connection', $wp_bb_http_headers_mixed)) {
 if (array_key_exists('X-Aaaaaaaaaaaa', $wp_bb_http_headers_mixed) ||
     array_key_exists('X-Aaaaaaaaaa', $wp_bb_http_headers_mixed)) {
 	wp_bb_spammer("Prohibited header 'X-Aaaaaaaaaa' or 'X-Aaaaaaaaaaaa' present");
+}
+if (array_key_exists('Proxy-Connection', $wp_bb_http_headers_mixed)) {
+	wp_bb_spammer("Prohibited header 'Proxy-Connection' present");
 }
 
 ?>
