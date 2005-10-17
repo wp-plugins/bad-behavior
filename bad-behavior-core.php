@@ -84,6 +84,8 @@ if (!wp_bb_check_whitelist()):
 
 	// Easy stuff: Ban known bad user-agents
 	require_once(WP_BB_CWD . "/bad-behavior-user-agent.php");
+	// Easy stuff: Ban flagrant protocol violations
+	require_once(WP_BB_CWD . "/bad-behavior-protocol.php");
 	
 	// Now analyze requests coming from "MSIE"
 	if (stripos($wp_bb_http_user_agent, "MSIE") !== FALSE) {
