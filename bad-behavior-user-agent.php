@@ -47,7 +47,7 @@ $wp_bb_spambots_reg = array(
 //	"/MSIE.*Windows XP/",	// misc comment spam
 );
 
-if (empty($wp_bb_http_user_agent)) {
+if (!strcmp($wp_bb_request_method, "POST") && empty($wp_bb_http_user_agent)) {
 	wp_bb_spammer("A User-Agent is required but none was provided.");
 }
 
