@@ -5,7 +5,7 @@ if (!defined('WP_BB_CWD'))
 
 die("Do NOT check Bad Behavior out of svn! Install the <a href=\"http://www.ioerror.us/software/bad-behavior/\">current version</a>.");
 
-define(WP_BB_VERSION, "1.2.2");
+define(WP_BB_VERSION, "1.2.3");
 
 require_once(WP_BB_CWD . "/bad-behavior-functions.php");
 
