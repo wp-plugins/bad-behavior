@@ -16,12 +16,13 @@ if (strpos($wp_bb_http_user_agent, "Google Desktop") === FALSE)
 	wp_bb_check_accept();
 
 // AvantGo mobile browser needs a different check
-if (strpos($wp_bb_http_user_agent, "AvantGo") !== FALSE) {
-	if (!array_key_exists('X-Avantgo-Screensize', $wp_bb_http_headers_mixed)) {
-		wp_bb_spammer("User-Agent claimed to be AvantGo, claim appears false");
-	}
-} else {
+// FIXME: Temporarily disable check; Danger's latest update sucks balls
+//if (strpos($wp_bb_http_user_agent, "AvantGo") !== FALSE) {
+//	if (!array_key_exists('X-Avantgo-Screensize', $wp_bb_http_headers_mixed)) {
+//		wp_bb_spammer("User-Agent claimed to be AvantGo, claim appears false");
+//	}
+//} else {
 	wp_bb_check_accept_encoding();
-}
+//}
 
 ?>
