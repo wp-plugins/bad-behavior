@@ -13,6 +13,12 @@ of malicious Web site hacking.
 
 == Installation ==
 
+*Warning*: If you are upgrading from a 1.x.x version of Bad Behavior,
+you must remove it from your system entirely, and delete all of its
+database tables, before installing Bad Behavior 2.0.x. You do not need
+to remove a 2.0.x version of Bad Behavior before upgrading to this
+release.
+
 Bad Behavior has been designed to install on each host software in the
 manner most appropriate to each platform. It's usually sufficient to
 follow the generic instructions for installing any plugin or extension
