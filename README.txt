@@ -45,12 +45,12 @@ requires a patch to WP-Cache 2 in order to protect cached pages.
   Edit the wp-content/plugins/wp-cache/wp-cache-phase1.php file and find the
 following two lines at around line 32:
 
-	if (! ($meta = unserialize(@file_get_contents($meta_pathname))) )
-		return;
+`	if (! ($meta = unserialize(@file_get_contents($meta_pathname))) )
+		return;`
 
   Immediately after this, insert the following line:
 
-	require_once( ABSPATH .  'wp-content/plugins/Bad-Behavior/bad-behavior-generic.php');
+`	require_once( ABSPATH .  'wp-content/plugins/Bad-Behavior/bad-behavior-generic.php');`
 
   Then visit your site. Everything should work normally, but spammers will
 not be able to access your cached pages either.
