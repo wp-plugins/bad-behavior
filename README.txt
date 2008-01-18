@@ -3,8 +3,8 @@ Tags: comment,trackback,referrer,spam,robot,antispam
 Contributors: error, MarkJaquith, Firas, skeltoac
 Donate link: http://www.bad-behavior.ioerror.us/
 Requires at least: 1.2
-Tested up to: 2.3.1
-Stable tag: 2.0.11
+Tested up to: 2.3.2
+Stable tag: 2.0.12
 
 Bad Behavior is a set of PHP scripts which prevents spambots and other
 malicious accesses to your PHP-based Web site. It prevents comment spam,
