@@ -119,6 +119,7 @@ function bb2_relative_path() {
 function bb2_mediawiki_timer(&$parser, &$text) {
 	global $bb2_timer_total;
 	$text = "<!-- Bad Behavior " . BB2_VERSION . " run time: " . number_format(1000 * $bb2_timer_total, 3) . " ms -->" . $text;
+	return true;
 }
 
 function bb2_mediawiki_entry() {
@@ -148,7 +149,7 @@ $wgExtensionCredits['other'][] = array(
 	'url' => 'http://www.bad-behavior.ioerror.us/'
 );
 
-$wgHooks['ParserAfterTidy'][] = 'bb2_mediawiki_timer';
+#$wgHooks['ParserAfterTidy'][] = 'bb2_mediawiki_timer';
 $wgExtensionFunctions[] = 'bb2_mediawiki_entry';
 
 ?>
