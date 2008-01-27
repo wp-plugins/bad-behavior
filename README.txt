@@ -24,6 +24,13 @@ manner most appropriate to each platform. It's usually sufficient to
 follow the generic instructions for installing any plugin or extension
 for your host software.
 
+On MediaWiki, it is necessary to add a second line to LocalSettings.php
+when installing the extension. Your LocalSettings.php should include
+the following:
+
+`	include_once( 'includes/DatabaseFunctions.php' );
+	include( './extensions/Bad-Behavior/bad-behavior-mediawiki.php' );
+
 For complete documentation and installation instructions, please visit
 http://www.bad-behavior.ioerror.us/
 
