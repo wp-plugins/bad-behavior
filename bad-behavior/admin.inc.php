@@ -73,8 +73,11 @@ function bb2_options()
 	<fieldset class="options">
 	<legend><?php _e('Logging'); ?></legend>
 	<p><label><input type="radio" name="logging" value="verbose" <?php if ($settings['verbose']) { ?>checked="checked" <?php } ?>/> <?php _e('Verbose HTTP request logging'); ?></label></p>
-	<p><label><input type="radio" name="logging" value="normal" <?php if ($settings['logging'] && !$settings['verbose']) { ?>checked="checked" <?php } ?>/> <?php _e('Normal HTTP request logging'); ?></label></p>
-	<p><label><input type="radio" name="logging" value="false" <?php if (!$settings['logging']) { ?>checked="checked" <?php } ?>/> <?php _e('Normal HTTP request logging'); ?></label></p>
+	<p><label><input type="radio" name="logging" value="normal" <?php if ($settings['logging'] && !$settings['verbose']) { ?>checked="checked" <?php } ?>/> <?php _e('Normal HTTP request logging (recommended)'); ?></label></p>
+	<p><label><input type="radio" name="logging" value="false" <?php if (!$settings['logging']) { ?>checked="checked" <?php } ?>/> <?php _e('Do not log HTTP requests (not recommended)'); ?></label></p>
+	</fieldset>
+
+	<fieldset class="options">
 	<legend><?php _e('Strict Mode'); ?></legend>
 	<p><label><input type="checkbox" name="strict" value="true" <?php if ($settings['strict']) { ?>checked="checked" <?php } ?>/> <?php _e('Strict checking (blocks more spam but may block some people)'); ?></label></p>
 	</fieldset>
