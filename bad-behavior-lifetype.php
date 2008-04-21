@@ -94,10 +94,12 @@ function bb2_read_settings() {
 	$displayStats = $config->getValue( 'bb2_display_stats', true );
 	$verbose = $config->getValue( 'bb2_verbose', false );
 	$isInstalled = $config->getValue( 'bb2_installed', false );
+	$logging = $config->getValue( 'bb2_logging', false );
 	
 	return array('log_table' => $prefix . 'bad_behavior', 
 				 'display_stats' => $displayStats,
 				 'verbose' => $verbose,
+				 'logging' => $logging,
 				 'is_installed' => $isInstalled );
 }
 
@@ -115,7 +117,7 @@ function bb2_write_settings($settings) {
 // installation
 function bb2_install() {
 	$settings = bb2_read_settings();
-	if( $settings['is_installed'] == false )
+	if( $settings['is_installed'] == false && $settings['logging'] )
 	{
 		bb2_db_query(bb2_table_structure($settings['log_table']));
 		$settings['is_installed'] = true;
