@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Bad Behavior
-Version: 2.0.14
+Version: 2.0.17
 Description: Deny automated spambots access to your PHP-based Web site.
 Plugin URI: http://www.bad-behavior.ioerror.us/
 Author: Michael Hampton
@@ -106,7 +106,7 @@ function bb2_read_settings() {
 	// Add in default settings when they aren't yet present in WP
 	$settings = get_settings('bad_behavior_settings');
 	if (!$settings) $settings = array();
-	return array_merge(array('log_table' => $wpdb->prefix . 'bad_behavior', 'display_stats' => true, 'strict' => false, 'verbose' => false), $settings);
+	return array_merge(array('log_table' => $wpdb->prefix . 'bad_behavior', 'display_stats' => true, 'strict' => false, 'verbose' => false, 'logging' => true), $settings);
 }
 
 // write settings to database
@@ -117,6 +117,7 @@ function bb2_write_settings($settings) {
 // installation
 function bb2_install() {
 	$settings = bb2_read_settings();
+	if (!$settings['logging']) return;
 	bb2_db_query(bb2_table_structure($settings['log_table']));
 }
 
@@ -159,7 +160,7 @@ require_once(BB2_CWD . "/bad-behavior/core.inc.php");
 bb2_install();	// FIXME: see above
 
 if (is_admin() || strstr($_SERVER['PHP_SELF'], 'wp-admin/')) {	// 1.5 kludge
-	require_once(BB2_CWD . "/bad-behavior/admin.inc.php");
+	require_once(BB2_CWD . "/bad-behavior-wordpress-admin.php");
 }
 
 bb2_start(bb2_read_settings());

@@ -96,6 +96,7 @@ function bb2_misc_headers($settings, $package)
 	if (array_key_exists('X-Aaaaaaaaaaaa', $package['headers_mixed']) || array_key_exists('X-Aaaaaaaaaa', $package['headers_mixed'])) {
 		return "b9cc1d86";
 	}
+	// Proxy-Connection does not exist and should never be seen in the wild
 	if (array_key_exists('Proxy-Connection', $package['headers_mixed'])) {
 		return "b7830251";
 	}
