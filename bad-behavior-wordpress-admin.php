@@ -1,5 +1,4 @@
 <?php if (!defined('BB2_CORE')) die('I said no cheating!');
-/* This techncially belongs a level up, with the WordPress code. It'll be moved soon. */
 
 function bb2_admin_pages() {
 	if (function_exists('current_user_can')) {
