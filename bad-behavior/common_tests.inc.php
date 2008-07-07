@@ -115,6 +115,11 @@ function bb2_misc_headers($settings, $package)
 		}
 	}
 	
+	// "uk" is not a language (ISO 639) nor a country (ISO 3166)
+	if (ereg('/\buk\b/', $package['headers_mixed']['Accept-Language'])) {
+		return "35ea7ffa";
+	}
+
 	return false;
 }
 
