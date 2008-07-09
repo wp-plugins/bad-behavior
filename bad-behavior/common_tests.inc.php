@@ -55,7 +55,7 @@ function bb2_misc_headers($settings, $package)
 	// Exceptions: Clearswift uses lowercase via (refuses to fix;
 	// may be blocked again in the future)
 	if (array_key_exists('via', $package['headers']) &&
-		!strstr($package['headers']['via'],'Clearswift Web Policy Engine')) {
+		strpos($package['headers']['via'],'Clearswift') === FALSE) {
 		return "9c9e4979";
 	}
 
