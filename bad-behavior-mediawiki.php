@@ -29,7 +29,8 @@ $bb2_settings_defaults = array(
 	'log_table' => $wgDBprefix . 'bad_behavior',
 	'display_stats' => true,
 	'strict' => false,
-	'verbose' => false
+	'verbose' => false,
+	'logging' => true
 );
 
 define('BB2_CWD', dirname(__FILE__));
@@ -105,6 +106,7 @@ function bb2_write_settings($settings) {
 function bb2_install() {
 	$settings = bb2_read_settings();
 	if (defined('BB2_NO_CREATE')) return;
+	if (!$settings['logging']) return;
 	bb2_db_query(bb2_table_structure($settings['log_table']));
 }
 
