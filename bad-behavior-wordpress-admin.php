@@ -22,6 +22,13 @@ function bb2_admin_pages() {
 	}
 }
 
+function bb2_clean_log_link($uri) {
+	foreach (array("paged", "ip", "key", "request_method", "user_agent") as $arg) {
+		$uri = remove_query_arg($arg, $uri);
+	}
+	return $uri;
+}
+
 function bb2_manage() {
 	$request_uri = $_SERVER["REQUEST_URI"];
 	$settings = bb2_read_settings();
@@ -37,8 +44,9 @@ function bb2_manage() {
 
 	// Query the DB based on variables selected
 	$r = bb2_db_query("SELECT COUNT(*) FROM `" . $settings['log_table'] . "` WHERE 1=1 " . $where);
-	$count = bb2_db_num_rows($r);
-	$pages = ceil(count / 100);
+	$results = bb2_db_rows($r);
+	$count = $results[0]["COUNT(*)"];
+	$pages = ceil($count / 100);
 	$r = bb2_db_query("SELECT * FROM `" . $settings['log_table'] . "` WHERE 1=1 " . $where . "ORDER BY `date` DESC LIMIT " . ($paged - 1) * $rows_per_page . "," . $rows_per_page);
 	$results = bb2_db_rows($r);
 
@@ -52,9 +60,12 @@ function bb2_manage() {
 
 <div class="tablenav">
 <?php
-	$page_links = paginate_links(array('base' => add_query_arg("paged", "%#%", $request_uri), 'format' => '', 'total' => $count, 'current' => $paged));
+	$page_links = paginate_links(array('base' => add_query_arg("paged", "%#%"), 'format' => '', 'total' => $pages, 'current' => $paged));
 	if ($page_links) echo "<div class=\"tablenav-pages\">$page_links</div>\n";
 ?>
+<div class="alignleft">
+Page <?php echo $paged; ?> of <?php echo $pages; ?> (count <?php echo $count; ?>)
+</div>
 </div>
 
 <table class="widefat">
@@ -79,9 +90,9 @@ function bb2_manage() {
 			echo "<tr id=\"request-" . $result["id"] . "\" class=\"alternate\" valign=\"top\">\n";
 		}
 		echo "<th scope=\"row\" class=\"check-column\"><input type=\"checkbox\" name=\"submit[]\" value=\"" . $result["id"] . "\" /></th>\n";
-		echo "<td><a href=\"" . add_query_arg("ip", $result["ip"], $request_uri) . "\">" . $result["ip"] . "</a><br/><br/>\n" . $result["date"] . "<br/><br/><a href=\"" . add_query_arg("key", $result["key"], $request_uri) . "\">" . $key["log"] . "</a></td>\n";
-		echo "<td><a href=\"" . add_query_arg("user_agent", $result["user_agent"], $request_uri) . "\">" . $result["user_agent"] . "</a></td>\n";
-		echo "<td>" . str_replace(array($result['request_method'], "\n"), array("<a href=\"" . add_query_arg("request_method" , $result["request_method"], $request_uri) . "\">" . $result["request_method"] . "</a>", "<br/>\n"), $result["http_headers"]) . "</td>\n";
+		echo "<td><a href=\"" . add_query_arg("ip", $result["ip"], bb2_clean_log_link($request_uri)) . "\">" . $result["ip"] . "</a><br/><br/>\n" . $result["date"] . "<br/><br/><a href=\"" . add_query_arg("key", $result["key"], bb2_clean_log_link($request_uri)) . "\">" . $key["log"] . "</a></td>\n";
+		echo "<td><a href=\"" . add_query_arg("user_agent", $result["user_agent"], bb2_clean_log_link($request_uri)) . "\">" . $result["user_agent"] . "</a></td>\n";
+		echo "<td>" . str_replace(array($result['request_method'], "\n"), array("<a href=\"" . add_query_arg("request_method" , $result["request_method"], bb2_clean_log_link($request_uri)) . "\">" . $result["request_method"] . "</a>", "<br/>\n"), $result["http_headers"]) . "</td>\n";
 		echo "<td>" . str_replace("\n", "<br/>\n", $result["request_entity"]) . "</td>\n";
 		echo "</tr>\n";
 	}
