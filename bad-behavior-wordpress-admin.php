@@ -51,7 +51,12 @@ function bb2_manage() {
 <?php
 	$alternate = 0;
 	foreach ($results as $result) {
-		echo "<tr id=\"request-" . $result["id"] . "\" class=\"" . $alternate ? "alternate" : "" . "\" valign=\"top\">\n";
+		$alternate++;
+		if ($alternate % 2) {
+			echo "<tr id=\"request-" . $result["id"] . "\" valign=\"top\">\n";
+		} else {
+			echo "<tr id=\"request-" . $result["id"] . "\" class=\"alternate\" valign=\"top\">\n";
+		}
 		echo "<th scope=\"row\" class=\"check-column\"><input type=\"checkbox\" name=\"submit[]\" value=\"" . $result["id"] . "\" /></th>\n";
 		echo "<td>" . $result["ip"] . "</td>\n";
 		echo "<td>" . $result["date"] . "</td>\n";
