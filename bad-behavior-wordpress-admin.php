@@ -77,8 +77,8 @@ Displaying <?php echo $count; ?> of <?php echo $totalcount; ?> records filtered 
 <?php if ($_GET['request_method']) echo "Method [<a href=\"" . remove_query_arg(array("paged", "request_method"), $request_uri) . "\">X</a>] "; ?>
 <?php else: ?>
 Displaying all <?php echo $totalcount; ?> records<br/>
-<a href="<?php add_query_arg("blocked", "true", remove_query_arg("paged", $request_uri)); ?>">Show Blocked</a>
 <?php endif; ?>
+<?php if (!$_GET['key'] && !$_GET['blocked']) { ?><a href="<?php add_query_arg("blocked", "true", remove_query_arg("paged", $request_uri)); ?>">Show Blocked</a><?php } ?>
 </div>
 </div>
 
@@ -104,9 +104,9 @@ Displaying all <?php echo $totalcount; ?> records<br/>
 			echo "<tr id=\"request-" . $result["id"] . "\" class=\"alternate\" valign=\"top\">\n";
 		}
 		echo "<th scope=\"row\" class=\"check-column\"><input type=\"checkbox\" name=\"submit[]\" value=\"" . $result["id"] . "\" /></th>\n";
-		echo "<td><a href=\"" . add_query_arg("ip", $result["ip"], bb2_clean_log_link($request_uri)) . "\">" . $result["ip"] . "</a><br/><br/>\n" . $result["date"] . "<br/><br/><a href=\"" . add_query_arg("key", $result["key"], bb2_clean_log_link($request_uri)) . "\">" . $key["log"] . "</a></td>\n";
-		echo "<td><a href=\"" . add_query_arg("user_agent", $result["user_agent"], bb2_clean_log_link($request_uri)) . "\">" . $result["user_agent"] . "</a></td>\n";
-		echo "<td>" . str_replace(array($result['request_method'], "\n"), array("<a href=\"" . add_query_arg("request_method" , $result["request_method"], bb2_clean_log_link($request_uri)) . "\">" . $result["request_method"] . "</a>", "<br/>\n"), $result["http_headers"]) . "</td>\n";
+		echo "<td><a href=\"" . add_query_arg("ip", $result["ip"], remove_query_arg("paged", $request_uri)) . "\">" . $result["ip"] . "</a><br/><br/>\n" . $result["date"] . "<br/><br/><a href=\"" . add_query_arg("key", $result["key"], remove_query_arg(array("paged", "blocked"), $request_uri)) . "\">" . $key["log"] . "</a></td>\n";
+		echo "<td><a href=\"" . add_query_arg("user_agent", $result["user_agent"], remove_query_arg("paged", $request_uri)) . "\">" . $result["user_agent"] . "</a></td>\n";
+		echo "<td>" . str_replace(array($result['request_method'], "\n"), array("<a href=\"" . add_query_arg("request_method" , $result["request_method"], remove_query_arg("paged", $request_uri)) . "\">" . $result["request_method"] . "</a>", "<br/>\n"), $result["http_headers"]) . "</td>\n";
 		echo "<td>" . str_replace("\n", "<br/>\n", $result["request_entity"]) . "</td>\n";
 		echo "</tr>\n";
 	}
