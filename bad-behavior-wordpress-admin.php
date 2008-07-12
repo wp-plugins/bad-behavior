@@ -76,7 +76,7 @@ Displaying <strong><?php echo $count; ?></strong> of <strong><?php echo $totalco
 <?php if ($_GET['key']) echo "Status [<a href=\"" . remove_query_arg(array("paged", "key"), $request_uri) . "\">X</a>] "; ?>
 <?php if ($_GET['blocked']) echo "Blocked [<a href=\"" . remove_query_arg(array("paged", "blocked"), $request_uri) . "\">X</a>] "; ?>
 <?php if ($_GET['user_agent']) echo "User Agent [<a href=\"" . remove_query_arg(array("paged", "user_agent"), $request_uri) . "\">X</a>] "; ?>
-<?php if ($_GET['request_method']) echo "Method [<a href=\"" . remove_query_arg(array("paged", "request_method"), $request_uri) . "\">X</a>] "; ?>
+<?php if ($_GET['request_method']) echo "GET/POST [<a href=\"" . remove_query_arg(array("paged", "request_method"), $request_uri) . "\">X</a>] "; ?>
 <?php else: ?>
 Displaying all <strong><?php echo $totalcount; ?></strong> records<br/>
 <?php endif; ?>
