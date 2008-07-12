@@ -62,18 +62,6 @@ the following:
 For complete documentation and installation instructions, please visit
 http://www.bad-behavior.ioerror.us/
 
-== Warning ==
-
-The WordPress-hosted copy of Bad Behavior should never be used in
-conjunction with Dave's Spam Karma plugin. If you intend to use Spam
-Karma and Bad Behavior together, always use the official copy from the
-Bad Behavior home page at http://www.bad-behavior.ioerror.us/download/ .
-
-The WordPress-hosted copy of Bad Behavior is unofficial and updated
-only when a major bug or security fix is available. To ensure that you
-always have the latest available release, always use the official copy
-from the Bad Behavior home page at http://www.bad-behavior.ioerror.us/ .
-
 == Release Notes ==
 
 = Bad Behavior 2.0 Known Issues =
@@ -97,3 +85,8 @@ following two lines at around line 34 (line 56 in WP-Super Cache):
 
   Then visit your site. Everything should work normally, but spammers will
 not be able to access your cached pages either.
+
+* When using Bad Behavior in conjunction with Spam Karma 2, you may see PHP
+warnings when Spam Karma 2 displays its internally generated CAPTCHA. This
+is a design problem in Spam Karma 2. Contact the author of Spam Karma 2 for
+a fix.
