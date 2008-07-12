@@ -57,9 +57,8 @@ function bb2_manage() {
 	<tr>
 	<th scope="col" class="check-column"><input type="checkbox" onclick="checkAll(document.getElementById('request-filter'));" /></th>
 	<th scope="col"><?php _e("IP"); ?></th>
+	<th scope="col"><?php _e("Status"); ?></th>
 	<th scope="col"><?php _e("Date"); ?></th>
-	<th scope="col"><?php _e("Method"); ?></th>
-	<th scope="col"><?php _e("URL"); ?></th>
 	<th scope="col"><?php _e("User Agent"); ?></th>
 	<th scope="col"><?php _e("Headers"); ?></th>
 	<th scope="col"><?php _e("Entity"); ?></th>
@@ -69,6 +68,7 @@ function bb2_manage() {
 <?php
 	$alternate = 0;
 	foreach ($results as $result) {
+		$key = bb2_get_response($result["key"]);
 		$alternate++;
 		if ($alternate % 2) {
 			echo "<tr id=\"request-" . $result["id"] . "\" valign=\"top\">\n";
@@ -78,10 +78,9 @@ function bb2_manage() {
 		echo "<th scope=\"row\" class=\"check-column\"><input type=\"checkbox\" name=\"submit[]\" value=\"" . $result["id"] . "\" /></th>\n";
 		echo "<td><a href=\"" . add_query_arg("ip", $result["ip"], $request_uri) . "\">" . $result["ip"] . "</a></td>\n";
 		echo "<td>" . $result["date"] . "</td>\n";
-		echo "<td><a href=\"" . add_query_arg("request_method" , $result["request_method"], $request_uri) . "\">" . $result["request_method"] . "</a></td>\n";
-		echo "<td>" . $result["request_uri"] . "</td>\n";
+		echo "<td><a href=\"" . $result["key"] . "\">" . $key["log"] . "</a></td>\n";
 		echo "<td><a href=\"" . add_query_arg("user_agent", $result["user_agent"], $request_uri) . "\">" . $result["user_agent"] . "</a></td>\n";
-		echo "<td>" . str_replace("\n", "<br/>\n", $result["http_headers"]) . "</td>\n";
+		echo "<td>" . str_replace(array($result['REQUEST_METHOD'], "\n"), array("<a href=\"" . add_query_arg("request_method" , $result["request_method"], $request_uri) . "\">" . $result["request_method"] . "</a>", "<br/>\n"), $result["http_headers"]) . "</td>\n";
 		echo "<td>" . str_replace("\n", "<br/>\n", $result["request_entity"]) . "</td>\n";
 		echo "</tr>\n";
 	}
