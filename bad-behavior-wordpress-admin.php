@@ -45,8 +45,11 @@ function bb2_manage() {
 	// Query the DB based on variables selected
 	$r = bb2_db_query("SELECT COUNT(*) FROM `" . $settings['log_table'] . "` WHERE 1=1 " . $where);
 	$results = bb2_db_rows($r);
+	$totalcount = $results[0]["COUNT(*)"];
+	$pages = ceil($totalcount / 100);
+	$r = bb2_db_query("SELECT * FROM `" . $settings['log_table'] . "` WHERE 1=1 " . $where);
+	$results = bb2_db_rows($r);
 	$count = $results[0]["COUNT(*)"];
-	$pages = ceil($count / 100);
 	$r = bb2_db_query("SELECT * FROM `" . $settings['log_table'] . "` WHERE 1=1 " . $where . "ORDER BY `date` DESC LIMIT " . ($paged - 1) * $rows_per_page . "," . $rows_per_page);
 	$results = bb2_db_rows($r);
 
@@ -64,7 +67,11 @@ function bb2_manage() {
 	if ($page_links) echo "<div class=\"tablenav-pages\">$page_links</div>\n";
 ?>
 <div class="alignleft">
-Filtering <?php echo $count; ?> records:
+<?php if ($count < $totalcount): ?>
+Displaying <?php echo $count; ?> of <?php echo $totalcount; ?> records filtered by
+<?php else: ?>
+Displaying <?php echo $totalcount; ?> records
+<?php endif; ?>
 <?php if ($_GET['ip']) echo "IP [<a href=\"" . remove_query_arg(array("paged", "ip"), $request_uri) . "\">X</a>] "; ?>
 <?php if ($_GET['key']) echo "Status [<a href=\"" . remove_query_arg(array("paged", "key"), $request_uri) . "\">X</a>] "; ?>
 <?php if ($_GET['user_agent']) echo "User Agent [<a href=\"" . remove_query_arg(array("paged", "user_agent"), $request_uri) . "\">X</a>] "; ?>
