@@ -39,12 +39,12 @@ function bb2_manage() {
 	<thead>
 	<tr>
 	<th scope="col" class="check-column"><input type="checkbox" onclick="checkAll(document.getElementById('request-filter'));" /></th>
-	<th scope="col"><?php __("IP"); ?></th>
-	<th scope="col"><?php __("Date"); ?></th>
-	<th scope="col"><?php __("Method"); ?></th>
-	<th scope="col"><?php __("URL"); ?></th>
-	<th scope="col"><?php __("Headers"); ?></th>
-	<th scope="col"><?php __("Entity"); ?></th>
+	<th scope="col"><?php _e("IP"); ?></th>
+	<th scope="col"><?php _e("Date"); ?></th>
+	<th scope="col"><?php _e("Method"); ?></th>
+	<th scope="col"><?php _e("URL"); ?></th>
+	<th scope="col"><?php _e("Headers"); ?></th>
+	<th scope="col"><?php _e("Entity"); ?></th>
 	</tr>
 	</thead>
 	<tbody>
