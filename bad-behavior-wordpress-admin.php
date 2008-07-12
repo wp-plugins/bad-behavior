@@ -63,7 +63,7 @@ function bb2_manage() {
 			echo "<tr id=\"request-" . $result["id"] . "\" class=\"alternate\" valign=\"top\">\n";
 		}
 		echo "<th scope=\"row\" class=\"check-column\"><input type=\"checkbox\" name=\"submit[]\" value=\"" . $result["id"] . "\" /></th>\n";
-		echo "<td>${ahref}ip=" . $result["ip"] . "\">" . $result["ip"] "</a></td>\n";
+		echo "<td>${ahref}ip=" . $result["ip"] . "\">" . $result["ip"] . "</a></td>\n";
 		echo "<td>" . $result["date"] . "</td>\n";
 		echo "<td>${ahref}request_method=" . $result["request_method"] . "\">" . $result["request_method"] . "</a></td>\n";
 		echo "<td>" . $result["request_uri"] . "</td>\n";
