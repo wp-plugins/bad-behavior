@@ -21,23 +21,37 @@ function bb2_admin_pages() {
 }
 
 function bb2_manage() {
+	$request_uri = $_SERVER["REQUEST_URI"];
 	$settings = bb2_read_settings();
 	$rows_per_page = 100;
 	$where = "";
 
 	// Get query variables desired by the user
+	$paged = $_GET['paged']; if (!$paged) $paged = 1;
+
 
 	// Query the DB based on variables selected
 	$r = bb2_db_query("SELECT COUNT(*) FROM `" . $settings['log_table'] . "` WHERE 1=1 " . $where);
 	$count = bb2_db_num_rows($r);
-	$r = bb2_db_query("SELECT * FROM `" . $settings['log_table'] . "` WHERE 1=1 " . $where . "ORDER BY `date` DESC LIMIT 0," . $rows_per_page);
+	$pages = ceil(count / 100);
+	$r = bb2_db_query("SELECT * FROM `" . $settings['log_table'] . "` WHERE 1=1 " . $where . "ORDER BY `date` DESC LIMIT " . ($paged - 1) * $rows_per_page . "," . $rows_per_page);
 	$results = bb2_db_rows($r);
 
 	// Display rows to the user
 ?>
 <div class="wrap">
 <h2><?php _e("Bad Behavior"); ?></h2>
-<form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
+<form method="post" action="<?php echo $request_uri; ?>">
+	<p>For more information please visit the <a href="http://www.bad-behavior.ioerror.us/">Bad Behavior</a> homepage.</p>
+	<p>If you find Bad Behavior valuable, please consider making a <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=error%40ioerror%2eus&item_name=Bad%20Behavior%20<?php echo BB2_VERSION; ?>%20%28From%20Admin%29&no_shipping=1&cn=Comments%20about%20Bad%20Behavior&tax=0&currency_code=USD&bn=PP%2dDonationsBF&charset=UTF%2d8">financial contribution</a> to further development of Bad Behavior.</p>
+
+<div class="tablenav">
+<?php
+	$page_links = paginate_links(array('base' => add_query_arg("paged", "%#%", $request_uri), 'format' => '', 'total' => $count, 'current' => $paged));
+	if ($page_links) echo "<div class=\"tablenav-pages\">$page_links</div>\n";
+?>
+</div>
+
 <table class="widefat">
 	<thead>
 	<tr>
@@ -54,7 +68,6 @@ function bb2_manage() {
 	<tbody>
 <?php
 	$alternate = 0;
-	$ahref = "<a href=\"" . $_SERVER['REQUEST_URI'] . "?";
 	foreach ($results as $result) {
 		$alternate++;
 		if ($alternate % 2) {
@@ -63,11 +76,11 @@ function bb2_manage() {
 			echo "<tr id=\"request-" . $result["id"] . "\" class=\"alternate\" valign=\"top\">\n";
 		}
 		echo "<th scope=\"row\" class=\"check-column\"><input type=\"checkbox\" name=\"submit[]\" value=\"" . $result["id"] . "\" /></th>\n";
-		echo "<td>${ahref}ip=" . $result["ip"] . "\">" . $result["ip"] . "</a></td>\n";
+		echo "<td><a href=\"" . add_query_arg("ip", $result["ip"], $request_uri) . "\">" . $result["ip"] . "</a></td>\n";
 		echo "<td>" . $result["date"] . "</td>\n";
-		echo "<td>${ahref}request_method=" . $result["request_method"] . "\">" . $result["request_method"] . "</a></td>\n";
+		echo "<td><a href=\"" . add_query_arg("request_method" , $result["request_method"], $request_uri) . "\">" . $result["request_method"] . "</a></td>\n";
 		echo "<td>" . $result["request_uri"] . "</td>\n";
-		echo "<td>${ahref}user_agent=" . $result["user_agent"] . "\">" . $result["user_agent"] . "</a></td>\n";
+		echo "<td><a href=\"" . add_query_arg("user_agent", $result["user_agent"], $request_uri) . "\">" . $result["user_agent"] . "</a></td>\n";
 		echo "<td>" . str_replace("\n", "<br/>\n", $result["http_headers"]) . "</td>\n";
 		echo "<td>" . str_replace("\n", "<br/>\n", $result["request_entity"]) . "</td>\n";
 		echo "</tr>\n";
