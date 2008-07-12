@@ -48,7 +48,7 @@ function bb2_manage() {
 	$results = bb2_db_rows($r);
 	$totalcount = $results[0]["COUNT(*)"];
 	$pages = ceil($totalcount / 100);
-	$r = bb2_db_query("SELECT * FROM `" . $settings['log_table'] . "` WHERE 1=1 " . $where);
+	$r = bb2_db_query("SELECT COUNT(*) FROM `" . $settings['log_table'] . "` WHERE 1=1 " . $where);
 	$results = bb2_db_rows($r);
 	$count = $results[0]["COUNT(*)"];
 	$r = bb2_db_query("SELECT * FROM `" . $settings['log_table'] . "` WHERE 1=1 " . $where . "ORDER BY `date` DESC LIMIT " . ($paged - 1) * $rows_per_page . "," . $rows_per_page);
