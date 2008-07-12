@@ -4,7 +4,7 @@
 
 function bb2_get_response($key) {
 	$bb2_responses = array(
-		'00000000' => array('response' => 200, 'explanation' => '', 'log' => ''),
+		'00000000' => array('response' => 200, 'explanation' => '', 'log' => 'Permitted'),
 		'136673cd' => array('response' => 403, 'explanation' => 'Your Internet Protocol address is listed on a blacklist of addresses involved in malicious or illegal activity. See the listing below for more details on specific blacklists and removal procedures.', 'log' => 'IP address found on external blacklist'),
 		'17566707' => array('response' => 403, 'explanation' => 'An invalid request was received from your browser. This may be caused by a malfunctioning proxy server or browser privacy software.', 'log' => 'Required header \'Accept\' missing'),
 		'17f4e8c8' => array('response' => 403, 'explanation' => 'You do not have permission to access this server.', 'log' => 'User-Agent was found on blacklist'),
