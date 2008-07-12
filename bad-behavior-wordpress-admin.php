@@ -30,18 +30,20 @@ function bb2_clean_log_link($uri) {
 }
 
 function bb2_manage() {
+	global $wpdb;
+
 	$request_uri = $_SERVER["REQUEST_URI"];
 	$settings = bb2_read_settings();
 	$rows_per_page = 100;
 	$where = "";
 
 	// Get query variables desired by the user
-	$paged = $_GET['paged']; if (!$paged) $paged = 1;
-	if ($_GET['key']) $where .= "AND `key` = '" . $_GET['key'] . "' ";
+	$paged = int($_GET['paged']); if (!$paged) $paged = 1;
+	if ($_GET['key']) $where .= "AND `key` = '" . $wpdb->escape($_GET['key']) . "' ";
 	if ($_GET['blocked']) $where .= "AND `key` != '00000000' ";
-	if ($_GET['ip']) $where .= "AND `ip` = '" . $_GET['ip'] . "' ";
-	if ($_GET['user_agent']) $where .= "AND `user_agent` = '" . $_GET['user_agent'] . "' ";
-	if ($_GET['request_method']) $where .= "AND `request_method` = '" . $_GET['request_method'] . "' ";
+	if ($_GET['ip']) $where .= "AND `ip` = '" . $wpdb->escape($_GET['ip']) . "' ";
+	if ($_GET['user_agent']) $where .= "AND `user_agent` = '" . $wpdb->escape($_GET['user_agent']) . "' ";
+	if ($_GET['request_method']) $where .= "AND `request_method` = '" . $wpdb->escape($_GET['request_method']) . "' ";
 
 	// Query the DB based on variables selected
 	$r = bb2_db_query("SELECT COUNT(*) FROM `" . $settings['log_table']);
