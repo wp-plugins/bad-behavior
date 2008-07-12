@@ -30,7 +30,10 @@ function bb2_manage() {
 
 	// Get query variables desired by the user
 	$paged = $_GET['paged']; if (!$paged) $paged = 1;
-
+	if ($_GET['key']) $where .= "AND `key` = '" . $_GET['key'] . "' ";
+	if ($_GET['ip']) $where .= "AND `ip` = '" . $_GET['ip'] . "' ";
+	if ($_GET['user_agent']) $where .= "AND `user_agent` = '" . $_GET['user_agent'] . "' ";
+	if ($_GET['request_method']) $where .= "AND `request_method` = '" . $_GET['request_method'] . "' ";
 
 	// Query the DB based on variables selected
 	$r = bb2_db_query("SELECT COUNT(*) FROM `" . $settings['log_table'] . "` WHERE 1=1 " . $where);
@@ -58,9 +61,7 @@ function bb2_manage() {
 	<thead>
 	<tr>
 	<th scope="col" class="check-column"><input type="checkbox" onclick="checkAll(document.getElementById('request-filter'));" /></th>
-	<th scope="col"><?php _e("Status"); ?></th>
-	<th scope="col"><?php _e("IP"); ?></th>
-	<th scope="col"><?php _e("Date"); ?></th>
+	<th scope="col"><?php _e("IP/Date/Status"); ?></th>
 	<th scope="col"><?php _e("User Agent"); ?></th>
 	<th scope="col"><?php _e("Headers"); ?></th>
 	<th scope="col"><?php _e("Entity"); ?></th>
@@ -78,9 +79,7 @@ function bb2_manage() {
 			echo "<tr id=\"request-" . $result["id"] . "\" class=\"alternate\" valign=\"top\">\n";
 		}
 		echo "<th scope=\"row\" class=\"check-column\"><input type=\"checkbox\" name=\"submit[]\" value=\"" . $result["id"] . "\" /></th>\n";
-		echo "<td><a href=\"" . add_query_arg("key", $result["key"], $request_uri) . "\">" . $key["log"] . "</a></td>\n";
-		echo "<td><a href=\"" . add_query_arg("ip", $result["ip"], $request_uri) . "\">" . $result["ip"] . "</a></td>\n";
-		echo "<td>" . $result["date"] . "</td>\n";
+		echo "<td><a href=\"" . add_query_arg("ip", $result["ip"], $request_uri) . "\">" . $result["ip"] . "</a><br/><br/>\n<td>" . $result["date"] . "<br/><br/>><a href=\"" . add_query_arg("key", $result["key"], $request_uri) . "\">" . $key["log"] . "</a></td>\n";
 		echo "<td><a href=\"" . add_query_arg("user_agent", $result["user_agent"], $request_uri) . "\">" . $result["user_agent"] . "</a></td>\n";
 		echo "<td>" . str_replace(array($result['request_method'], "\n"), array("<a href=\"" . add_query_arg("request_method" , $result["request_method"], $request_uri) . "\">" . $result["request_method"] . "</a>", "<br/>\n"), $result["http_headers"]) . "</td>\n";
 		echo "<td>" . str_replace("\n", "<br/>\n", $result["request_entity"]) . "</td>\n";
