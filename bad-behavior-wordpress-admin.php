@@ -62,8 +62,8 @@ function bb2_manage() {
 		echo "<td>" . $result["date"] . "</td>\n";
 		echo "<td>" . $result["request_method"] . "</td>\n";
 		echo "<td>" . $result["request_uri"] . "</td>\n";
-		echo "<td>" . $result["http_headers"] . "</td>\n";
-		echo "<td>" . $result["request_entity"] . "</td>\n";
+		echo "<td>" . str_replace("\n", "<br/>\n", $result["http_headers"]) . "</td>\n";
+		echo "<td>" . str_replace("\n", "<br/>\n", $result["request_entity"]) . "</td>\n";
 		echo "</tr>\n";
 	}
 ?>
