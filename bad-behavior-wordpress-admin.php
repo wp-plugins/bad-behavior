@@ -1,5 +1,7 @@
 <?php if (!defined('BB2_CORE')) die('I said no cheating!');
 
+require_once("bad-behavior/responses.inc.php");
+
 function bb2_admin_pages() {
 	if (function_exists('current_user_can')) {
 		// The new 2.x way
