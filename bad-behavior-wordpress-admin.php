@@ -35,6 +35,9 @@ function bb2_manage() {
 
 	// Display rows to the user
 ?>
+<div class="wrap">
+<h2><?php _e("Bad Behavior"); ?></h2>
+<form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
 <table class="widefat">
 	<thead>
 	<tr>
@@ -43,6 +46,7 @@ function bb2_manage() {
 	<th scope="col"><?php _e("Date"); ?></th>
 	<th scope="col"><?php _e("Method"); ?></th>
 	<th scope="col"><?php _e("URL"); ?></th>
+	<th scope="col"><?php _e("User Agent"); ?></th>
 	<th scope="col"><?php _e("Headers"); ?></th>
 	<th scope="col"><?php _e("Entity"); ?></th>
 	</tr>
@@ -50,6 +54,7 @@ function bb2_manage() {
 	<tbody>
 <?php
 	$alternate = 0;
+	$ahref = "<a href=\"" . $_SERVER['REQUEST_URI'] . "?";
 	foreach ($results as $result) {
 		$alternate++;
 		if ($alternate % 2) {
@@ -58,17 +63,20 @@ function bb2_manage() {
 			echo "<tr id=\"request-" . $result["id"] . "\" class=\"alternate\" valign=\"top\">\n";
 		}
 		echo "<th scope=\"row\" class=\"check-column\"><input type=\"checkbox\" name=\"submit[]\" value=\"" . $result["id"] . "\" /></th>\n";
-		echo "<td>" . $result["ip"] . "</td>\n";
+		echo "<td>${ahref}ip=" . $result["ip"] . "\">" . $result["ip"] "</a></td>\n";
 		echo "<td>" . $result["date"] . "</td>\n";
-		echo "<td>" . $result["request_method"] . "</td>\n";
+		echo "<td>${ahref}request_method=" . $result["request_method"] . "\">" . $result["request_method"] . "</a></td>\n";
 		echo "<td>" . $result["request_uri"] . "</td>\n";
+		echo "<td>${ahref}user_agent=" . $result["user_agent"] . "\">" . $result["user_agent"] . "</a></td>\n";
 		echo "<td>" . str_replace("\n", "<br/>\n", $result["http_headers"]) . "</td>\n";
 		echo "<td>" . str_replace("\n", "<br/>\n", $result["request_entity"]) . "</td>\n";
 		echo "</tr>\n";
 	}
 ?>
 	</tbody>
-	</table>
+</table>
+</form>
+</div>
 <?php
 }
 

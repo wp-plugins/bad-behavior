@@ -160,6 +160,7 @@ require_once(BB2_CWD . "/bad-behavior/core.inc.php");
 bb2_install();	// FIXME: see above
 
 if (is_admin() || strstr($_SERVER['PHP_SELF'], 'wp-admin/')) {	// 1.5 kludge
+	wp_enqueue_script("admin-forms");
 	require_once(BB2_CWD . "/bad-behavior-wordpress-admin.php");
 }
 
