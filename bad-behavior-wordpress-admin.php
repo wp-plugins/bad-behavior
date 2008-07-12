@@ -44,7 +44,7 @@ function bb2_manage() {
 	if ($_GET['request_method']) $where .= "AND `request_method` = '" . $_GET['request_method'] . "' ";
 
 	// Query the DB based on variables selected
-	$r = bb2_db_query("SELECT COUNT(*) FROM `" . $settings['log_table'] . "` WHERE 1=1 " . $where);
+	$r = bb2_db_query("SELECT COUNT(*) FROM `" . $settings['log_table']);
 	$results = bb2_db_rows($r);
 	$totalcount = $results[0]["COUNT(*)"];
 	$pages = ceil($totalcount / 100);
@@ -69,14 +69,15 @@ function bb2_manage() {
 ?>
 <div class="alignleft">
 <?php if ($count < $totalcount): ?>
-Displaying <?php echo $count; ?> of <?php echo $totalcount; ?> records filtered by
+Displaying <?php echo $count; ?> of <?php echo $totalcount; ?> records filtered by:<br/>
 <?php if ($_GET['ip']) echo "IP [<a href=\"" . remove_query_arg(array("paged", "ip"), $request_uri) . "\">X</a>] "; ?>
 <?php if ($_GET['key']) echo "Status [<a href=\"" . remove_query_arg(array("paged", "key"), $request_uri) . "\">X</a>] "; ?>
 <?php if ($_GET['blocked']) echo "Blocked [<a href=\"" . remove_query_arg(array("paged", "blocked"), $request_uri) . "\">X</a>] "; ?>
 <?php if ($_GET['user_agent']) echo "User Agent [<a href=\"" . remove_query_arg(array("paged", "user_agent"), $request_uri) . "\">X</a>] "; ?>
 <?php if ($_GET['request_method']) echo "Method [<a href=\"" . remove_query_arg(array("paged", "request_method"), $request_uri) . "\">X</a>] "; ?>
 <?php else: ?>
-Displaying <?php echo $totalcount; ?> records
+Displaying all <?php echo $totalcount; ?> records<br/>
+<a href="<?php add_query_arg("blocked", "true", remove_query_arg("paged", $request_uri)); ?>">Show Blocked</a>
 <?php endif; ?>
 </div>
 </div>
