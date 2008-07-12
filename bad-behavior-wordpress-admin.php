@@ -64,7 +64,11 @@ function bb2_manage() {
 	if ($page_links) echo "<div class=\"tablenav-pages\">$page_links</div>\n";
 ?>
 <div class="alignleft">
-Page <?php echo $paged; ?> of <?php echo $pages; ?> (count <?php echo $count; ?>)
+Filtering <?php echo $count; ?> records:
+<?php if ($_GET['ip']) echo "IP [<a href=\"" . remove_query_arg(array("paged", "ip"), $request_uri) . "\">X</a>] "; ?>
+<?php if ($_GET['key']) echo "Status [<a href=\"" . remove_query_arg(array("paged", "key"), $request_uri) . "\">X</a>] "; ?>
+<?php if ($_GET['user_agent']) echo "User Agent [<a href=\"" . remove_query_arg(array("paged", "user_agent"), $request_uri) . "\">X</a>] "; ?>
+<?php if ($_GET['request_method']) echo "Method [<a href=\"" . remove_query_arg(array("paged", "request_method"), $request_uri) . "\">X</a>] "; ?>
 </div>
 </div>
 
