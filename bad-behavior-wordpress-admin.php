@@ -16,7 +16,55 @@ function bb2_admin_pages() {
 
 	if ($bb2_is_admin) {
 		add_options_page(__("Bad Behavior"), __("Bad Behavior"), 8, 'bb2_options', 'bb2_options');
+		add_management_page(__("Bad Behavior"), __("Bad Behavior"), 8, 'bb2_manage', 'bb2_manage');
 	}
+}
+
+function bb2_manage() {
+	$settings = bb2_read_settings();
+	$rows_per_page = 100;
+	$where = "";
+
+	// Get query variables desired by the user
+
+	// Query the DB based on variables selected
+	$r = bb2_db_query("SELECT COUNT(*) FROM `" . $settings['log_table'] . "` WHERE 1=1 " . $where);
+	$count = bb2_db_num_rows($r);
+	$r = bb2_db_query("SELECT * FROM `" . $settings['log_table'] . "` WHERE 1=1 " . $where . "ORDER BY `date` DESC LIMIT 0," . $rows_per_page);
+	$results = bb2_db_rows($r);
+
+	// Display rows to the user
+?>
+<table class="widefat">
+	<thead>
+	<tr>
+	<th scope="col" class="check-column"><input type="checkbox" onclick="checkAll(document.getElementById('request-filter'));" /></th>
+	<th scope="col"><?php __("IP"); ?></th>
+	<th scope="col"><?php __("Date"); ?></th>
+	<th scope="col"><?php __("Method"); ?></th>
+	<th scope="col"><?php __("URL"); ?></th>
+	<th scope="col"><?php __("Headers"); ?></th>
+	<th scope="col"><?php __("Entity"); ?></th>
+	</tr>
+	</thead>
+	<tbody>
+<?php
+	$alternate = 0;
+	foreach ($results as $result) {
+		echo "<tr id=\"request-" . $result["id"] . "\" class=\"" . $alternate ? "alternate" : "" . "\" valign=\"top\">\n";
+		echo "<th scope=\"row\" class=\"check-column\"><input type=\"checkbox\" name=\"submit[]\" value=\"" . $result["id"] . "\" /></th>\n";
+		echo "<td>" . $result["ip"] . "</td>\n";
+		echo "<td>" . $result["date"] . "</td>\n";
+		echo "<td>" . $result["request_method"] . "</td>\n";
+		echo "<td>" . $result["request_uri"] . "</td>\n";
+		echo "<td>" . $result["http_headers"] . "</td>\n";
+		echo "<td>" . $result["request_entity"] . "</td>\n";
+		echo "</tr>\n";
+	}
+?>
+	</tbody>
+	</table>
+<?php
 }
 
 function bb2_options()
