@@ -23,7 +23,7 @@ function bb2_admin_pages() {
 }
 
 function bb2_clean_log_link($uri) {
-	foreach (array("paged", "ip", "key", "request_method", "user_agent") as $arg) {
+	foreach (array("paged", "ip", "key", "blocked", "request_method", "user_agent") as $arg) {
 		$uri = remove_query_arg($arg, $uri);
 	}
 	return $uri;
@@ -38,6 +38,7 @@ function bb2_manage() {
 	// Get query variables desired by the user
 	$paged = $_GET['paged']; if (!$paged) $paged = 1;
 	if ($_GET['key']) $where .= "AND `key` = '" . $_GET['key'] . "' ";
+	if ($_GET['blocked']) $where .= "AND `key` != '00000000' ";
 	if ($_GET['ip']) $where .= "AND `ip` = '" . $_GET['ip'] . "' ";
 	if ($_GET['user_agent']) $where .= "AND `user_agent` = '" . $_GET['user_agent'] . "' ";
 	if ($_GET['request_method']) $where .= "AND `request_method` = '" . $_GET['request_method'] . "' ";
@@ -69,13 +70,14 @@ function bb2_manage() {
 <div class="alignleft">
 <?php if ($count < $totalcount): ?>
 Displaying <?php echo $count; ?> of <?php echo $totalcount; ?> records filtered by
+<?php if ($_GET['ip']) echo "IP [<a href=\"" . remove_query_arg(array("paged", "ip"), $request_uri) . "\">X</a>] "; ?>
+<?php if ($_GET['key']) echo "Status [<a href=\"" . remove_query_arg(array("paged", "key"), $request_uri) . "\">X</a>] "; ?>
+<?php if ($_GET['blocked']) echo "Blocked [<a href=\"" . remove_query_arg(array("paged", "blocked"), $request_uri) . "\">X</a>] "; ?>
+<?php if ($_GET['user_agent']) echo "User Agent [<a href=\"" . remove_query_arg(array("paged", "user_agent"), $request_uri) . "\">X</a>] "; ?>
+<?php if ($_GET['request_method']) echo "Method [<a href=\"" . remove_query_arg(array("paged", "request_method"), $request_uri) . "\">X</a>] "; ?>
 <?php else: ?>
 Displaying <?php echo $totalcount; ?> records
 <?php endif; ?>
-<?php if ($_GET['ip']) echo "IP [<a href=\"" . remove_query_arg(array("paged", "ip"), $request_uri) . "\">X</a>] "; ?>
-<?php if ($_GET['key']) echo "Status [<a href=\"" . remove_query_arg(array("paged", "key"), $request_uri) . "\">X</a>] "; ?>
-<?php if ($_GET['user_agent']) echo "User Agent [<a href=\"" . remove_query_arg(array("paged", "user_agent"), $request_uri) . "\">X</a>] "; ?>
-<?php if ($_GET['request_method']) echo "Method [<a href=\"" . remove_query_arg(array("paged", "request_method"), $request_uri) . "\">X</a>] "; ?>
 </div>
 </div>
 
