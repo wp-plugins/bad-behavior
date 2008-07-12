@@ -38,7 +38,7 @@ function bb2_manage() {
 	$where = "";
 
 	// Get query variables desired by the user
-	$paged = int($_GET['paged']); if (!$paged) $paged = 1;
+	$paged = 0 + $_GET['paged']; if (!$paged) $paged = 1;
 	if ($_GET['key']) $where .= "AND `key` = '" . $wpdb->escape($_GET['key']) . "' ";
 	if ($_GET['blocked']) $where .= "AND `key` != '00000000' ";
 	if ($_GET['ip']) $where .= "AND `ip` = '" . $wpdb->escape($_GET['ip']) . "' ";
