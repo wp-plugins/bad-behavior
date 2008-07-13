@@ -224,6 +224,16 @@ function bb2_options()
 		} else {
 			$settings['httpbl_key'] = '';
 		}
+		if ($_POST['httpbl_threat']) {
+			$settings['httpbl_threat'] = $_POST['httpbl_threat'];
+		} else {
+			$settings['httpbl_threat'] = '25';
+		}
+		if ($_POST['httpbl_maxage']) {
+			$settings['httpbl_maxage'] = $_POST['httpbl_maxage'];
+		} else {
+			$settings['httpbl_maxage'] = '30';
+		}
 		bb2_write_settings($settings);
 ?>
 	<div id="message" class="updated fade"><p><strong><?php _e('Options saved.') ?></strong></p></div>
@@ -258,6 +268,8 @@ function bb2_options()
 	<p>To use Bad Behavior's http:BL features you must have an <a href="http://www.projecthoneypot.org/httpbl_configure.php">http:BL Access Key</a>.</p>
 	<table class="form-table">
 	<tr><td><label><input type="text" size="12" maxlength="12" name="httpbl_key" value="<?php echo $settings['httpbl_key']; ?>" /> http:BL Access Key</label></td></tr>
+	<tr><td><label><input type="text" size="3" maxlength="3" name="httpbl_threat" value="<?php echo $settings['httpbl_threat']; ?>" /> Minimum Threat Level (25 is recommended)</label></td></tr>
+	<tr><td><label><input type="text" size="3" maxlength="3" name="httpbl_maxage" value="<?php echo $settings['httpbl_maxage']; ?>" /> Maximum Age of Data (30 is recommended)</label></td></tr>
 	</table>
 
 	<p class="submit"><input class="button" type="submit" name="submit" value="<?php _e('Update &raquo;'); ?>" /></p>

@@ -103,6 +103,8 @@
 		$isInstalled = $config->getValue( 'bb2_installed', false );
 		$logging = $config->getValue( 'bb2_logging', true );
 		$httpbl_key = $config->getValue( 'bb2_httpbl_key', '' );
+		$httpbl_threat = $config->getValue( 'bb2_httpbl_threat', '25' );
+		$httpbl_maxage = $config->getValue( 'bb2_httpbl_maxage', '30' );
 		
 		return array('log_table' => $prefix . $logTable, 
 					 'display_stats' => $displayStats,
@@ -110,6 +112,8 @@
 					 'verbose' => $verbose,
 					 'logging' => $logging,
 					 'httpbl_key' => $httpbl_key,
+					 'httpbl_threat' => $httpbl_threat,
+					 'httpbl_maxage' => $httpbl_maxage,
 					 'is_installed' => $isInstalled );
 	}
 	
@@ -122,6 +126,8 @@
 		$config->setValue( 'bb2_strict', $settings['strict'] );
 		$config->setValue( 'bb2_verbose', $settings['verbose'] );
 		$config->setValue( 'bb2_httpbl_key', $settings['httpbl_key'] );
+		$config->setValue( 'bb2_httpbl_threat', $settings['httpbl_threat'] );
+		$config->setValue( 'bb2_httpbl_maxage', $settings['httpbl_maxage'] );
 		$config->setValue( 'bb2_installed', $settings['is_installed'] );
 		$config->save();
 	}

@@ -32,6 +32,8 @@ $bb2_settings_defaults = array(
 	'verbose' => false,
 	'logging' => true,
 	'httpbl_key' => '',
+	'httpbl_threat' => '25',
+	'httpbl_maxage' => '30',
 );
 
 define('BB2_CWD', dirname(__FILE__));
