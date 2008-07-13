@@ -10,7 +10,7 @@ function bb2_blacklist($package) {
 		"adwords",		// referrer spam
 		"autoemailspider",	// spam harvester
 		"blogsearchbot-martin",	// from honeypot
-		"core-project/"		// FrontPage extension exploits
+		"core-project/",	// FrontPage extension exploits
 		"Digger",		// spam harvester
 		"ecollector",		// spam harvester
 		"EmailCollector",	// spam harvester
@@ -75,6 +75,7 @@ function bb2_blacklist($package) {
 		"Windows NT 5.0;)",	// wikispam bot
 		"Windows NT 5.1;)",	// wikispam bot
 		"Windows XP 5",		// spam harvester
+		"WordPress/4.01",	// pingback spam
 		"\\\\)",		// spam harvester
 	);
 
