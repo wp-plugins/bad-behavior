@@ -106,7 +106,7 @@ function bb2_read_settings() {
 	// Add in default settings when they aren't yet present in WP
 	$settings = get_settings('bad_behavior_settings');
 	if (!$settings) $settings = array();
-	return array_merge(array('log_table' => $wpdb->prefix . 'bad_behavior', 'display_stats' => true, 'strict' => false, 'verbose' => false, 'logging' => true), $settings);
+	return array_merge(array('log_table' => $wpdb->prefix . 'bad_behavior', 'display_stats' => true, 'strict' => false, 'verbose' => false, 'logging' => true, 'httpbl_key' => '',), $settings);
 }
 
 // write settings to database

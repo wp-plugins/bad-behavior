@@ -37,7 +37,8 @@ function bb2_httpbl_lookup($ip) {
 		8 => "msnbot",
 		9 => "Yahoo! Slurp",
 	);
-	$httpbl_key = "owwdrvbhklry";
+	$settings = bb2_read_settings();
+	$httpbl_key = $settings['httpbl_key'];
 	$r = $_SESSION['httpbl'][$ip];
 	$d = "";
 	if (!$r) {	// Lookup
@@ -86,7 +87,7 @@ function bb2_manage() {
 	$rows_per_page = 100;
 	$where = "";
 
-	// Get query variables desired by the user
+	// Get query variables desired by the user with input validation
 	$paged = 0 + $_GET['paged']; if (!$paged) $paged = 1;
 	if ($_GET['key']) $where .= "AND `key` = '" . $wpdb->escape($_GET['key']) . "' ";
 	if ($_GET['blocked']) $where .= "AND `key` != '00000000' ";
@@ -216,6 +217,11 @@ function bb2_options()
 			$settings['verbose'] = false;
 			$settings['logging'] = false;
 		}
+		if ($_POST['httpbl_key']) {
+			$settings['httpbl_key'] = $_POST['httpbl_key'];
+		} else {
+			$settings['httpbl_key'] = '';
+		}
 		bb2_write_settings($settings);
 ?>
 	<div id="message" class="updated fade"><p><strong><?php _e('Options saved.') ?></strong></p></div>
@@ -244,6 +250,12 @@ function bb2_options()
 	<h3><?php _e('Strict Mode'); ?></h3>
 	<table class="form-table">
 	<tr><td><label><input type="checkbox" name="strict" value="true" <?php if ($settings['strict']) { ?>checked="checked" <?php } ?>/> <?php _e('Strict checking (blocks more spam but may block some people)'); ?></label></td></tr>
+	</table>
+
+	<h3><?php _e('http:BL'); ?></h3>
+	<p>To use Bad Behavior's http:BL features you must have an <a href="http://www.projecthoneypot.org/httpbl_configure.php">http:BL Access Key</a>.</p>
+	<table class="form-table">
+	<tr><td><label><input type="text" size="12" maxlength="12" name="httpbl_key" value="<?php echo $settings['httpbl_key']; ?>" /> http:BL Access Key</label></td></tr>
 	</table>
 
 	<p class="submit"><input class="button" type="submit" name="submit" value="<?php _e('Update &raquo;'); ?>" /></p>

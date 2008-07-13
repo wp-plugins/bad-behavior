@@ -30,7 +30,8 @@ $bb2_settings_defaults = array(
 	'display_stats' => true,
 	'strict' => false,
 	'verbose' => false,
-	'logging' => true
+	'logging' => true,
+	'httpbl_key' => '',
 );
 
 define('BB2_CWD', dirname(__FILE__));

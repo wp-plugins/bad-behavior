@@ -102,12 +102,14 @@
 		$verbose = $config->getValue( 'bb2_verbose', false );
 		$isInstalled = $config->getValue( 'bb2_installed', false );
 		$logging = $config->getValue( 'bb2_logging', true );
+		$httpbl_key = $config->getValue( 'bb2_httpbl_key', '' );
 		
 		return array('log_table' => $prefix . $logTable, 
 					 'display_stats' => $displayStats,
 					 'strict' => $strict,
 					 'verbose' => $verbose,
 					 'logging' => $logging,
+					 'httpbl_key' => $httpbl_key,
 					 'is_installed' => $isInstalled );
 	}
 	
@@ -119,6 +121,7 @@
 		$config->setValue( 'bb2_display_stats', $settings['display_stats'] );
 		$config->setValue( 'bb2_strict', $settings['strict'] );
 		$config->setValue( 'bb2_verbose', $settings['verbose'] );
+		$config->setValue( 'bb2_httpbl_key', $settings['httpbl_key'] );
 		$config->setValue( 'bb2_installed', $settings['is_installed'] );
 		$config->save();
 	}
