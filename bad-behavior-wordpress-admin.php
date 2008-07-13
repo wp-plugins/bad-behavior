@@ -19,6 +19,7 @@ function bb2_admin_pages() {
 	if ($bb2_is_admin) {
 		add_options_page(__("Bad Behavior"), __("Bad Behavior"), 8, 'bb2_options', 'bb2_options');
 		add_management_page(__("Bad Behavior"), __("Bad Behavior"), 8, 'bb2_manage', 'bb2_manage');
+		@session_start();
 	}
 }
 
@@ -27,6 +28,20 @@ function bb2_clean_log_link($uri) {
 		$uri = remove_query_arg($arg, $uri);
 	}
 	return $uri;
+}
+
+function bb2_httpbl_lookup($ip) {
+	$httpbl_key = "owwdrvbhklry";
+	$r = $_SESSION['httpbl'][$ip];
+	if ($r === false) {
+		$find = implode('.', array_reverse(explode('.', "${httpbl_key}.${ip}")));
+		$result = gethostbynamel("${find}.dnsbl.httpbl.org.");
+		if (!empty($result)) {
+			$r = $result[0];
+			$_SESSION['httpbl'][$ip] = $r;
+		}
+	}
+	return $r;
 }
 
 function bb2_manage() {
@@ -105,7 +120,8 @@ Displaying all <strong><?php echo $totalcount; ?></strong> records<br/>
 			echo "<tr id=\"request-" . $result["id"] . "\" class=\"alternate\" valign=\"top\">\n";
 		}
 		echo "<th scope=\"row\" class=\"check-column\"><input type=\"checkbox\" name=\"submit[]\" value=\"" . $result["id"] . "\" /></th>\n";
-		echo "<td><a href=\"" . add_query_arg("ip", $result["ip"], remove_query_arg("paged", $request_uri)) . "\">" . $result["ip"] . "</a><br/><br/>\n" . $result["date"] . "<br/><br/><a href=\"" . add_query_arg("key", $result["key"], remove_query_arg(array("paged", "blocked"), $request_uri)) . "\">" . $key["log"] . "</a></td>\n";
+		$httpbl = bb2_httpbl_lookup($result["ip"]);
+		echo "<td><a href=\"" . add_query_arg("ip", $result["ip"], remove_query_arg("paged", $request_uri)) . "\">" . $result["ip"] . "</a><br/><br/>\n" . $result["date"] . "<br/><br/><a href=\"" . add_query_arg("key", $result["key"], remove_query_arg(array("paged", "blocked"), $request_uri)) . "\">" . $key["log"] . "</a><br/><br/>HTTPBL: $httpbl</td>\n";
 		echo "<td>" . str_replace(array($result['user_agent'], $result['request_method'], "\n"), array("<a href=\"" . add_query_arg("user_agent", $result["user_agent"], remove_query_arg("paged", $request_uri)) . "\">" . $result["user_agent"] . "</a>", "<a href=\"" . add_query_arg("request_method" , $result["request_method"], remove_query_arg("paged", $request_uri)) . "\">" . $result["request_method"] . "</a>", "<br/>\n"), htmlspecialchars($result["http_headers"])) . "</td>\n";
 		echo "<td>" . htmlspecialchars(str_replace("\n", "<br/>\n", $result["request_entity"])) . "</td>\n";
 		echo "</tr>\n";
