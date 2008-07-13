@@ -80,7 +80,7 @@ Displaying <strong><?php echo $count; ?></strong> of <strong><?php echo $totalco
 <?php else: ?>
 Displaying all <strong><?php echo $totalcount; ?></strong> records<br/>
 <?php endif; ?>
-<?php if (!$_GET['key'] && !$_GET['blocked']) { ?><a href="<?php add_query_arg("blocked", "true", remove_query_arg("paged", $request_uri)); ?>">Show Blocked</a><?php } ?>
+<?php if (!$_GET['key'] && !$_GET['blocked']) { ?><a href="<?php echo add_query_arg(array("blocked" => "true", "paged" => false), $request_uri); ?>">Show Blocked</a><?php } ?>
 </div>
 </div>
 
