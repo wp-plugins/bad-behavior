@@ -38,7 +38,7 @@ function bb2_manage() {
 	$where = "";
 
 	// Get query variables desired by the user
-	$paged = int($_GET['paged']); if (!$paged) $paged = 1;
+	$paged = 0 + $_GET['paged']; if (!$paged) $paged = 1;
 	if ($_GET['key']) $where .= "AND `key` = '" . $wpdb->escape($_GET['key']) . "' ";
 	if ($_GET['blocked']) $where .= "AND `key` != '00000000' ";
 	if ($_GET['ip']) $where .= "AND `ip` = '" . $wpdb->escape($_GET['ip']) . "' ";
@@ -49,10 +49,10 @@ function bb2_manage() {
 	$r = bb2_db_query("SELECT COUNT(*) FROM `" . $settings['log_table']);
 	$results = bb2_db_rows($r);
 	$totalcount = $results[0]["COUNT(*)"];
-	$pages = ceil($totalcount / 100);
 	$r = bb2_db_query("SELECT COUNT(*) FROM `" . $settings['log_table'] . "` WHERE 1=1 " . $where);
 	$results = bb2_db_rows($r);
 	$count = $results[0]["COUNT(*)"];
+	$pages = ceil($count / 100);
 	$r = bb2_db_query("SELECT * FROM `" . $settings['log_table'] . "` WHERE 1=1 " . $where . "ORDER BY `date` DESC LIMIT " . ($paged - 1) * $rows_per_page . "," . $rows_per_page);
 	$results = bb2_db_rows($r);
 
@@ -71,16 +71,16 @@ function bb2_manage() {
 ?>
 <div class="alignleft">
 <?php if ($count < $totalcount): ?>
-Displaying <?php echo $count; ?> of <?php echo $totalcount; ?> records filtered by:<br/>
+Displaying <strong><?php echo $count; ?></strong> of <strong><?php echo $totalcount; ?></strong> records filtered by:<br/>
 <?php if ($_GET['ip']) echo "IP [<a href=\"" . remove_query_arg(array("paged", "ip"), $request_uri) . "\">X</a>] "; ?>
 <?php if ($_GET['key']) echo "Status [<a href=\"" . remove_query_arg(array("paged", "key"), $request_uri) . "\">X</a>] "; ?>
 <?php if ($_GET['blocked']) echo "Blocked [<a href=\"" . remove_query_arg(array("paged", "blocked"), $request_uri) . "\">X</a>] "; ?>
 <?php if ($_GET['user_agent']) echo "User Agent [<a href=\"" . remove_query_arg(array("paged", "user_agent"), $request_uri) . "\">X</a>] "; ?>
-<?php if ($_GET['request_method']) echo "Method [<a href=\"" . remove_query_arg(array("paged", "request_method"), $request_uri) . "\">X</a>] "; ?>
+<?php if ($_GET['request_method']) echo "GET/POST [<a href=\"" . remove_query_arg(array("paged", "request_method"), $request_uri) . "\">X</a>] "; ?>
 <?php else: ?>
-Displaying all <?php echo $totalcount; ?> records<br/>
+Displaying all <strong><?php echo $totalcount; ?></strong> records<br/>
 <?php endif; ?>
-<?php if (!$_GET['key'] && !$_GET['blocked']) { ?><a href="<?php add_query_arg("blocked", "true", remove_query_arg("paged", $request_uri)); ?>">Show Blocked</a><?php } ?>
+<?php if (!$_GET['key'] && !$_GET['blocked']) { ?><a href="<?php echo add_query_arg(array("blocked" => "true", "paged" => false), $request_uri); ?>">Show Blocked</a><?php } ?>
 </div>
 </div>
 
@@ -106,13 +106,21 @@ Displaying all <?php echo $totalcount; ?> records<br/>
 		}
 		echo "<th scope=\"row\" class=\"check-column\"><input type=\"checkbox\" name=\"submit[]\" value=\"" . $result["id"] . "\" /></th>\n";
 		echo "<td><a href=\"" . add_query_arg("ip", $result["ip"], remove_query_arg("paged", $request_uri)) . "\">" . $result["ip"] . "</a><br/><br/>\n" . $result["date"] . "<br/><br/><a href=\"" . add_query_arg("key", $result["key"], remove_query_arg(array("paged", "blocked"), $request_uri)) . "\">" . $key["log"] . "</a></td>\n";
-		echo "<td>" . str_replace(array($result['user_agent'], $result['request_method'], "\n"), array("<a href=\"" . add_query_arg("user_agent", $result["user_agent"], remove_query_arg("paged", $request_uri)) . "\">" . $result["user_agent"] . "</a>", "<a href=\"" . add_query_arg("request_method" , $result["request_method"], remove_query_arg("paged", $request_uri)) . "\">" . $result["request_method"] . "</a>", "<br/>\n"), $result["http_headers"]) . "</td>\n";
-		echo "<td>" . str_replace("\n", "<br/>\n", $result["request_entity"]) . "</td>\n";
+		echo "<td>" . str_replace(array($result['user_agent'], $result['request_method'], "\n"), array("<a href=\"" . add_query_arg("user_agent", $result["user_agent"], remove_query_arg("paged", $request_uri)) . "\">" . $result["user_agent"] . "</a>", "<a href=\"" . add_query_arg("request_method" , $result["request_method"], remove_query_arg("paged", $request_uri)) . "\">" . $result["request_method"] . "</a>", "<br/>\n"), htmlspecialchars($result["http_headers"])) . "</td>\n";
+		echo "<td>" . htmlspecialchars(str_replace("\n", "<br/>\n", $result["request_entity"])) . "</td>\n";
 		echo "</tr>\n";
 	}
 ?>
 	</tbody>
 </table>
+<div class="tablenav">
+<?php
+	$page_links = paginate_links(array('base' => add_query_arg("paged", "%#%"), 'format' => '', 'total' => $pages, 'current' => $paged));
+	if ($page_links) echo "<div class=\"tablenav-pages\">$page_links</div>\n";
+?>
+<div class="alignleft">
+</div>
+</div>
 </form>
 </div>
 <?php
