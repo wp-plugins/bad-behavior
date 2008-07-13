@@ -34,8 +34,8 @@ function bb2_httpbl_lookup($ip) {
 	$httpbl_key = "owwdrvbhklry";
 	$r = $_SESSION['httpbl'][$ip];
 	if ($r === false) {
-		$find = implode('.', array_reverse(explode('.', "${ip}.${httpbl_key}")));
-		$result = gethostbynamel("${find}.dnsbl.httpbl.org.");
+		$find = implode('.', array_reverse(explode('.', $ip)));
+		$result = gethostbynamel("${httpbl_key}.${find}.dnsbl.httpbl.org.");
 		if (!empty($result)) {
 			$r = $result[0];
 			$_SESSION['httpbl'][$ip] = $r;
