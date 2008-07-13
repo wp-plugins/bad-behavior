@@ -31,9 +31,16 @@ function bb2_clean_log_link($uri) {
 }
 
 function bb2_httpbl_lookup($ip) {
+	$engines = array(
+		2 => "Bloglines",
+		5 => "Googlebot",
+		8 => "msnbot",
+		9 => "Yahoo! Slurp",
+	);
 	$httpbl_key = "owwdrvbhklry";
 	$r = $_SESSION['httpbl'][$ip];
-	if ($r === false) {
+	$d = "";
+	if (!$r) {	// Lookup
 		$find = implode('.', array_reverse(explode('.', $ip)));
 		$result = gethostbynamel("${httpbl_key}.${find}.dnsbl.httpbl.org.");
 		if (!empty($result)) {
@@ -41,7 +48,34 @@ function bb2_httpbl_lookup($ip) {
 			$_SESSION['httpbl'][$ip] = $r;
 		}
 	}
-	return $r;
+	if ($r) {	// Interpret
+		$ip = explode('.', $r);
+		if ($ip[0] == 127) {
+			if ($ip[3] == 0) {
+				if ($engines[$ip[2]]) {
+					$d .= $engines[$ip[2]];
+				} else {
+					$d .= "Search engine ${ip[2]}<br/>\n";
+				}
+			}
+			if ($ip[3] & 1) {
+				$d .= "Suspicious<br/>\n";
+			}
+			if ($ip[3] & 2) {
+				$d .= "Harvester<br/>\n";
+			}
+			if ($ip[3] & 4) {
+				$d .= "Comment Spammer<br/>\n";
+			}
+			if ($ip[3] & 7) {
+				$d .= "Threat level ${ip[2]}<br/>\n";
+			}
+			if ($ip[3] > 0) {
+				$d .= "Age ${ip[1]} days<br/>\n";
+			}
+		}
+	}
+	return $d;
 }
 
 function bb2_manage() {
@@ -121,7 +155,9 @@ Displaying all <strong><?php echo $totalcount; ?></strong> records<br/>
 		}
 		echo "<th scope=\"row\" class=\"check-column\"><input type=\"checkbox\" name=\"submit[]\" value=\"" . $result["id"] . "\" /></th>\n";
 		$httpbl = bb2_httpbl_lookup($result["ip"]);
-		echo "<td><a href=\"" . add_query_arg("ip", $result["ip"], remove_query_arg("paged", $request_uri)) . "\">" . $result["ip"] . "</a><br/><br/>\n" . $result["date"] . "<br/><br/><a href=\"" . add_query_arg("key", $result["key"], remove_query_arg(array("paged", "blocked"), $request_uri)) . "\">" . $key["log"] . "</a><br/><br/>http:BL $httpbl</td>\n";
+		echo "<td><a href=\"" . add_query_arg("ip", $result["ip"], remove_query_arg("paged", $request_uri)) . "\">" . $result["ip"] . "</a><br/><br/>\n" . $result["date"] . "<br/><br/><a href=\"" . add_query_arg("key", $result["key"], remove_query_arg(array("paged", "blocked"), $request_uri)) . "\">" . $key["log"] . "</a>\n";
+		if ($httpbl) echo "<br/><br/>http:BL $httpbl\n";
+		echo "</td>\n";
 		echo "<td>" . str_replace(array($result['user_agent'], $result['request_method'], "\n"), array("<a href=\"" . add_query_arg("user_agent", $result["user_agent"], remove_query_arg("paged", $request_uri)) . "\">" . $result["user_agent"] . "</a>", "<a href=\"" . add_query_arg("request_method" , $result["request_method"], remove_query_arg("paged", $request_uri)) . "\">" . $result["request_method"] . "</a>", "<br/>\n"), htmlspecialchars($result["http_headers"])) . "</td>\n";
 		echo "<td>" . htmlspecialchars(str_replace("\n", "<br/>\n", $result["request_entity"])) . "</td>\n";
 		echo "</tr>\n";
