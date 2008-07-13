@@ -121,9 +121,9 @@ function bb2_manage() {
 <div class="alignleft">
 <?php if ($count < $totalcount): ?>
 Displaying <strong><?php echo $count; ?></strong> of <strong><?php echo $totalcount; ?></strong> records filtered by:<br/>
-<?php if ($_GET['ip']) echo "IP [<a href=\"" . remove_query_arg(array("paged", "ip"), $request_uri) . "\">X</a>] "; ?>
 <?php if ($_GET['key']) echo "Status [<a href=\"" . remove_query_arg(array("paged", "key"), $request_uri) . "\">X</a>] "; ?>
 <?php if ($_GET['blocked']) echo "Blocked [<a href=\"" . remove_query_arg(array("paged", "blocked"), $request_uri) . "\">X</a>] "; ?>
+<?php if ($_GET['ip']) echo "IP [<a href=\"" . remove_query_arg(array("paged", "ip"), $request_uri) . "\">X</a>] "; ?>
 <?php if ($_GET['user_agent']) echo "User Agent [<a href=\"" . remove_query_arg(array("paged", "user_agent"), $request_uri) . "\">X</a>] "; ?>
 <?php if ($_GET['request_method']) echo "GET/POST [<a href=\"" . remove_query_arg(array("paged", "request_method"), $request_uri) . "\">X</a>] "; ?>
 <?php else: ?>
@@ -162,7 +162,7 @@ Displaying all <strong><?php echo $totalcount; ?></strong> records<br/>
 		if (strpos($headers, $result['user_agent']) !== FALSE) $headers = substr_replace($headers, "<a href=\"" . add_query_arg("user_agent", rawurlencode($result["user_agent"]), remove_query_arg("paged", $request_uri)) . "\">" . $result['user_agent'] . "</a>", strpos($headers, $result['user_agent']), strlen($result['user_agent']));
 		if (strpos($headers, $result['request_method']) !== FALSE) $headers = substr_replace($headers, "<a href=\"" . add_query_arg("request_method", rawurlencode($result["request_method"]), remove_query_arg("paged", $request_uri)) . "\">" . $result['request_method'] . "</a>", strpos($headers, $result['request_method']), strlen($result['request_method']));
 		echo "<td>$headers</td>\n";
-		echo "<td>" . htmlspecialchars(str_replace("\n", "<br/>\n", $result["request_entity"])) . "</td>\n";
+		echo "<td>" . str_replace("\n", "<br/>\n", htmlspecialchars($result["request_entity"])) . "</td>\n";
 		echo "</tr>\n";
 	}
 ?>
