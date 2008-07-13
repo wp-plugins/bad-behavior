@@ -39,6 +39,8 @@ function bb2_httpbl_lookup($ip) {
 	);
 	$settings = bb2_read_settings();
 	$httpbl_key = $settings['httpbl_key'];
+	if (!$httpbl_key) return false;
+
 	$r = $_SESSION['httpbl'][$ip];
 	$d = "";
 	if (!$r) {	// Lookup
