@@ -137,6 +137,10 @@ function bb2_start($settings)
 		require_once(BB2_CORE . "/blacklist.inc.php");
 		bb2_test($settings, $package, bb2_blacklist($package));
 
+		// Check the http:BL
+		require_once(BB2_CORE . "/blackhole.inc.php");
+		bb2_test($settings, $package, bb2_httpbl($package));
+
 		// Check for common stuff
 		require_once(BB2_CORE . "/common_tests.inc.php");
 		bb2_test($settings, $package, bb2_protocol($settings, $package));
