@@ -10,6 +10,7 @@ function bb2_blacklist($package) {
 		"adwords",		// referrer spam
 		"autoemailspider",	// spam harvester
 		"blogsearchbot-martin",	// from honeypot
+		"core-project/"		// FrontPage extension exploits
 		"Digger",		// spam harvester
 		"ecollector",		// spam harvester
 		"EmailCollector",	// spam harvester
