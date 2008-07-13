@@ -158,10 +158,10 @@ Displaying all <strong><?php echo $totalcount; ?></strong> records<br/>
 		echo "<td><a href=\"" . add_query_arg("ip", $result["ip"], remove_query_arg("paged", $request_uri)) . "\">" . $result["ip"] . "</a><br/><br/>\n" . $result["date"] . "<br/><br/><a href=\"" . add_query_arg("key", $result["key"], remove_query_arg(array("paged", "blocked"), $request_uri)) . "\">" . $key["log"] . "</a>\n";
 		if ($httpbl) echo "<br/><br/>http:BL:<br/>$httpbl\n";
 		echo "</td>\n";
-		$headers = $result['http_headers'];
+		$headers = htmlspecialchars($result['http_headers']);
 		if (strpos($headers, $result['user_agent']) !== FALSE) $headers = substr_replace($headers, "<a href=\"" . add_query_arg("user_agent", $result["user_agent"], remove_query_arg("paged", $request_uri)) . "\">", strpos($headers, $result['user_agent']), strlen($result['user_agent']));
 		if (strpos($headers, $result['request_method']) !== FALSE) $headers = substr_replace($headers, "<a href=\"" . add_query_arg("request_method", $result["request_method"], remove_query_arg("paged", $request_uri)) . "\">", strpos($headers, $result['request_method']), strlen($result['request_method']));
-		echo "<td>" . htmlspecialchars($headers) . "</td>\n";
+		echo "<td>$headers</td>\n";
 		echo "<td>" . htmlspecialchars(str_replace("\n", "<br/>\n", $result["request_entity"])) . "</td>\n";
 		echo "</tr>\n";
 	}
