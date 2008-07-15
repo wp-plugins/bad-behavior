@@ -35,7 +35,7 @@ function bb2_blackhole($package) {
 	return false;
 }
 
-function bb2_httpbl($package) {
+function bb2_httpbl($settings, $package) {
 	if (!$package['httpbl_key']) return false;
 
 	$find = implode('.', array_reverse(explode('.', $package['ip'])));

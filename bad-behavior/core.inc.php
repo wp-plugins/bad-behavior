@@ -139,7 +139,7 @@ function bb2_start($settings)
 
 		// Check the http:BL
 		require_once(BB2_CORE . "/blackhole.inc.php");
-		bb2_test($settings, $package, bb2_httpbl($package));
+		bb2_test($settings, $package, bb2_httpbl($settings, $package));
 
 		// Check for common stuff
 		require_once(BB2_CORE . "/common_tests.inc.php");
