@@ -41,6 +41,7 @@ function bb2_blacklist($package) {
 		"PycURL",		// misc comment spam
 //		"Shockwave Flash",	// spam harvester
 //		WP 2.5 now has Flash; FIXME
+		"Super Happy Fun ",	// spam harvester
 		"TrackBack/",		// trackback spam
 		"user",			// suspicious harvester
 		"User Agent: ",		// spam harvester
