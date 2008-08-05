@@ -10,11 +10,12 @@ function bb2_blacklist($package) {
 		"adwords",		// referrer spam
 		"autoemailspider",	// spam harvester
 		"blogsearchbot-martin",	// from honeypot
+		"CherryPicker",		// spam harvester
 		"core-project/",	// FrontPage extension exploits
+		"Diamond",		// delivers spyware/adware
 		"Digger",		// spam harvester
 		"ecollector",		// spam harvester
 		"EmailCollector",	// spam harvester
-		"Email Extractor",	// spam harvester
 		"Email Siphon",		// spam harvester
 		"EmailSiphon",		// spam harvester
 		"grub crawler",		// misc comment/email spam
@@ -27,7 +28,7 @@ function bb2_blacklist($package) {
 		"LWP",			// spambot scripts
 		"Microsoft URL",	// spam harvester
 		"Missigua",		// spam harvester
-		"MJ12bot",		// crawls MUCH too fast
+		"MJ12bot/v1.0.8",	// malicious botnet
 		"Movable Type",		// customised spambots
 		"Mozilla ",		// malicious software
 		"Mozilla/4.0(",		// from honeypot
@@ -60,6 +61,7 @@ function bb2_blacklist($package) {
 		"compatible ; MSIE",	// misc comment/email spam
 		"compatible-",		// misc comment/email spam
 		"DTS Agent",		// misc comment/email spam
+		"Email Extractor",	// spam harvester
 		"Gecko/25",		// revisit this in 500 years
 		"grub-client",		// search engine ignores robots.txt
 		"hanzoweb",		// very badly behaved crawler
