@@ -148,7 +148,7 @@ Displaying all <strong><?php echo $totalcount; ?></strong> records<br/>
 	<tbody>
 <?php
 	$alternate = 0;
-	@foreach ($results as $result) {
+	if ($results) foreach ($results as $result) {
 		$key = bb2_get_response($result["key"]);
 		$alternate++;
 		if ($alternate % 2) {
