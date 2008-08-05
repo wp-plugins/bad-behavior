@@ -3,6 +3,8 @@
 require_once("bad-behavior/responses.inc.php");
 
 function bb2_admin_pages() {
+	global $wp_db_version;
+
 	if (function_exists('current_user_can')) {
 		// The new 2.x way
 		if (current_user_can('manage_options')) {
@@ -18,7 +20,9 @@ function bb2_admin_pages() {
 
 	if ($bb2_is_admin) {
 		add_options_page(__("Bad Behavior"), __("Bad Behavior"), 8, 'bb2_options', 'bb2_options');
-		add_management_page(__("Bad Behavior"), __("Bad Behavior"), 8, 'bb2_manage', 'bb2_manage');
+		if ($wp_db_version >= 4772) {	// Version 2.1 or later
+			add_management_page(__("Bad Behavior"), __("Bad Behavior"), 8, 'bb2_manage', 'bb2_manage');
+		}
 		@session_start();
 	}
 }
