@@ -144,6 +144,7 @@ function bb2_start($settings)
 		// Check for common stuff
 		require_once(BB2_CORE . "/common_tests.inc.php");
 		bb2_test($settings, $package, bb2_protocol($settings, $package));
+		bb2_test($settings, $package, bb2_cookies($settings, $package));
 		bb2_test($settings, $package, bb2_misc_headers($settings, $package));
 
 		// Specific checks

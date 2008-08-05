@@ -20,6 +20,16 @@ function bb2_protocol($settings, $package)
 	return false;
 }
 
+function bb2_cookies($settings, $package)
+{
+	// Enforce RFC 2965 sec 3.3.5 and 9.1
+	// Bots wanting new-style cookies should send Cookie2
+	if (strpos($package['headers_mixed']['Cookie'], '$Version=0') !== FALSE && !array_key_exists($package['headers_mixed']['Cookie2'])) {
+		return '6c502ff1';
+	}
+	return false;
+}
+
 function bb2_misc_headers($settings, $package)
 {
 	$ua = $package['headers_mixed']['User-Agent'];
