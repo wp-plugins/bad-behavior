@@ -3,6 +3,8 @@
 require_once("bad-behavior/responses.inc.php");
 
 function bb2_admin_pages() {
+	global $wp_db_version;
+
 	if (function_exists('current_user_can')) {
 		// The new 2.x way
 		if (current_user_can('manage_options')) {
@@ -18,7 +20,9 @@ function bb2_admin_pages() {
 
 	if ($bb2_is_admin) {
 		add_options_page(__("Bad Behavior"), __("Bad Behavior"), 8, 'bb2_options', 'bb2_options');
-		add_management_page(__("Bad Behavior"), __("Bad Behavior"), 8, 'bb2_manage', 'bb2_manage');
+		if ($wp_db_version >= 4772) {	// Version 2.1 or later
+			add_management_page(__("Bad Behavior"), __("Bad Behavior"), 8, 'bb2_manage', 'bb2_manage');
+		}
 		@session_start();
 	}
 }
@@ -148,7 +152,7 @@ Displaying all <strong><?php echo $totalcount; ?></strong> records<br/>
 	<tbody>
 <?php
 	$alternate = 0;
-	foreach ($results as $result) {
+	if ($results) foreach ($results as $result) {
 		$key = bb2_get_response($result["key"]);
 		$alternate++;
 		if ($alternate % 2) {
@@ -162,7 +166,7 @@ Displaying all <strong><?php echo $totalcount; ?></strong> records<br/>
 		if ($httpbl) echo "<br/><br/>http:BL:<br/>$httpbl\n";
 		echo "</td>\n";
 		$headers = str_replace("\n", "<br/>\n", htmlspecialchars($result['http_headers']));
-		if (strpos($headers, $result['user_agent']) !== FALSE) $headers = substr_replace($headers, "<a href=\"" . add_query_arg("user_agent", rawurlencode($result["user_agent"]), remove_query_arg("paged", $request_uri)) . "\">" . $result['user_agent'] . "</a>", strpos($headers, $result['user_agent']), strlen($result['user_agent']));
+		if (@strpos($headers, $result['user_agent']) !== FALSE) $headers = substr_replace($headers, "<a href=\"" . add_query_arg("user_agent", rawurlencode($result["user_agent"]), remove_query_arg("paged", $request_uri)) . "\">" . $result['user_agent'] . "</a>", strpos($headers, $result['user_agent']), strlen($result['user_agent']));
 		if (strpos($headers, $result['request_method']) !== FALSE) $headers = substr_replace($headers, "<a href=\"" . add_query_arg("request_method", rawurlencode($result["request_method"]), remove_query_arg("paged", $request_uri)) . "\">" . $result['request_method'] . "</a>", strpos($headers, $result['request_method']), strlen($result['request_method']));
 		echo "<td>$headers</td>\n";
 		echo "<td>" . str_replace("\n", "<br/>\n", htmlspecialchars($result["request_entity"])) . "</td>\n";

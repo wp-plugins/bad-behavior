@@ -24,13 +24,13 @@ function bb2_post($settings, $package)
 	// Catch a few completely broken spambots
 	foreach ($request_entity as $key => $value) {
 		$pos = strpos($key, "	document.write");
-		if ($pos !== FAlSE) {
+		if ($pos !== FALSE) {
 			return "dfd9b1ad";
 		}
 	}
 
 	// If Referer exists, it should refer to a page on our site
-	if (array_key_exists($package['headers_mixed']['Referer']) && stripos($package['headers_mixed']['Referer'], $package['headers_mixed']['Host']) === FALSE) {
+	if (array_key_exists('Referer', $package['headers_mixed']) && stripos($package['headers_mixed']['Referer'], $package['headers_mixed']['Host']) === FALSE) {
 		return "cd361abb";
 	}
 
