@@ -269,7 +269,7 @@ function bb2_options()
 	</table>
 
 	<h3><?php _e('http:BL'); ?></h3>
-	<p>To use Bad Behavior's http:BL features you must have an <a href="http://www.projecthoneypot.org/httpbl_configure.php">http:BL Access Key</a>.</p>
+	<p>To use Bad Behavior's http:BL features you must have an <a href="http://www.projecthoneypot.org/httpbl_configure.php?rf=24694">http:BL Access Key</a>.</p>
 	<table class="form-table">
 	<tr><td><label><input type="text" size="12" maxlength="12" name="httpbl_key" value="<?php echo $settings['httpbl_key']; ?>" /> http:BL Access Key</label></td></tr>
 	<tr><td><label><input type="text" size="3" maxlength="3" name="httpbl_threat" value="<?php echo $settings['httpbl_threat']; ?>" /> Minimum Threat Level (25 is recommended)</label></td></tr>
