@@ -32,7 +32,7 @@ function bb2_cookies($settings, $package)
 
 function bb2_misc_headers($settings, $package)
 {
-	$ua = $package['headers_mixed']['User-Agent'];
+	@$ua = $package['headers_mixed']['User-Agent'];
 
 	if (!strcmp($package['request_method'], "POST") && empty($ua)) {
 		return "f9f2b8b9";
