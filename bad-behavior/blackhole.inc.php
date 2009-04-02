@@ -45,9 +45,9 @@ function bb2_blackhole($package) {
 
 function bb2_httpbl($settings, $package) {
 	// Can't use IPv6 addresses yet
-	if (is_ipv6($package['REMOTE_ADDR'])) return;
+	if (@is_ipv6($package['REMOTE_ADDR'])) return;
 
-	if (!$settings['httpbl_key']) return false;
+	if (@!$settings['httpbl_key']) return false;
 
 	$find = implode('.', array_reverse(explode('.', $package['ip'])));
 	$result = gethostbynamel($settings['httpbl_key'].".${find}.dnsbl.httpbl.org.");
