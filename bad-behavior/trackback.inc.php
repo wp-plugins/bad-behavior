@@ -12,6 +12,12 @@ function bb2_trackback($package)
 	if (array_key_exists('Via', $package['headers_mixed']) || array_key_exists('Max-Forwards', $package['headers_mixed']) || array_key_exists('X-Forwarded-For', $package['headers_mixed']) || array_key_exists('Client-Ip', $package['headers_mixed'])) {
 		return 'd60b87c7';
 	}
+
+	// Fake WordPress trackbacks
+	// Real ones do not contain Accept:, and have a charset defined
+	if (array_key_exists('Accept', $package['headers_mixed']) || strpos($package['headers_mixed']['Content-Type'], "charset=") === FALSE) {
+		return 'e3990b47';
+	}
 	return false;
 }
 
