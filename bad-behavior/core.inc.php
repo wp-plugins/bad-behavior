@@ -111,7 +111,7 @@ function bb2_start($settings)
 	}
 
 	// IPv6 - IPv4 compatibility mode hack
-	$_SERVER['REMOTE_ADDR'] = preg_replace("^::ffff:", "", $_SERVER['REMOTE_ADDR']);
+	$_SERVER['REMOTE_ADDR'] = preg_replace("/^::ffff:/", "", $_SERVER['REMOTE_ADDR']);
 	// We use these frequently. Keep a copy close at hand.
 	$ip = $_SERVER['REMOTE_ADDR'];
 	$request_method = $_SERVER['REQUEST_METHOD'];
