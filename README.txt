@@ -91,7 +91,7 @@ following two lines at around line 34 (line 56 in WP-Super Cache):
 
   Immediately after this, insert the following line:
 
-`	require_once( ABSPATH .  'wp-content/plugins/Bad-Behavior/bad-behavior-generic.php');`
+`	require_once( ABSPATH . 'wp-content/plugins/Bad-Behavior/bad-behavior-generic.php');`
 
   Then visit your site. Everything should work normally, but spammers will
 not be able to access your cached pages either.
