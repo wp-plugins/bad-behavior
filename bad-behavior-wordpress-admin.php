@@ -238,6 +238,11 @@ function bb2_options()
 		} else {
 			$settings['httpbl_maxage'] = '30';
 		}
+		if ($_POST['offsite_forms']) {
+			$settings['offsite_forms'] = true;
+		} else {
+			$settings['offsite_forms'] = false;
+		}
 		bb2_write_settings($settings);
 ?>
 	<div id="message" class="updated fade"><p><strong><?php _e('Options saved.') ?></strong></p></div>
@@ -263,9 +268,10 @@ function bb2_options()
 	<tr><td><label><input type="radio" name="logging" value="false" <?php if (!$settings['logging']) { ?>checked="checked" <?php } ?>/> <?php _e('Do not log HTTP requests (not recommended)'); ?></label></td></tr>
 	</table>
 
-	<h3><?php _e('Strict Mode'); ?></h3>
+	<h3><?php _e('Security'); ?></h3>
 	<table class="form-table">
 	<tr><td><label><input type="checkbox" name="strict" value="true" <?php if ($settings['strict']) { ?>checked="checked" <?php } ?>/> <?php _e('Strict checking (blocks more spam but may block some people)'); ?></label></td></tr>
+	<tr><td><label><input type="checkbox" name="offsite_forms" value="true" <?php if ($settings['offsite_forms']) { ?>checked="checked" <?php } ?>/> <?php _e('Allow form postings from other web sites (required for OpenID; increases spam received)'); ?></label></td></tr>
 	</table>
 
 	<h3><?php _e('http:BL'); ?></h3>

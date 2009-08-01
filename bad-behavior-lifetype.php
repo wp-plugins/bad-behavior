@@ -105,6 +105,7 @@
 		$httpbl_key = $config->getValue( 'bb2_httpbl_key', '' );
 		$httpbl_threat = $config->getValue( 'bb2_httpbl_threat', '25' );
 		$httpbl_maxage = $config->getValue( 'bb2_httpbl_maxage', '30' );
+		$offsite_forms = $config->getValue( 'offsite_forms', false );
 		
 		return array('log_table' => $prefix . $logTable, 
 					 'display_stats' => $displayStats,
@@ -114,6 +115,7 @@
 					 'httpbl_key' => $httpbl_key,
 					 'httpbl_threat' => $httpbl_threat,
 					 'httpbl_maxage' => $httpbl_maxage,
+					 'offsite_forms' => $offsite_forms,
 					 'is_installed' => $isInstalled );
 	}
 	
@@ -128,6 +130,7 @@
 		$config->setValue( 'bb2_httpbl_key', $settings['httpbl_key'] );
 		$config->setValue( 'bb2_httpbl_threat', $settings['httpbl_threat'] );
 		$config->setValue( 'bb2_httpbl_maxage', $settings['httpbl_maxage'] );
+		$config->setValue( 'bb2_offsite_forms', $settings['offsite_forms'] );
 		$config->setValue( 'bb2_installed', $settings['is_installed'] );
 		$config->save();
 	}

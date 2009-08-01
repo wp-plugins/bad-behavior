@@ -34,6 +34,7 @@ $bb2_settings_defaults = array(
 	'httpbl_key' => '',
 	'httpbl_threat' => '25',
 	'httpbl_maxage' => '30',
+	'offsite_forms' => false,
 );
 
 define('BB2_CWD', dirname(__FILE__));
