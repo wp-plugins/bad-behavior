@@ -48,6 +48,7 @@ function bb2_blacklist($package) {
 		"user",			// suspicious harvester
 		"User Agent: ",		// spam harvester
 		"User-Agent: ",		// spam harvester
+		"WebSite-X Suite",	// misc comment spam
 		"Winnie Poh",		// Automated Coppermine hacks
 		"Wordpress",		// malicious software
 		"\"",			// malicious software
