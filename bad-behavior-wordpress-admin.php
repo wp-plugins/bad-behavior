@@ -35,11 +35,20 @@ function bb2_clean_log_link($uri) {
 }
 
 function bb2_httpbl_lookup($ip) {
+	// NB: Many of these are defunct
 	$engines = array(
-		2 => "Bloglines",
+		1 => "AltaVista",
+		2 => "Teoma/Ask Crawler",
+		3 => "Baidu Spide",
+		4 => "Excite",
 		5 => "Googlebot",
+		6 => "Looksmart",
+		7 => "Lycos",
 		8 => "msnbot",
 		9 => "Yahoo! Slurp",
+		10 => "Twiceler",
+		11 => "Infoseek",
+		12 => "Minor Search Engine",
 	);
 	$settings = bb2_read_settings();
 	$httpbl_key = $settings['httpbl_key'];
@@ -162,7 +171,13 @@ Displaying all <strong><?php echo $totalcount; ?></strong> records<br/>
 		}
 		echo "<th scope=\"row\" class=\"check-column\"><input type=\"checkbox\" name=\"submit[]\" value=\"" . $result["id"] . "\" /></th>\n";
 		$httpbl = bb2_httpbl_lookup($result["ip"]);
-		echo "<td><a href=\"" . add_query_arg("ip", $result["ip"], remove_query_arg("paged", $request_uri)) . "\">" . $result["ip"] . "</a><br/><br/>\n" . $result["date"] . "<br/><br/><a href=\"" . add_query_arg("key", $result["key"], remove_query_arg(array("paged", "blocked"), $request_uri)) . "\">" . $key["log"] . "</a>\n";
+		$host = gethostbyaddr($result["ip"]);
+		if (!strcmp($host, $result["ip"])) {
+			$host = "";
+		} else {
+			$host .= "<br/>\n";
+		}
+		echo "<td><a href=\"" . add_query_arg("ip", $result["ip"], remove_query_arg("paged", $request_uri)) . "\">" . $result["ip"] . "</a><br/>$host<br/>\n" . $result["date"] . "<br/><br/><a href=\"" . add_query_arg("key", $result["key"], remove_query_arg(array("paged", "blocked"), $request_uri)) . "\">" . $key["log"] . "</a>\n";
 		if ($httpbl) echo "<br/><br/>http:BL:<br/>$httpbl\n";
 		echo "</td>\n";
 		$headers = str_replace("\n", "<br/>\n", htmlspecialchars($result['http_headers']));
@@ -289,5 +304,16 @@ function bb2_options()
 }
 
 add_action('admin_menu', 'bb2_admin_pages');
+
+function bb2_plugin_action_links($links, $file) {
+	if ($file == "bad-behavior/bad-behavior-wordpress.php" && function_exists("admin_url")) {
+		$log_link = '<a href="' . admin_url("tools.php?page=bb2_manage") . '">Log</a>';
+		$settings_link = '<a href="' . admin_url("options-general.php?page=bb2_options") . '">Settings</a>';
+		array_unshift($links, $settings_link, $log_link);
+	}
+	return $links;
+}
+add_filter("plugin_action_links", "bb2_plugin_action_links", 10, 2);
+
 
 ?>
