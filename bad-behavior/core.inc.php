@@ -152,7 +152,7 @@ function bb2_start($settings)
 		// Specific checks
 		@$ua = $headers_mixed['User-Agent'];
 		// MSIE checks
-		if (stripos($ua, "MSIE") !== FALSE) {
+		if (stripos($ua, "; MSIE") !== FALSE) {
 			$package['is_browser'] = true;
 			if (stripos($ua, "Opera") !== FALSE) {
 				require_once(BB2_CORE . "/opera.inc.php");
