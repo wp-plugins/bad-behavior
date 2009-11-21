@@ -44,6 +44,7 @@ $bb2_timer_start = $bb2_mtime[1] + $bb2_mtime[0];
 define('BB2_CWD', dirname(__FILE__));
 
 // Bad Behavior callback functions.
+require_once("bad-behavior-mysql.php");
 
 // Return current time in the format preferred by your database.
 function bb2_db_date() {
