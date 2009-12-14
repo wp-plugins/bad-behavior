@@ -11,6 +11,9 @@ function bb2_blackhole($package) {
 	// Can't use IPv6 addresses yet
 	if (@is_ipv6($package['ip'])) return false;
 
+	// Workaround for "MySQL server has gone away"
+	bb2_db_query("SET @@session.wait_timeout = 90");
+
 	// Only conservative lists
 	$bb2_blackhole_lists = array(
 		"sbl-xbl.spamhaus.org",	// All around nasties
