@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Bad Behavior
-Version: 2.0.29
+Version: 2.0.35
 Description: Deny automated spambots access to your PHP-based Web site.
 Plugin URI: http://www.bad-behavior.ioerror.us/
 Author: Michael Hampton
@@ -44,6 +44,7 @@ $bb2_timer_start = $bb2_mtime[1] + $bb2_mtime[0];
 define('BB2_CWD', dirname(__FILE__));
 
 // Bad Behavior callback functions.
+require_once("bad-behavior-mysql.php");
 
 // Return current time in the format preferred by your database.
 function bb2_db_date() {

@@ -32,6 +32,7 @@ function bb2_blacklist($package) {
 		"MJ12bot/v1.0.8",	// malicious botnet
 		"Movable Type",		// customised spambots
 		"Mozilla ",		// malicious software
+		"Mozilla/2",		// malicious software
 		"Mozilla/4.0(",		// from honeypot
 		"Mozilla/4.0+(",	// suspicious harvester
 		"MSIE",			// malicious software
@@ -68,11 +69,12 @@ function bb2_blacklist($package) {
 		"grub-client",		// search engine ignores robots.txt
 		"hanzoweb",		// very badly behaved crawler
 		"Indy Library",		// misc comment/email spam
-		"larbin@unspecified",	// stealth harvesters
+		"MSIE 7.0;  Windows NT 5.2",	// Cyveillance
 		"Murzillo compatible",	// comment spam bot
 		".NET CLR 1)",		// free poker, etc.
 		"POE-Component-Client",	// free poker, etc.
 		"Turing Machine",	// www.anonymizer.com abuse
+		"unspecified.mail",	// stealth harvesters
 		"User-agent: ",		// spam harvester/splogger
 		"WebaltBot",		// spam harvester
 		"WISEbot",		// spam harvester
@@ -82,6 +84,7 @@ function bb2_blacklist($package) {
 		"Windows NT 5.1;)",	// wikispam bot
 		"Windows XP 5",		// spam harvester
 		"WordPress/4.01",	// pingback spam
+		"Xedant Human Emulator",// spammer script engine
 		"\\\\)",		// spam harvester
 	);
 

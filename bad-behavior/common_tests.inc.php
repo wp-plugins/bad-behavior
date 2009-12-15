@@ -45,6 +45,10 @@ function bb2_misc_headers($settings, $package)
 	if (strpos($package['request_uri'], "#") !== FALSE) {
 		return "dfd9b1ad";
 	}
+	// A pretty nasty SQL injection attack on IIS servers
+	if (strpos($package['request_uri'], ";DECLARE%20@") !== FALSE) {
+		return "dfd9b1ad";
+	}
 
 	// Range: field exists and begins with 0
 	// Real user-agents do not start ranges at 0
@@ -66,7 +70,8 @@ function bb2_misc_headers($settings, $package)
 	// Exceptions: Clearswift uses lowercase via (refuses to fix;
 	// may be blocked again in the future)
 	if (array_key_exists('via', $package['headers']) &&
-		strpos($package['headers']['via'],'Clearswift') === FALSE) {
+		strpos($package['headers']['via'],'Clearswift') === FALSE &&
+		strpos($ua,'CoralWebPrx') === FALSE) {
 		return "9c9e4979";
 	}
 
