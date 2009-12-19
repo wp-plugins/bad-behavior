@@ -32,6 +32,8 @@ define('BB2_CWD', dirname(__FILE__));
 
 // Settings you can adjust for Bad Behavior.
 // Most of these are unused in non-database mode.
+// DO NOT EDIT HERE; instead make changes in settings.ini.
+// These settings are used when settings.ini is not present.
 $bb2_settings_defaults = array(
 	'log_table' => 'bad_behavior',
 	'display_stats' => true,
@@ -93,7 +95,8 @@ function bb2_email() {
 // Settings are hard-coded for non-database use
 function bb2_read_settings() {
 	global $bb2_settings_defaults;
-	return $bb2_settings_defaults;
+	$settings = @parse_ini_file(dirname(__FILE__) . "/settings.ini");
+	return array_merge($bb2_settings_defaults, $settings);
 }
 
 // write settings to database
