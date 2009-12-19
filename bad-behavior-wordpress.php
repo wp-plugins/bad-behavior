@@ -140,8 +140,9 @@ function bb2_insert_stats($force = false) {
 			echo sprintf('<p><a href="http://www.bad-behavior.ioerror.us/">%1$s</a> %2$s <strong>%3$s</strong> %4$s</p>', __('Bad Behavior'), __('has blocked'), $blocked[0]["COUNT(*)"], __('access attempts in the last 7 days.'));
 		}
 	}
-	if (array_key_exists('BB2_RESULT', $_SESSION)) {
-		echo sprintf('<!-- Bad Behavior result was %s! This request would have been blocked. -->\n', $_SESSION['BB2_RESULT']);
+	if (@!empty($_SESSION['BB2_RESULT'])) {
+		echo sprintf("\n<!-- Bad Behavior result was %s! This request would have been blocked. -->\n", $_SESSION['BB2_RESULT']);
+		unset($_SESSION['BB2_RESULT']);
 	}
 }
 
