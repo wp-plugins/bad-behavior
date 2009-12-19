@@ -140,6 +140,9 @@ function bb2_insert_stats($force = false) {
 			echo sprintf('<p><a href="http://www.bad-behavior.ioerror.us/">%1$s</a> %2$s <strong>%3$s</strong> %4$s</p>', __('Bad Behavior'), __('has blocked'), $blocked[0]["COUNT(*)"], __('access attempts in the last 7 days.'));
 		}
 	}
+	if (array_key_exists('BB2_RESULT', $_SESSION)) {
+		echo sprintf('<!-- Bad Behavior result was %s! This request would have been blocked. -->\n', $_SESSION['BB2_RESULT']);
+	}
 }
 
 // Return the top-level relative path of wherever we are (for cookies)
@@ -165,7 +168,7 @@ if (is_admin() || strstr($_SERVER['PHP_SELF'], 'wp-admin/')) {	// 1.5 kludge
 	require_once(BB2_CWD . "/bad-behavior-wordpress-admin.php");
 }
 
-bb2_start(bb2_read_settings());
+$_SESSION['BB2_RESULT'] = bb2_start(bb2_read_settings());
 
 $bb2_mtime = explode(" ", microtime());
 $bb2_timer_stop = $bb2_mtime[1] + $bb2_mtime[0];
