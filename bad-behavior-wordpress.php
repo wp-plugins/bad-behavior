@@ -79,7 +79,8 @@ function bb2_db_query($query) {
 
 	$wpdb->hide_errors();
 	$result = $wpdb->get_results($query, ARRAY_A);
-	$wpdb->show_errors();
+	if ( defined('WP_DEBUG') and WP_DEBUG == true )
+		$wpdb->show_errors();
 	if (mysql_error()) {
 		return FALSE;
 	}
