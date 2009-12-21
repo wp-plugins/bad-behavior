@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Bad Behavior
-Version: 2.0.35
+Version: 2.1.1
 Description: Deny automated spambots access to your PHP-based Web site.
 Plugin URI: http://www.bad-behavior.ioerror.us/
 Author: Michael Hampton
@@ -80,7 +80,8 @@ function bb2_db_query($query) {
 
 	$wpdb->hide_errors();
 	$result = $wpdb->get_results($query, ARRAY_A);
-	$wpdb->show_errors();
+	if ( defined('WP_DEBUG') and WP_DEBUG == true )
+		$wpdb->show_errors();
 	if (mysql_error()) {
 		return FALSE;
 	}
@@ -140,6 +141,10 @@ function bb2_insert_stats($force = false) {
 			echo sprintf('<p><a href="http://www.bad-behavior.ioerror.us/">%1$s</a> %2$s <strong>%3$s</strong> %4$s</p>', __('Bad Behavior'), __('has blocked'), $blocked[0]["COUNT(*)"], __('access attempts in the last 7 days.'));
 		}
 	}
+	if (@!empty($_SESSION['BB2_RESULT'])) {
+		echo sprintf("\n<!-- Bad Behavior result was %s! This request would have been blocked. -->\n", $_SESSION['BB2_RESULT']);
+		unset($_SESSION['BB2_RESULT']);
+	}
 }
 
 // Return the top-level relative path of wherever we are (for cookies)
@@ -165,7 +170,7 @@ if (is_admin() || strstr($_SERVER['PHP_SELF'], 'wp-admin/')) {	// 1.5 kludge
 	require_once(BB2_CWD . "/bad-behavior-wordpress-admin.php");
 }
 
-bb2_start(bb2_read_settings());
+$_SESSION['BB2_RESULT'] = bb2_start(bb2_read_settings());
 
 $bb2_mtime = explode(" ", microtime());
 $bb2_timer_stop = $bb2_mtime[1] + $bb2_mtime[0];
