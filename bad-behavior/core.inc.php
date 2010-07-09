@@ -83,6 +83,12 @@ function bb2_screen($settings, $package)
 		require_once(BB2_CORE . "/blacklist.inc.php");
 		if ($r = bb2_blacklist($package)) return $r;
 
+		// Check for CloudFlare CDN
+		if (array_key_exists('Cf-Connecting-Ip', $package['headers_mixed'])) {
+			require_once(BB2_CORE . "/cloudflare.inc.php");
+			bb2_test($settings, $package, bb2_cloudflare($package));
+		}
+
 		// Check the http:BL
 		require_once(BB2_CORE . "/blackhole.inc.php");
 		if ($r = bb2_httpbl($settings, $package)) return $r;

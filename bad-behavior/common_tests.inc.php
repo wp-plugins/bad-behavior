@@ -4,7 +4,6 @@
 
 function bb2_protocol($settings, $package)
 {
-	// Is it claiming to be HTTP/1.0?  Then it shouldn't do HTTP/1.1 things
 	// Always run this test; we should never see Expect:
 	if (array_key_exists('Expect', $package['headers_mixed']) && stripos($package['headers_mixed']['Expect'], "100-continue") !== FALSE) {
 		return "a0105122";
@@ -105,6 +104,12 @@ function bb2_misc_headers($settings, $package)
 		if (preg_match('/\bkeep-alive,\s?keep-alive\b/i', $package['headers_mixed']['Connection'])) {
 			return "a52f0448";
 		}
+		// Keep-Alive format in RFC 2068; some bots mangle these headers
+		if (stripos($package['headers_mixed']['Connection'], "Keep-Alive: ") !== FALSE) {
+			return "b0924802";
+		}
+		// Close should not be oddly capitalized
+		
 	}
 	
 
@@ -113,7 +118,7 @@ function bb2_misc_headers($settings, $package)
 		return "b9cc1d86";
 	}
 	// Proxy-Connection does not exist and should never be seen in the wild
-	if (array_key_exists('Proxy-Connection', $package['headers_mixed'])) {
+	if ($settings['strict'] && array_key_exists('Proxy-Connection', $package['headers_mixed'])) {
 		return "b7830251";
 	}
 
