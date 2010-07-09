@@ -69,8 +69,10 @@ function bb2_misc_headers($settings, $package)
 	// Lowercase via is used by open proxies/referrer spammers
 	// Exceptions: Clearswift uses lowercase via (refuses to fix;
 	// may be blocked again in the future)
+	// Coral CDN uses lowercase via
 	if (array_key_exists('via', $package['headers']) &&
-		strpos($package['headers']['via'],'Clearswift') === FALSE) {
+		strpos($package['headers']['via'],'Clearswift') === FALSE &&
+		strpos($ua,'CoralWebPrx') === FALSE) {
 		return "9c9e4979";
 	}
 
@@ -112,7 +114,7 @@ function bb2_misc_headers($settings, $package)
 		return "b9cc1d86";
 	}
 	// Proxy-Connection does not exist and should never be seen in the wild
-	if (array_key_exists('Proxy-Connection', $package['headers_mixed'])) {
+	if ($settings['strict'] && array_key_exists('Proxy-Connection', $package['headers_mixed'])) {
 		return "b7830251";
 	}
 

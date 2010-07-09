@@ -315,5 +315,4 @@ function bb2_plugin_action_links($links, $file) {
 }
 add_filter("plugin_action_links", "bb2_plugin_action_links", 10, 2);
 
-
 ?>

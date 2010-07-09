@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Bad Behavior
-Version: 2.0.32
+Version: 2.0.37
 Description: Deny automated spambots access to your PHP-based Web site.
 Plugin URI: http://www.bad-behavior.ioerror.us/
 Author: Michael Hampton
@@ -79,7 +79,8 @@ function bb2_db_query($query) {
 
 	$wpdb->hide_errors();
 	$result = $wpdb->get_results($query, ARRAY_A);
-	$wpdb->show_errors();
+	if ( defined('WP_DEBUG') and WP_DEBUG == true )
+		$wpdb->show_errors();
 	if (mysql_error()) {
 		return FALSE;
 	}
