@@ -98,6 +98,7 @@ function bb2_manage() {
 	global $wpdb;
 
 	$request_uri = $_SERVER["REQUEST_URI"];
+	if (!$request_uri) $request_uri = $_SERVER['SCRIPT_NAME'];	# IIS
 	$settings = bb2_read_settings();
 	$rows_per_page = 100;
 	$where = "";
@@ -206,6 +207,9 @@ Displaying all <strong><?php echo $totalcount; ?></strong> records<br/>
 function bb2_options()
 {
 	$settings = bb2_read_settings();
+
+	$request_uri = $_SERVER["REQUEST_URI"];
+	if (!$request_uri) $request_uri = $_SERVER['SCRIPT_NAME'];	# IIS
 
 	if ($_POST) {
 		if ($_POST['display_stats']) {

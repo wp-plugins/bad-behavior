@@ -64,7 +64,9 @@ function bb2_start($settings)
 		}
 	}
 
-	@$package = array('ip' => $_SERVER['REMOTE_ADDR'], 'headers' => $headers, 'headers_mixed' => $headers_mixed, 'request_method' => $_SERVER['REQUEST_METHOD'], 'request_uri' => $_SERVER['REQUEST_URI'], 'server_protocol' => $_SERVER['SERVER_PROTOCOL'], 'request_entity' => $request_entity, 'user_agent' => $_SERVER['HTTP_USER_AGENT'], 'is_browser' => false);
+	$request_uri = $_SERVER["REQUEST_URI"];
+	if (!$request_uri) $request_uri = $_SERVER['SCRIPT_NAME'];	# IIS
+	@$package = array('ip' => $_SERVER['REMOTE_ADDR'], 'headers' => $headers, 'headers_mixed' => $headers_mixed, 'request_method' => $_SERVER['REQUEST_METHOD'], 'request_uri' => $request_uri, 'server_protocol' => $_SERVER['SERVER_PROTOCOL'], 'request_entity' => $request_entity, 'user_agent' => $_SERVER['HTTP_USER_AGENT'], 'is_browser' => false);
 
 	$result = bb2_screen($settings, $package);
 	if ($result && !defined('BB2_TEST')) bb2_banned($settings, $package, $result);
@@ -82,6 +84,12 @@ function bb2_screen($settings, $package)
 		// Now check the blacklist
 		require_once(BB2_CORE . "/blacklist.inc.php");
 		if ($r = bb2_blacklist($package)) return $r;
+
+		// Check for CloudFlare CDN
+		if (array_key_exists('Cf-Connecting-Ip', $package['headers_mixed'])) {
+			require_once(BB2_CORE . "/cloudflare.inc.php");
+			bb2_test($settings, $package, bb2_cloudflare($package));
+		}
 
 		// Check the http:BL
 		require_once(BB2_CORE . "/blackhole.inc.php");
