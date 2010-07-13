@@ -25,6 +25,8 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 if (!defined('MEDIAWIKI')) die();
 
 // Settings you can adjust for Bad Behavior.
+// DO NOT EDIT HERE; instead make changes in settings.ini.
+// These settings are used when settings.ini is not present.
 $bb2_settings_defaults = array(
 	'log_table' => $wgDBprefix . 'bad_behavior',
 	'display_stats' => true,
@@ -91,7 +93,8 @@ function bb2_email() {
 // retrieve settings from database
 function bb2_read_settings() {
 	global $bb2_settings_defaults;
-	return $bb2_settings_defaults;
+	$settings = @parse_ini_file(dirname(__FILE__) . "/settings.ini");
+	return array_merge($bb2_settings_defaults, $settings);
 }
 
 // This Bad Behavior-related function is a stub. You can help MediaWiki by expanding it.

@@ -32,6 +32,8 @@ define('BB2_CWD', dirname(__FILE__));
 
 // Settings you can adjust for Bad Behavior.
 // Most of these are unused in non-database mode.
+// DO NOT EDIT HERE; instead make changes in settings.ini.
+// These settings are used when settings.ini is not present.
 $bb2_settings_defaults = array(
 	'log_table' => 'bad_behavior',
 	'display_stats' => true,
@@ -83,17 +85,24 @@ function bb2_db_rows($result) {
 	return $result;
 }
 
+// Create the SQL query for inserting a record in the database.
+// See example for MySQL elsewhere.
+function bb2_insert($settings, $package, $key)
+{
+	return "--";
+}
+
 // Return emergency contact email address.
 function bb2_email() {
-	// return "example@example.com";	// You need to change this.
-	return "badbots@ioerror.us";	// You need to change this.
+	return "example@example.com";	// You need to change this.
 }
 
 // retrieve settings from database
 // Settings are hard-coded for non-database use
 function bb2_read_settings() {
 	global $bb2_settings_defaults;
-	return $bb2_settings_defaults;
+	$settings = @parse_ini_file(dirname(__FILE__) . "/settings.ini");
+	return array_merge($bb2_settings_defaults, $settings);
 }
 
 // write settings to database

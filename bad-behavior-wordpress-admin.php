@@ -98,6 +98,7 @@ function bb2_manage() {
 	global $wpdb;
 
 	$request_uri = $_SERVER["REQUEST_URI"];
+	if (!$request_uri) $request_uri = $_SERVER['SCRIPT_NAME'];	# IIS
 	$settings = bb2_read_settings();
 	$rows_per_page = 100;
 	$where = "";
@@ -178,7 +179,7 @@ Displaying all <strong><?php echo $totalcount; ?></strong> records<br/>
 			$host .= "<br/>\n";
 		}
 		echo "<td><a href=\"" . add_query_arg("ip", $result["ip"], remove_query_arg("paged", $request_uri)) . "\">" . $result["ip"] . "</a><br/>$host<br/>\n" . $result["date"] . "<br/><br/><a href=\"" . add_query_arg("key", $result["key"], remove_query_arg(array("paged", "blocked"), $request_uri)) . "\">" . $key["log"] . "</a>\n";
-		if ($httpbl) echo "<br/><br/>http:BL:<br/>$httpbl\n";
+		if ($httpbl) echo "<br/><br/><a href=\"http://www.projecthoneypot.org/ip_{$result['ip']}\">http:BL</a>:<br/>$httpbl\n";
 		echo "</td>\n";
 		$headers = str_replace("\n", "<br/>\n", htmlspecialchars($result['http_headers']));
 		if (@strpos($headers, $result['user_agent']) !== FALSE) $headers = substr_replace($headers, "<a href=\"" . add_query_arg("user_agent", rawurlencode($result["user_agent"]), remove_query_arg("paged", $request_uri)) . "\">" . $result['user_agent'] . "</a>", strpos($headers, $result['user_agent']), strlen($result['user_agent']));
@@ -206,6 +207,9 @@ Displaying all <strong><?php echo $totalcount; ?></strong> records<br/>
 function bb2_options()
 {
 	$settings = bb2_read_settings();
+
+	$request_uri = $_SERVER["REQUEST_URI"];
+	if (!$request_uri) $request_uri = $_SERVER['SCRIPT_NAME'];	# IIS
 
 	if ($_POST) {
 		if ($_POST['display_stats']) {
