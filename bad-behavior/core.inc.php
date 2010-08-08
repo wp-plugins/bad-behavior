@@ -78,19 +78,20 @@ function bb2_screen($settings, $package)
 	// Please proceed to the security checkpoint and have your
 	// identification and boarding pass ready.
 
+	// Check for CloudFlare CDN since IP to be screened may be different
+	// Thanks to J.Miller at Project Honey Pot
+	if (array_key_exists('Cf-Connecting-Ip', $package['headers_mixed'])) {
+		require_once(BB2_CORE . "/cloudflare.inc.php");
+		$r = bb2_cloudflare($package);
+		if ($r !== false && $r != $package['ip']) return $r;
+	}
+
 	// First check the whitelist
 	require_once(BB2_CORE . "/whitelist.inc.php");
 	if (!bb2_whitelist($package)) {
 		// Now check the blacklist
 		require_once(BB2_CORE . "/blacklist.inc.php");
 		if ($r = bb2_blacklist($package)) return $r;
-
-		// Check for CloudFlare CDN
-		if (array_key_exists('Cf-Connecting-Ip', $package['headers_mixed'])) {
-			require_once(BB2_CORE . "/cloudflare.inc.php");
-			$r = bb2_cloudflare($package);
-			if ($r !== false && $r != $package['ip']) return $r;
-		}
 
 		// Check the http:BL
 		require_once(BB2_CORE . "/blackhole.inc.php");

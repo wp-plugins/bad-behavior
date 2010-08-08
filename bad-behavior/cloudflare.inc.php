@@ -7,7 +7,7 @@ require_once(BB2_CORE . "/roundtripdns.inc.php");
 function bb2_cloudflare(&$package)
 {
 	if (bb2_roundtripdns($package['ip'], "cloudflare.com")) {
-		$package['ip'] = $package['headers_mixed']['Cf-Connecting-Ip'];
+		$package['ip'] = preg_replace("/^::ffff:/", "", $package['headers_mixed']['Cf-Connecting-Ip']);
 	} else {
 		return '70e45496';
 	}
