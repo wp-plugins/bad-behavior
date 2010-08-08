@@ -85,10 +85,16 @@ function bb2_db_rows($result) {
 	return $result;
 }
 
+// Create the SQL query for inserting a record in the database.
+// See example for MySQL elsewhere.
+function bb2_insert($settings, $package, $key)
+{
+	return "--";
+}
+
 // Return emergency contact email address.
 function bb2_email() {
-	// return "example@example.com";	// You need to change this.
-	return "badbots@ioerror.us";	// You need to change this.
+	return "example@example.com";	// You need to change this.
 }
 
 // retrieve settings from database
