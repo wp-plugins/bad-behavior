@@ -79,8 +79,9 @@ function bb2_screen($settings, $package)
 	// identification and boarding pass ready.
 
 	// Check for CloudFlare CDN since IP to be screened may be different
-	// Thanks to J.Miller at Project Honey Pot
+	// Thanks to J.Miller 
 	if (array_key_exists('Cf-Connecting-Ip', $package['headers_mixed'])) {
+		$package['ip'] = preg_replace("/^::ffff:/", "", $package['headers_mixed']['Cf-Connecting-Ip']);
 		require_once(BB2_CORE . "/cloudflare.inc.php");
 		$r = bb2_cloudflare($package);
 		if ($r !== false && $r != $package['ip']) return $r;
