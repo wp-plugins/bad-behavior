@@ -66,7 +66,12 @@ function bb2_start($settings)
 
 	$request_uri = $_SERVER["REQUEST_URI"];
 	if (!$request_uri) $request_uri = $_SERVER['SCRIPT_NAME'];	# IIS
-	@$package = array('ip' => $_SERVER['REMOTE_ADDR'], 'headers' => $headers, 'headers_mixed' => $headers_mixed, 'request_method' => $_SERVER['REQUEST_METHOD'], 'request_uri' => $request_uri, 'server_protocol' => $_SERVER['SERVER_PROTOCOL'], 'request_entity' => $request_entity, 'user_agent' => $_SERVER['HTTP_USER_AGENT'], 'is_browser' => false);
+
+	# Nasty CloudFlare hack provided by butchs at simplemachines
+	$ip_temp = preg_replace("/^::ffff:/", "", (array_key_exists('Cf-Connecting-Ip', $headers_mixed)) ? $_SERVER['HTTP_CF_CONNECTING_IP'] : $_SERVER['REMOTE_ADDR']);
+	$cloudflare_ip = preg_replace("/^::ffff:/", $_SERVER['REMOTE_ADDR']);
+
+	@$package = array('ip' => $ip_temp, 'headers' => $headers, 'headers_mixed' => $headers_mixed, 'request_method' => $_SERVER['REQUEST_METHOD'], 'request_uri' => $request_uri, 'server_protocol' => $_SERVER['SERVER_PROTOCOL'], 'request_entity' => $request_entity, 'user_agent' => $_SERVER['HTTP_USER_AGENT'], 'is_browser' => false, 'cloudflare' => $cloudflare_ip);
 
 	$result = bb2_screen($settings, $package);
 	if ($result && !defined('BB2_TEST')) bb2_banned($settings, $package, $result);
@@ -79,9 +84,8 @@ function bb2_screen($settings, $package)
 	// identification and boarding pass ready.
 
 	// Check for CloudFlare CDN since IP to be screened may be different
-	// Thanks to J.Miller 
+	// Thanks to butchs at Simple Machines
 	if (array_key_exists('Cf-Connecting-Ip', $package['headers_mixed'])) {
-		$package['ip'] = preg_replace("/^::ffff:/", "", $package['headers_mixed']['Cf-Connecting-Ip']);
 		require_once(BB2_CORE . "/cloudflare.inc.php");
 		$r = bb2_cloudflare($package);
 		if ($r !== false && $r != $package['ip']) return $r;

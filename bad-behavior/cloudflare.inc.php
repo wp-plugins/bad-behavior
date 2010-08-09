@@ -4,9 +4,9 @@
 
 require_once(BB2_CORE . "/roundtripdns.inc.php");
 
-function bb2_cloudflare(&$package)
+function bb2_cloudflare($package)
 {
-	if (!bb2_roundtripdns($_SERVER['REMOTE_ADDR'], "cloudflare.com")) {
+	if (!bb2_roundtripdns($package['cloudflare'], "cloudflare.com")) {
 		return '70e45496';
 	}
 	return false;
