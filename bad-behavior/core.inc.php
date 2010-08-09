@@ -69,7 +69,7 @@ function bb2_start($settings)
 
 	# Nasty CloudFlare hack provided by butchs at simplemachines
 	$ip_temp = preg_replace("/^::ffff:/", "", (array_key_exists('Cf-Connecting-Ip', $headers_mixed)) ? $_SERVER['HTTP_CF_CONNECTING_IP'] : $_SERVER['REMOTE_ADDR']);
-	$cloudflare_ip = preg_replace("/^::ffff:/", $_SERVER['REMOTE_ADDR']);
+	$cloudflare_ip = preg_replace("/^::ffff:/", "", $_SERVER['REMOTE_ADDR']);
 
 	@$package = array('ip' => $ip_temp, 'headers' => $headers, 'headers_mixed' => $headers_mixed, 'request_method' => $_SERVER['REQUEST_METHOD'], 'request_uri' => $request_uri, 'server_protocol' => $_SERVER['SERVER_PROTOCOL'], 'request_entity' => $request_entity, 'user_agent' => $_SERVER['HTTP_USER_AGENT'], 'is_browser' => false, 'cloudflare' => $cloudflare_ip);
 
