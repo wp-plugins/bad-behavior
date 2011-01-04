@@ -4,8 +4,8 @@
 
 function bb2_protocol($settings, $package)
 {
-	// Always run this test; we should never see Expect:
-	if (array_key_exists('Expect', $package['headers_mixed']) && stripos($package['headers_mixed']['Expect'], "100-continue") !== FALSE) {
+	// We should never see Expect: for HTTP/1.0 requests
+	if (array_key_exists('Expect', $package['headers_mixed']) && stripos($package['headers_mixed']['Expect'], "100-continue") !== FALSE && !strcmp($package['server_protocol'], "HTTP/1.0")) {
 		return "a0105122";
 	}
 

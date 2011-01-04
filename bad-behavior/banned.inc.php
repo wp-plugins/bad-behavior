@@ -5,7 +5,7 @@
 
 require_once(BB2_CORE . "/responses.inc.php");
 
-function bb2_display_denial($settings, $key, $previous_key = false)
+function bb2_display_denial($settings, $package, $key, $previous_key = false)
 {
 	define('DONOTCACHEPAGE', true);	// WP Super Cache
 	if (!$previous_key) $previous_key = $key;
@@ -13,7 +13,7 @@ function bb2_display_denial($settings, $key, $previous_key = false)
 		// FIXME: lookup the real key
 	}
 	// Create support key
-	$ip = explode(".", $_SERVER['REMOTE_ADDR']);
+	$ip = explode(".", $package['ip']);
 	$ip_hex = "";
 	foreach ($ip as $octet) {
 		$ip_hex .= str_pad(dechex($octet), 2, 0, STR_PAD_LEFT);
