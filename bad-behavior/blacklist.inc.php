@@ -18,6 +18,7 @@ function bb2_blacklist($package) {
 		"EmailCollector",	// spam harvester
 		"Email Siphon",		// spam harvester
 		"EmailSiphon",		// spam harvester
+		"Forum Poster",		// forum spambot
 		"grub crawler",		// misc comment/email spam
 		"HttpProxy",		// misc comment/email spam
 		"Internet Explorer",	// XMLRPC exploits seen
@@ -42,8 +43,9 @@ function bb2_blacklist($package) {
 		"psycheclone",		// spam harvester
 		"PussyCat ",		// misc comment spam
 		"PycURL",		// misc comment spam
-//		"Shockwave Flash",	// spam harvester
+		"Python-urllib",	// commonly abused
 //		WP 2.5 now has Flash; FIXME
+//		"Shockwave Flash",	// spam harvester
 		"Super Happy Fun ",	// spam harvester
 		"TrackBack/",		// trackback spam
 		"user",			// suspicious harvester
