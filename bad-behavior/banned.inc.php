@@ -5,6 +5,19 @@
 
 require_once(BB2_CORE . "/responses.inc.php");
 
+function bb2_housekeeping($settings, $package)
+{
+	// FIXME Yes, the interval's hard coded (again) for now.
+	$query = "DELETE FROM `" . $settings['log_table'] . "` WHERE `date` < DATE_SUB('" . bb2_db_date() . "', INTERVAL 7 DAY)";
+	bb2_db_query($query);
+
+	// Waste a bunch more of the spammer's time, sometimes.
+	if (rand(1,1000) == 1) {
+		$query = "OPTIMIZE TABLE `" . $settings['log_table'] . "`";
+		bb2_db_query($query);
+	}
+}
+
 function bb2_display_denial($settings, $package, $key, $previous_key = false)
 {
 	define('DONOTCACHEPAGE', true);	// WP Super Cache

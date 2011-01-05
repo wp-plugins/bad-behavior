@@ -23,7 +23,6 @@ function bb2_banned($settings, $package, $key, $previous_key=false)
 		bb2_banned_callback($settings, $package, $key);
 	}
 	// Penalize the spammers some more
-	require_once(BB2_CORE . "/housekeeping.inc.php");
 	bb2_housekeeping($settings, $package);
 	die();
 }
@@ -81,8 +80,8 @@ function bb2_start($settings)
 
 function bb2_screen($settings, $package)
 {
-	// Please proceed to the security checkpoint and have your
-	// identification and boarding pass ready.
+	// Please proceed to the security checkpoint, have your identification
+	// and boarding pass ready, and prepare to be nakedized or fondled.
 
 	// Check for CloudFlare CDN since IP to be screened may be different
 	// Thanks to butchs at Simple Machines
@@ -90,6 +89,10 @@ function bb2_screen($settings, $package)
 		require_once(BB2_CORE . "/cloudflare.inc.php");
 		$r = bb2_cloudflare($package);
 		if ($r !== false && $r != $package['ip']) return $r;
+		# FIXME: For Cloudflare we are bypassing all checks for now
+		# See cloudflare.inc.php for more detail
+		bb2_approved($settings, $package);
+		return false;
 	}
 
 	// First check the whitelist
