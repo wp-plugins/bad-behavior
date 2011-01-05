@@ -141,7 +141,6 @@ function bb2_mediawiki_entry() {
 	$bb2_timer_start = $bb2_mtime[1] + $bb2_mtime[0];
 
 	if (php_sapi_name() != 'cli') {
-		require_once(BB2_CWD . "/bad-behavior/core.inc.php");
 		bb2_install();	// FIXME: see above
 		$settings = bb2_read_settings();
 		bb2_start($settings);
@@ -152,7 +151,7 @@ function bb2_mediawiki_entry() {
 	$bb2_timer_total = $bb2_timer_stop - $bb2_timer_start;
 }
 
-require_once(BB2_CWD . "/bad-behavior/version.inc.php");
+require_once(BB2_CWD . "/bad-behavior/core.inc.php");
 $wgExtensionCredits['other'][] = array(
 	'name' => 'Bad Behavior',
 	'version' => BB2_VERSION,

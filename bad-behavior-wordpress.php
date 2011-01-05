@@ -147,7 +147,6 @@ function bb2_relative_path() {
 	return $url['path'] . '/';
 }
 
-// FIXME: some sort of hack to run install on 1.5 (and older?) blogs
 // FIXME: figure out what's wrong on 2.0 that this doesn't work
 // register_activation_hook(__FILE__, 'bb2_install');
 //add_action('activate_bb2/bad-behavior-wordpress.php', 'bb2_install');
@@ -155,7 +154,6 @@ add_action('wp_head', 'bb2_insert_head');
 add_action('wp_footer', 'bb2_insert_stats');
 
 // Calls inward to Bad Behavor itself.
-require_once(BB2_CWD . "/bad-behavior/version.inc.php");
 require_once(BB2_CWD . "/bad-behavior/core.inc.php");
 bb2_install();	// FIXME: see above
 
