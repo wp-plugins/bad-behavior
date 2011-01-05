@@ -114,28 +114,27 @@ function bb2_screen($settings, $package)
 		// MSIE checks
 		if (stripos($ua, "; MSIE") !== FALSE) {
 			$package['is_browser'] = true;
+			require_once(BB2_CORE . "/browser.inc.php");
 			if (stripos($ua, "Opera") !== FALSE) {
-				require_once(BB2_CORE . "/opera.inc.php");
 				if ($r = bb2_opera($package)) return $r;
 			} else {
-				require_once(BB2_CORE . "/msie.inc.php");
 				if ($r = bb2_msie($package)) return $r;
 			}
 		} elseif (stripos($ua, "Konqueror") !== FALSE) {
 			$package['is_browser'] = true;
-			require_once(BB2_CORE . "/konqueror.inc.php");
+			require_once(BB2_CORE . "/browser.inc.php");
 			if ($r = bb2_konqueror($package)) return $r;
 		} elseif (stripos($ua, "Opera") !== FALSE) {
 			$package['is_browser'] = true;
-			require_once(BB2_CORE . "/opera.inc.php");
+			require_once(BB2_CORE . "/browser.inc.php");
 			if ($r = bb2_opera($package)) return $r;
 		} elseif (stripos($ua, "Safari") !== FALSE) {
 			$package['is_browser'] = true;
-			require_once(BB2_CORE . "/safari.inc.php");
+			require_once(BB2_CORE . "/browser.inc.php");
 			if ($r = bb2_safari($package)) return $r;
 		} elseif (stripos($ua, "Lynx") !== FALSE) {
 			$package['is_browser'] = true;
-			require_once(BB2_CORE . "/lynx.inc.php");
+			require_once(BB2_CORE . "/browser.inc.php");
 			if ($r = bb2_lynx($package)) return $r;
 		} elseif (stripos($ua, "MovableType") !== FALSE) {
 			require_once(BB2_CORE . "/movabletype.inc.php");
@@ -151,7 +150,7 @@ function bb2_screen($settings, $package)
 			if ($r = bb2_yahoo($package)) return $r;
 		} elseif (stripos($ua, "Mozilla") !== FALSE && stripos($ua, "Mozilla") == 0) {
 			$package['is_browser'] = true;
-			require_once(BB2_CORE . "/mozilla.inc.php");
+			require_once(BB2_CORE . "/browser.inc.php");
 			if ($r = bb2_mozilla($package)) return $r;
 		}
 
