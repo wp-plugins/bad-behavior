@@ -140,11 +140,14 @@ function bb2_screen($settings, $package)
 			require_once(BB2_CORE . "/movabletype.inc.php");
 			if ($r = bb2_movabletype($package)) return $r;
 		} elseif (stripos($ua, "msnbot") !== FALSE || stripos($ua, "MS Search") !== FALSE) {
-			require_once(BB2_CORE . "/msnbot.inc.php");
+			require_once(BB2_CORE . "/searchengine.inc.php");
 			if ($r = bb2_msnbot($package)) return $r;
 		} elseif (stripos($ua, "Googlebot") !== FALSE || stripos($ua, "Mediapartners-Google") !== FALSE || stripos($ua, "Google Wireless") !== FALSE) {
-			require_once(BB2_CORE . "/google.inc.php");
+			require_once(BB2_CORE . "/searchengine.inc.php");
 			if ($r = bb2_google($package)) return $r;
+		} elseif (stripos($ua, "Yahoo! Slurp") !== FALSE || stripos($ua, "Yahoo! SearchMonkey") !== FALSE) {
+			require_once(BB2_CORE . "/searchengine.inc.php");
+			if ($r = bb2_yahoo($package)) return $r;
 		} elseif (stripos($ua, "Mozilla") !== FALSE && stripos($ua, "Mozilla") == 0) {
 			$package['is_browser'] = true;
 			require_once(BB2_CORE . "/mozilla.inc.php");
