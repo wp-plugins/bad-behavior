@@ -142,7 +142,7 @@ function bb2_screen($settings, $package)
 		} elseif (stripos($ua, "MovableType") !== FALSE) {
 			require_once(BB2_CORE . "/movabletype.inc.php");
 			if ($r = bb2_movabletype($package)) return $r;
-		} elseif (stripos($ua, "msnbot") !== FALSE || stripos($ua, "MS Search") !== FALSE) {
+		} elseif (stripos($ua, "bingbot") !== FALSE || stripos($ua, "msnbot") !== FALSE || stripos($ua, "MS Search") !== FALSE) {
 			require_once(BB2_CORE . "/searchengine.inc.php");
 			if ($r = bb2_msnbot($package)) return $r;
 		} elseif (stripos($ua, "Googlebot") !== FALSE || stripos($ua, "Mediapartners-Google") !== FALSE || stripos($ua, "Google Wireless") !== FALSE) {
