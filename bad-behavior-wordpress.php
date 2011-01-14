@@ -167,5 +167,3 @@ $_SESSION['BB2_RESULT'] = bb2_start(bb2_read_settings());
 $bb2_mtime = explode(" ", microtime());
 $bb2_timer_stop = $bb2_mtime[1] + $bb2_mtime[0];
 $bb2_timer_total = $bb2_timer_stop - $bb2_timer_start;
-
-?>

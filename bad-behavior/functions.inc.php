@@ -72,5 +72,3 @@ function bb2_load_headers() {
 	}
 	return $headers;
 }
-
-?>

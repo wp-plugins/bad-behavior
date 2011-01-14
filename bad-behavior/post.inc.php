@@ -100,5 +100,3 @@ function bb2_post($settings, $package)
 
 	return false;
 }
-
-?>

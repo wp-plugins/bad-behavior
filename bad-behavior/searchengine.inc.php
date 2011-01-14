@@ -43,5 +43,3 @@ function bb2_yahoo($package)
 #	}
 	return false;
 }
-
-?>

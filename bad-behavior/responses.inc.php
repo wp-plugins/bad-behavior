@@ -49,4 +49,3 @@ function bb2_get_response($key) {
 	if (array_key_exists($key, $bb2_responses)) return $bb2_responses[$key];
 	return array('00000000');
 }
-?>

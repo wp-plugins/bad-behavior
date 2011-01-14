@@ -125,5 +125,3 @@ function bb2_blacklist($package) {
 
 	return FALSE;
 }
-
-?>

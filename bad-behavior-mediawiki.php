@@ -162,5 +162,3 @@ $wgExtensionCredits['other'][] = array(
 
 #$wgHooks['ParserAfterTidy'][] = 'bb2_mediawiki_timer';
 $wgExtensionFunctions[] = 'bb2_mediawiki_entry';
-
-?>

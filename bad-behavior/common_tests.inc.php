@@ -146,5 +146,3 @@ function bb2_misc_headers($settings, $package)
 
 	return false;
 }
-
-?>

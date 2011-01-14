@@ -172,4 +172,3 @@ function bb2_screen($settings, $package)
 	bb2_approved($settings, $package);
 	return false;
 }
-?>

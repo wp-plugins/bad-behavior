@@ -61,5 +61,3 @@ function bb2_log_denial($settings, $package, $key, $previous_key=false)
 	if (!$settings['logging']) return;
 	bb2_db_query(bb2_insert($settings, $package, $key));
 }
-
-?>
