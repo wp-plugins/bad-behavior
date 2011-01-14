@@ -62,6 +62,10 @@ the following:
 For complete documentation and installation instructions, please visit
 http://www.bad-behavior.ioerror.us/
 
+== Screenshots ==
+
+1. Most of the time, only spammers see this. In the event a human winds up here, a way out is provided.
+
 == Release Notes ==
 
 = Bad Behavior 2.0 Known Issues =
