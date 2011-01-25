@@ -2,9 +2,9 @@
 Tags: comment,trackback,referrer,spam,robot,antispam
 Contributors: error, MarkJaquith, Firas, skeltoac
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=error%40ioerror%2eus&item_name=Bad%20Behavior%20%28From%20WordPress%20Page%29&no_shipping=1&cn=Comments%20about%20Bad%20Behavior&tax=0&currency_code=USD&bn=PP%2dDonationsBF&charset=UTF%2d8
-Requires at least: 1.5
-Tested up to: 2.9
-Stable tag: 2.0.36
+Requires at least: 2.7
+Tested up to: 3.0.4
+Stable tag: 2.0.39
 
 Welcome to a whole new way of keeping your blog, forum, guestbook, wiki or
 content management system free of link spam. Bad Behavior is a PHP-based
@@ -35,7 +35,7 @@ Installing and configuring Bad Behavior on most platforms is simple and takes
 only a few minutes. In most cases, no configuration at all is needed. Simply
 turn it on and stop worrying about spam!
 
-The core of Bad Behavior is free software released under the GNU General
+The core of Bad Behavior is free software released under the GNU Lesser General
 Public License. (On some non-free platforms, special license terms exist for
 Bad Behavior's platform connector.)
 
@@ -43,8 +43,10 @@ Bad Behavior's platform connector.)
 
 *Warning*: If you are upgrading from a 1.x.x version of Bad Behavior,
 you must remove it from your system entirely, and delete all of its
-database tables, before installing Bad Behavior 2.0.x. You do not need
-to remove a 2.0.x version of Bad Behavior before upgrading to this
+database tables, before installing Bad Behavior 2.0.x. If you are upgrading
+from version 2.0.18 or prior, you must delete all of its files before
+upgrading, but do not need to delete the database tables. You do not need
+to remove a 2.0.19 or later version of Bad Behavior before upgrading to this
 release.
 
 Bad Behavior has been designed to install on each host software in the
@@ -62,9 +64,15 @@ the following:
 For complete documentation and installation instructions, please visit
 http://www.bad-behavior.ioerror.us/
 
+== Screenshots ==
+
+1. Most of the time, only spammers see this. In the event a human winds up here, a way out is provided.
+
 == Release Notes ==
 
 = Bad Behavior 2.0 Known Issues =
+
+* Bad Behavior requires MySQL 4.1 or later and PHP 5.2 or later.
 
 * Bad Behavior may be unable to protect cached pages on MediaWiki.
 

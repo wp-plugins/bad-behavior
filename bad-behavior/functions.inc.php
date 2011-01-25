@@ -2,6 +2,11 @@
 
 // Miscellaneous helper functions.
 
+// Quick and dirty check for an IPv6 address
+function is_ipv6($address) {
+	return (strpos($address, ":")) ? TRUE : FALSE;
+}
+
 // stripos() needed because stripos is only present on PHP 5
 if (!function_exists('stripos')) {
 	function stripos($haystack,$needle,$offset = 0) {
@@ -41,6 +46,7 @@ function match_cidr($addr, $cidr) {
 		foreach ($cidr as $cidrlet) {
 			if (match_cidr($addr, $cidrlet)) {
 				$output = true;
+				break;
 			}
 		}
 	} else {
@@ -59,12 +65,10 @@ function bb2_load_headers() {
 	if (!is_callable('getallheaders')) {
 		$headers = array();
 		foreach ($_SERVER as $h => $v)
-			if (ereg('HTTP_(.+)', $h, $hp))
+			if (preg_match('/HTTP_(.+)/', $h, $hp))
 				$headers[str_replace("_", "-", uc_all($hp[1]))] = $v;
 	} else {
 		$headers = getallheaders();
 	}
 	return $headers;
 }
-
-?>
