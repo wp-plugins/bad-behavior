@@ -268,7 +268,7 @@ function bb2_options()
 			$settings['reverse_proxy'] = false;
 		}
 		if ($_POST['reverse_proxy_header']) {
-			$settings['reverse_proxy_header'] = $_POST['reverse_proxy_header'];
+			$settings['reverse_proxy_header'] = uc_all($_POST['reverse_proxy_header']);
 		} else {
 			$settings['reverse_proxy_header'] = 'X-Forwarded-For';
 		}
@@ -318,8 +318,8 @@ function bb2_options()
 
 	<h3><?php _e('Reverse Proxy/Load Balancer'); ?></h3>
 	<p>If you are using Bad Behavior behind a reverse proxy, load balancer, HTTP accelerator, content cache or similar technology, enable the Reverse Proxy option.</p>
-	<p>If you have a chain of two or more reverse proxies between your server and the public Internet, you must specify <em>all</em> of the IP address ranges (in CIDR format) of all of your proxy servers, load balancers, etc.</p>
-	<p>In addition, your reverse proxy servers must set the IP address of the Internet client from which they received the request in an HTTP header. If you don't specify a header, <a href="http://en.wikipedia.org/wiki/X-Forwarded-For">X-Forwarded-For</a> will be used. Most proxy servers already support X-Forwarded-For and you would then only need to ensure that it is enabled on your proxy servers.</p>
+	<p>If you have a chain of two or more reverse proxies between your server and the public Internet, you must specify <em>all</em> of the IP address ranges (in CIDR format) of all of your proxy servers, load balancers, etc. Otherwise, Bad Behavior may be unable to determine the client's true IP address.</p>
+	<p>In addition, your reverse proxy servers must set the IP address of the Internet client from which they received the request in an HTTP header. If you don't specify a header, <a href="http://en.wikipedia.org/wiki/X-Forwarded-For">X-Forwarded-For</a> will be used. Most proxy servers already support X-Forwarded-For and you would then only need to ensure that it is enabled on your proxy servers. Some other header names in common use include <u>X-Real-Ip</u> (nginx) and <u>Cf-Connecting-Ip</u> (CloudFlare).</p>
 	<table class="form-table">
 	<tr><td><label><input type="checkbox" name="reverse_proxy" value="true" <?php if ($settings['reverse_proxy']) { ?>checked="checked" <?php } ?>/> <?php _e('Enable Reverse Proxy'); ?></label></td></tr>
 	<tr><td><label><input type="text" size="32" name="reverse_proxy_header" value="<?php echo $settings['reverse_proxy_header']; ?>" /> Header containing Internet clients' IP address</label></td></tr>
