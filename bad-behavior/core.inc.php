@@ -81,6 +81,8 @@ function bb2_start($settings)
 	if (!$request_uri) $request_uri = $_SERVER['SCRIPT_NAME'];	# IIS
 
 	if ($settings['reverse_proxy']) {
+		$headers['X-Bad-Behavior-Remote-Address'] = $_SERVER['REMOTE_ADDR'];
+		$headers_mixed['X-Bad-Behavior-Remote-Address'] = $_SERVER['REMOTE_ADDR'];
 		$ip = bb2_reverse_proxy($settings, $headers_mixed);
 	} else {
 		$ip = $_SERVER['REMOTE_ADDR'];
