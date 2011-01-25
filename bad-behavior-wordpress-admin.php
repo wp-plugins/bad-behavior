@@ -320,8 +320,8 @@ function bb2_options()
 	<p>In addition, your reverse proxy servers must set the IP address of the Internet client from which they received the request in an HTTP header. If you don't specify a header, 'X-Forwarded-For' will be used. Most proxy servers already support X-Forwarded-For and you would then only need to ensure that it is enabled on your proxy servers.</p>
 	<table class="form-table">
 	<tr><td><label><input type="checkbox" name="reverse_proxy" value="true" <?php if ($settings['reverse_proxy']) { ?>checked="checked" <?php } ?>/> <?php _e('Enable Reverse Proxy'); ?></label></td></tr>
-	<tr><td><label><input type="text" size="3" maxlength="3" name="reverse_proxy_header" value="<?php echo $settings['reverse_proxy_header']; ?>" /> Header containing Internet clients' IP address</label></td></tr>
-	<tr><td><label>IP address or CIDR format address ranges for your proxy servers (one per line)<br/><textarea cols="24" rows="6" name="reverse_proxy_addresses"><?php echo implode("\n", $settings['reverse_proxy_addresses']); ?>"</textarea></td></tr>
+	<tr><td><label><input type="text" size="32" name="reverse_proxy_header" value="<?php echo $settings['reverse_proxy_header']; ?>" /> Header containing Internet clients' IP address</label></td></tr>
+	<tr><td><label>IP address or CIDR format address ranges for your proxy servers (one per line)<br/><textarea cols="24" rows="6" name="reverse_proxy_addresses"><?php echo implode("\n", $settings['reverse_proxy_addresses']); ?></textarea></td></tr>
 	</table>
 
 	<p class="submit"><input class="button" type="submit" name="submit" value="<?php _e('Update &raquo;'); ?>" /></p>
