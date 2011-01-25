@@ -34,7 +34,7 @@ define('BB2_CWD', dirname(__FILE__));
 // Most of these are unused in non-database mode.
 $bb2_settings_defaults = array(
 	'log_table' => 'bad_behavior',
-	'display_stats' => true,
+	'display_stats' => false,
 	'strict' => false,
 	'verbose' => false,
 	'logging' => true,

@@ -27,7 +27,7 @@ if (!defined('MEDIAWIKI')) die();
 // Settings you can adjust for Bad Behavior.
 $bb2_settings_defaults = array(
 	'log_table' => $wgDBprefix . 'bad_behavior',
-	'display_stats' => true,
+	'display_stats' => false,
 	'strict' => false,
 	'verbose' => false,
 	'logging' => true,

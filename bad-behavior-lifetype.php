@@ -97,7 +97,7 @@
 		$config =& Config::getConfig();
 		$prefix = Db::getPrefix();
 		$logTable = $config->getValue( 'bb2_log_table', BB2_DEFAULT_LOG_TABLE );
-		$displayStats = $config->getValue( 'bb2_display_stats', true );
+		$displayStats = $config->getValue( 'bb2_display_stats', false );
 		$strict = $config->getValue( 'bb2_strict', false );
 		$verbose = $config->getValue( 'bb2_verbose', false );
 		$isInstalled = $config->getValue( 'bb2_installed', false );
