@@ -30,7 +30,7 @@ define('BB2_CWD', dirname(__FILE__));
 // These settings are used when settings.ini is not present.
 $bb2_settings_defaults = array(
 	'log_table' => 'bad_behavior',
-	'display_stats' => true,
+	'display_stats' => false,
 	'strict' => false,
 	'verbose' => false,
 	'logging' => true,
