@@ -128,7 +128,7 @@ function bb2_manage() {
 <h2><?php _e("Bad Behavior"); ?></h2>
 <form method="post" action="<?php echo $request_uri; ?>">
 	<p>For more information please visit the <a href="http://www.bad-behavior.ioerror.us/">Bad Behavior</a> homepage.</p>
-	<p>If you find Bad Behavior valuable, please consider making a <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=error%40ioerror%2eus&item_name=Bad%20Behavior%20<?php echo BB2_VERSION; ?>%20%28From%20Admin%29&no_shipping=1&cn=Comments%20about%20Bad%20Behavior&tax=0&currency_code=USD&bn=PP%2dDonationsBF&charset=UTF%2d8">financial contribution</a> to further development of Bad Behavior.</p>
+	<p>If you find Bad Behavior valuable, please consider <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=error%40ioerror%2eus&item_name=Bad%20Behavior%20<?php echo BB2_VERSION; ?>%20%28From%20Admin%29&no_shipping=1&cn=Comments%20about%20Bad%20Behavior&tax=0&currency_code=USD&bn=PP%2dDonationsBF&charset=UTF%2d8">donating</a> to help further development of Bad Behavior.</p>
 
 <div class="tablenav">
 <?php
@@ -274,6 +274,8 @@ function bb2_options()
 		}
 		if ($_POST['reverse_proxy_addresses']) {
 			$settings['reverse_proxy_addresses'] = preg_split("/[\s,]+/m", $_POST['reverse_proxy_addresses']);
+		} else {
+			$settings['reverse_proxy_addresses'] = array();
 		}
 		bb2_write_settings($settings);
 ?>
