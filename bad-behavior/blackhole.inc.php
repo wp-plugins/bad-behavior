@@ -61,4 +61,3 @@ function bb2_httpbl($settings, $package) {
 	}
 	return false;
 }
-?>
