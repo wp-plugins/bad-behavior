@@ -1,5 +1,5 @@
 <?php if (!defined('BB2_CWD')) die("I said no cheating!");
-define('BB2_VERSION', "2.1.8");
+define('BB2_VERSION', "2.1.9");
 
 // Bad Behavior entry point is bb2_start()
 // If you're reading this, you are probably lost.
@@ -40,6 +40,19 @@ function bb2_approved($settings, $package)
 	}
 }
 
+// If this is reverse-proxied or load balanced, obtain the actual client IP
+function bb2_reverse_proxy($settings, $headers_mixed)
+{
+	$addrs = array_reverse(preg_split("/[\s,]+/", $headers_mixed[$settings['reverse_proxy_header']]));
+	if (!empty($settings['reverse_proxy_addresses'])) {
+		foreach ($addrs as $addr) {
+			if (!match_cidr($addr, $settings['reverse_proxy_addresses'])) {
+				return $addr;
+			}
+		}
+	}
+	return $addrs[0];
+}
 
 // Let God sort 'em out!
 function bb2_start($settings)
@@ -67,11 +80,13 @@ function bb2_start($settings)
 	$request_uri = $_SERVER["REQUEST_URI"];
 	if (!$request_uri) $request_uri = $_SERVER['SCRIPT_NAME'];	# IIS
 
-	# Nasty CloudFlare hack provided by butchs at simplemachines
-	$ip_temp = preg_replace("/^::ffff:/", "", (array_key_exists('Cf-Connecting-Ip', $headers_mixed)) ? $_SERVER['HTTP_CF_CONNECTING_IP'] : $_SERVER['REMOTE_ADDR']);
-	$cloudflare_ip = preg_replace("/^::ffff:/", "", $_SERVER['REMOTE_ADDR']);
+	if ($settings['reverse_proxy']) {
+		$ip = bb2_reverse_proxy($settings, $headers_mixed);
+	} else {
+		$ip = $_SERVER['REMOTE_ADDR'];
+	}
 
-	@$package = array('ip' => $ip_temp, 'headers' => $headers, 'headers_mixed' => $headers_mixed, 'request_method' => $_SERVER['REQUEST_METHOD'], 'request_uri' => $request_uri, 'server_protocol' => $_SERVER['SERVER_PROTOCOL'], 'request_entity' => $request_entity, 'user_agent' => $_SERVER['HTTP_USER_AGENT'], 'is_browser' => false, 'cloudflare' => $cloudflare_ip);
+	@$package = array('ip' => $ip, 'headers' => $headers, 'headers_mixed' => $headers_mixed, 'request_method' => $_SERVER['REQUEST_METHOD'], 'request_uri' => $request_uri, 'server_protocol' => $_SERVER['SERVER_PROTOCOL'], 'request_entity' => $request_entity, 'user_agent' => $_SERVER['HTTP_USER_AGENT'], 'is_browser' => false,);
 
 	$result = bb2_screen($settings, $package);
 	if ($result && !defined('BB2_TEST')) bb2_banned($settings, $package, $result);

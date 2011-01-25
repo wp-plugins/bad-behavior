@@ -262,6 +262,19 @@ function bb2_options()
 		} else {
 			$settings['offsite_forms'] = false;
 		}
+		if ($_POST['reverse_proxy']) {
+			$settings['reverse_proxy'] = true;
+		} else {
+			$settings['reverse_proxy'] = false;
+		}
+		if ($_POST['reverse_proxy_header']) {
+			$settings['reverse_proxy_header'] = $_POST['reverse_proxy_header'];
+		} else {
+			$settings['reverse_proxy_header'] = 'X-Forwarded-For';
+		}
+		if ($_POST['reverse_proxy_addresses']) {
+			$settings['reverse_proxy_addresses'] = preg_split("/[\s,]+/m", $_POST['reverse_proxy_addresses']);
+		}
 		bb2_write_settings($settings);
 ?>
 	<div id="message" class="updated fade"><p><strong><?php _e('Options saved.') ?></strong></p></div>
@@ -299,6 +312,16 @@ function bb2_options()
 	<tr><td><label><input type="text" size="12" maxlength="12" name="httpbl_key" value="<?php echo $settings['httpbl_key']; ?>" /> http:BL Access Key</label></td></tr>
 	<tr><td><label><input type="text" size="3" maxlength="3" name="httpbl_threat" value="<?php echo $settings['httpbl_threat']; ?>" /> Minimum Threat Level (25 is recommended)</label></td></tr>
 	<tr><td><label><input type="text" size="3" maxlength="3" name="httpbl_maxage" value="<?php echo $settings['httpbl_maxage']; ?>" /> Maximum Age of Data (30 is recommended)</label></td></tr>
+	</table>
+
+	<h3><?php _e('Reverse Proxy/Load Balancer'); ?></h3>
+	<p>If you are using Bad Behavior behind a reverse proxy, load balancer, HTTP accelerator, content cache or similar technology, enable the Reverse Proxy option.</p>
+	<p>If you have a chain of two or more reverse proxies between your server and the public Internet, you must specify <em>all</em> of the IP address ranges (in CIDR format) of all of your proxy servers, load balancers, etc.</p>
+	<p>In addition, your reverse proxy servers must set the IP address of the Internet client from which they received the request in an HTTP header. If you don't specify a header, 'X-Forwarded-For' will be used. Most proxy servers already support X-Forwarded-For and you would then only need to ensure that it is enabled on your proxy servers.</p>
+	<table class="form-table">
+	<tr><td><label><input type="checkbox" name="reverse_proxy" value="true" <?php if ($settings['reverse_proxy']) { ?>checked="checked" <?php } ?>/> <?php _e('Enable Reverse Proxy'); ?></label></td></tr>
+	<tr><td><label><input type="text" size="3" maxlength="3" name="reverse_proxy_header" value="<?php echo $settings['reverse_proxy_header']; ?>" /> Header containing Internet clients' IP address</label></td></tr>
+	<tr><td><label>IP address or CIDR format address ranges for your proxy servers (one per line)<br/><textarea cols="24" rows="6" name="reverse_proxy_addresses"><?php echo implode("\n", $settings['reverse_proxy_addresses']); ?>"</textarea></td></tr>
 	</table>
 
 	<p class="submit"><input class="button" type="submit" name="submit" value="<?php _e('Update &raquo;'); ?>" /></p>
