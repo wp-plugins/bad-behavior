@@ -15,6 +15,10 @@ Welcome to a whole new way of keeping your blog, forum, guestbook, wiki or
 content management system free of link spam. Bad Behavior is a PHP-based
 solution for blocking link spam and the robots which deliver it.
 
+Thousands of sites, large and small, like SourceForge, GNOME, the U.S.
+Department of Education, and many more, trust Bad Behavior to help reduce
+incoming link spam and malicious activity.
+
 Bad Behavior complements other link spam solutions by acting as a gatekeeper,
 preventing spammers from ever delivering their junk, and in many cases, from
 ever reading your site in the first place. This keeps your site's load down,
