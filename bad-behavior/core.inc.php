@@ -141,18 +141,21 @@ function bb2_screen($settings, $package)
 				if ($r == 1) return false;	# whitelisted
 				return $r;
 			}
+			return false;
 		} elseif (stripos($ua, "Googlebot") !== FALSE || stripos($ua, "Mediapartners-Google") !== FALSE) {
 			require_once(BB2_CORE . "/searchengine.inc.php");
 			if ($r = bb2_google($package)) {
 				if ($r == 1) return false;	# whitelisted
 				return $r;
 			}
+			return false;
 		} elseif (stripos($ua, "Yahoo! Slurp") !== FALSE || stripos($ua, "Yahoo! SearchMonkey") !== FALSE) {
 			require_once(BB2_CORE . "/searchengine.inc.php");
 			if ($r = bb2_yahoo($package)) {
 				if ($r == 1) return false;	# whitelisted
 				return $r;
 			}
+			return false;
 		}
 		// MSIE checks
 		if (stripos($ua, "; MSIE") !== FALSE) {
