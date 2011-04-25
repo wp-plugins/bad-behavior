@@ -100,7 +100,7 @@ function bb2_read_settings() {
 	global $wpdb;
 
 	// Add in default settings when they aren't yet present in WP
-	$settings = get_settings('bad_behavior_settings');
+	$settings = get_option('bad_behavior_settings');
 	if (!$settings) $settings = array();
 	return array_merge(array('log_table' => $wpdb->prefix . 'bad_behavior', 'display_stats' => true, 'strict' => false, 'verbose' => false, 'logging' => true, 'httpbl_key' => '', 'httpbl_threat' => '25', 'httpbl_maxage' => '30', 'offsite_forms' => false, 'reverse_proxy' => false, 'reverse_proxy_header' => 'X-Forwarded-For', 'reverse_proxy_addresses' => array(),), $settings);
 	
