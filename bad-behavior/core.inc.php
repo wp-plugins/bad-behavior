@@ -1,5 +1,5 @@
 <?php if (!defined('BB2_CWD')) die("I said no cheating!");
-define('BB2_VERSION', "2.1.9");
+define('BB2_VERSION', "2.1.13");
 
 // Bad Behavior entry point is bb2_start()
 // If you're reading this, you are probably lost.
@@ -121,7 +121,10 @@ function bb2_screen($settings, $package)
 
 		// Check the http:BL
 		require_once(BB2_CORE . "/blackhole.inc.php");
-		if ($r = bb2_httpbl($settings, $package)) return $r;
+		if ($r = bb2_httpbl($settings, $package)) {
+			if ($r == 1) return false;	# whitelisted
+			return $r;
+		}
 
 		// Check for common stuff
 		require_once(BB2_CORE . "/common_tests.inc.php");
@@ -131,6 +134,29 @@ function bb2_screen($settings, $package)
 
 		// Specific checks
 		@$ua = $package['user_agent'];
+		// Search engine checks come first
+		if (stripos($ua, "bingbot") !== FALSE || stripos($ua, "msnbot") !== FALSE || stripos($ua, "MS Search") !== FALSE) {
+			require_once(BB2_CORE . "/searchengine.inc.php");
+			if ($r = bb2_msnbot($package)) {
+				if ($r == 1) return false;	# whitelisted
+				return $r;
+			}
+			return false;
+		} elseif (stripos($ua, "Googlebot") !== FALSE || stripos($ua, "Mediapartners-Google") !== FALSE) {
+			require_once(BB2_CORE . "/searchengine.inc.php");
+			if ($r = bb2_google($package)) {
+				if ($r == 1) return false;	# whitelisted
+				return $r;
+			}
+			return false;
+		} elseif (stripos($ua, "Yahoo! Slurp") !== FALSE || stripos($ua, "Yahoo! SearchMonkey") !== FALSE) {
+			require_once(BB2_CORE . "/searchengine.inc.php");
+			if ($r = bb2_yahoo($package)) {
+				if ($r == 1) return false;	# whitelisted
+				return $r;
+			}
+			return false;
+		}
 		// MSIE checks
 		if (stripos($ua, "; MSIE") !== FALSE) {
 			$package['is_browser'] = true;
@@ -159,15 +185,6 @@ function bb2_screen($settings, $package)
 		} elseif (stripos($ua, "MovableType") !== FALSE) {
 			require_once(BB2_CORE . "/movabletype.inc.php");
 			if ($r = bb2_movabletype($package)) return $r;
-		} elseif (stripos($ua, "bingbot") !== FALSE || stripos($ua, "msnbot") !== FALSE || stripos($ua, "MS Search") !== FALSE) {
-			require_once(BB2_CORE . "/searchengine.inc.php");
-			if ($r = bb2_msnbot($package)) return $r;
-		} elseif (stripos($ua, "Googlebot") !== FALSE || stripos($ua, "Mediapartners-Google") !== FALSE || stripos($ua, "Google Wireless") !== FALSE) {
-			require_once(BB2_CORE . "/searchengine.inc.php");
-			if ($r = bb2_google($package)) return $r;
-		} elseif (stripos($ua, "Yahoo! Slurp") !== FALSE || stripos($ua, "Yahoo! SearchMonkey") !== FALSE) {
-			require_once(BB2_CORE . "/searchengine.inc.php");
-			if ($r = bb2_yahoo($package)) return $r;
 		} elseif (stripos($ua, "Mozilla") !== FALSE && stripos($ua, "Mozilla") == 0) {
 			$package['is_browser'] = true;
 			require_once(BB2_CORE . "/browser.inc.php");
