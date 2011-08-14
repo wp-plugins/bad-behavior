@@ -1,30 +1,34 @@
 <?php
 /*
-http://www.bad-behavior.ioerror.us/
-
 Bad Behavior - detects and blocks unwanted Web accesses
-Copyright (C) 2005 Michael Hampton
+Copyright (C) 2005,2006,2007,2008,2009,2010,2011 Michael Hampton
 
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
+Bad Behavior is free software; you can redistribute it and/or modify it under
+the terms of the GNU Lesser General Public License as published by the Free
+Software Foundation; either version 3 of the License, or (at your option) any
+later version.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+You should have received a copy of the GNU Lesser General Public License along
+with this program. If not, see <http://www.gnu.org/licenses/>.
+
+Please report any problems to bad . bots AT ioerror DOT us
+http://www.bad-behavior.ioerror.us/
 */
+
+###############################################################################
+###############################################################################
 
 // This file is the entry point for Bad Behavior.
 
 if (!defined('MEDIAWIKI')) die();
 
 // Settings you can adjust for Bad Behavior.
+// DO NOT EDIT HERE; instead make changes in settings.ini.
+// These settings are used when settings.ini is not present.
 $bb2_settings_defaults = array(
 	'log_table' => $wgDBprefix . 'bad_behavior',
 	'display_stats' => false,
@@ -35,11 +39,15 @@ $bb2_settings_defaults = array(
 	'httpbl_threat' => '25',
 	'httpbl_maxage' => '30',
 	'offsite_forms' => false,
+	'reverse_proxy' => false,
+	'reverse_proxy_header' => 'X-Forwarded-For',
+	'reverse_proxy_addresses' => array(),
 );
 
 define('BB2_CWD', dirname(__FILE__));
 
 // Bad Behavior callback functions.
+require_once("bad-behavior-mysql.php");
 
 // Return current time in the format preferred by your database.
 function bb2_db_date() {
@@ -90,7 +98,8 @@ function bb2_email() {
 // retrieve settings from database
 function bb2_read_settings() {
 	global $bb2_settings_defaults;
-	return $bb2_settings_defaults;
+	$settings = @parse_ini_file(dirname(__FILE__) . "/settings.ini");
+	return array_merge($bb2_settings_defaults, $settings);
 }
 
 // This Bad Behavior-related function is a stub. You can help MediaWiki by expanding it.
@@ -135,7 +144,6 @@ function bb2_mediawiki_entry() {
 	$bb2_timer_start = $bb2_mtime[1] + $bb2_mtime[0];
 
 	if (php_sapi_name() != 'cli') {
-		require_once(BB2_CWD . "/bad-behavior/core.inc.php");
 		bb2_install();	// FIXME: see above
 		$settings = bb2_read_settings();
 		bb2_start($settings);
@@ -146,7 +154,7 @@ function bb2_mediawiki_entry() {
 	$bb2_timer_total = $bb2_timer_stop - $bb2_timer_start;
 }
 
-require_once(BB2_CWD . "/bad-behavior/version.inc.php");
+require_once(BB2_CWD . "/bad-behavior/core.inc.php");
 $wgExtensionCredits['other'][] = array(
 	'name' => 'Bad Behavior',
 	'version' => BB2_VERSION,
@@ -157,5 +165,3 @@ $wgExtensionCredits['other'][] = array(
 
 #$wgHooks['ParserAfterTidy'][] = 'bb2_mediawiki_timer';
 $wgExtensionFunctions[] = 'bb2_mediawiki_entry';
-
-?>

@@ -1,36 +1,30 @@
 <?php
 /*
 Plugin Name: Bad Behavior
-Version: 2.0.43
+Version: 2.1.13
 Description: Deny automated spambots access to your PHP-based Web site.
 Plugin URI: http://www.bad-behavior.ioerror.us/
 Author: Michael Hampton
-Author URI: http://www.homelandstupidity.us/
-License: GPL
+Author URI: http://www.bad-behavior.ioerror.us/
+License: LGPLv3
 
 Bad Behavior - detects and blocks unwanted Web accesses
-Copyright (C) 2005 Michael Hampton
+Copyright (C) 2005,2006,2007,2008,2009,2010,2011 Michael Hampton
 
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
+Bad Behavior is free software; you can redistribute it and/or modify it under
+the terms of the GNU Lesser General Public License as published by the Free
+Software Foundation; either version 3 of the License, or (at your option) any
+later version.
 
-As a special exemption, you may link this program with any of the
-programs listed below, regardless of the license terms of those
-programs, and distribute the resulting program, without including the
-source code for such programs: ExpressionEngine
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+You should have received a copy of the GNU Lesser General Public License along
+with this program. If not, see <http://www.gnu.org/licenses/>.
 
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-Please report any problems to badbots AT ioerror DOT us
+Please report any problems to bad . bots AT ioerror DOT us
+http://www.bad-behavior.ioerror.us/
 */
 
 ###############################################################################
@@ -44,6 +38,7 @@ $bb2_timer_start = $bb2_mtime[1] + $bb2_mtime[0];
 define('BB2_CWD', dirname(__FILE__));
 
 // Bad Behavior callback functions.
+require_once("bad-behavior-mysql.php");
 
 // Return current time in the format preferred by your database.
 function bb2_db_date() {
@@ -107,7 +102,9 @@ function bb2_read_settings() {
 	// Add in default settings when they aren't yet present in WP
 	$settings = get_option('bad_behavior_settings');
 	if (!$settings) $settings = array();
-	return array_merge(array('log_table' => $wpdb->prefix . 'bad_behavior', 'display_stats' => false, 'strict' => false, 'verbose' => false, 'logging' => true, 'httpbl_key' => '', 'httpbl_threat' => '25', 'httpbl_maxage' => '30', 'offsite_forms' => false), $settings);
+	return array_merge(array('log_table' => $wpdb->prefix . 'bad_behavior', 'display_stats' => true, 'strict' => false, 'verbose' => false, 'logging' => true, 'httpbl_key' => '', 'httpbl_threat' => '25', 'httpbl_maxage' => '30', 'offsite_forms' => false, 'reverse_proxy' => false, 'reverse_proxy_header' => 'X-Forwarded-For', 'reverse_proxy_addresses' => array(),), $settings);
+	
+	
 }
 
 // write settings to database
@@ -140,6 +137,10 @@ function bb2_insert_stats($force = false) {
 			echo sprintf('<p><a href="http://www.bad-behavior.ioerror.us/">%1$s</a> %2$s <strong>%3$s</strong> %4$s</p>', __('Bad Behavior'), __('has blocked'), $blocked[0]["COUNT(*)"], __('access attempts in the last 7 days.'));
 		}
 	}
+	if (@!empty($_SESSION['BB2_RESULT'])) {
+		echo sprintf("\n<!-- Bad Behavior result was %s! This request would have been blocked. -->\n", $_SESSION['BB2_RESULT']);
+		unset($_SESSION['BB2_RESULT']);
+	}
 }
 
 // Return the top-level relative path of wherever we are (for cookies)
@@ -148,7 +149,6 @@ function bb2_relative_path() {
 	return $url['path'] . '/';
 }
 
-// FIXME: some sort of hack to run install on 1.5 (and older?) blogs
 // FIXME: figure out what's wrong on 2.0 that this doesn't work
 // register_activation_hook(__FILE__, 'bb2_install');
 //add_action('activate_bb2/bad-behavior-wordpress.php', 'bb2_install');
@@ -156,7 +156,6 @@ add_action('wp_head', 'bb2_insert_head');
 add_action('wp_footer', 'bb2_insert_stats');
 
 // Calls inward to Bad Behavor itself.
-require_once(BB2_CWD . "/bad-behavior/version.inc.php");
 require_once(BB2_CWD . "/bad-behavior/core.inc.php");
 bb2_install();	// FIXME: see above
 
@@ -165,10 +164,8 @@ if (is_admin() || strstr($_SERVER['PHP_SELF'], 'wp-admin/')) {	// 1.5 kludge
 	require_once(BB2_CWD . "/bad-behavior-wordpress-admin.php");
 }
 
-bb2_start(bb2_read_settings());
+$_SESSION['BB2_RESULT'] = bb2_start(bb2_read_settings());
 
 $bb2_mtime = explode(" ", microtime());
 $bb2_timer_stop = $bb2_mtime[1] + $bb2_mtime[0];
 $bb2_timer_total = $bb2_timer_stop - $bb2_timer_start;
-
-?>

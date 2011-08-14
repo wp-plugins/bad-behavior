@@ -107,6 +107,7 @@ function bb2_manage() {
 	$paged = 0 + $_GET['paged']; if (!$paged) $paged = 1;
 	if ($_GET['key']) $where .= "AND `key` = '" . $wpdb->escape($_GET['key']) . "' ";
 	if ($_GET['blocked']) $where .= "AND `key` != '00000000' ";
+	else if ($_GET['permitted']) $where .= "AND `key` = '00000000' ";
 	if ($_GET['ip']) $where .= "AND `ip` = '" . $wpdb->escape($_GET['ip']) . "' ";
 	if ($_GET['user_agent']) $where .= "AND `user_agent` = '" . $wpdb->escape($_GET['user_agent']) . "' ";
 	if ($_GET['request_method']) $where .= "AND `request_method` = '" . $wpdb->escape($_GET['request_method']) . "' ";
@@ -139,14 +140,16 @@ function bb2_manage() {
 <?php if ($count < $totalcount): ?>
 Displaying <strong><?php echo $count; ?></strong> of <strong><?php echo $totalcount; ?></strong> records filtered by:<br/>
 <?php if ($_GET['key']) echo "Status [<a href=\"" . remove_query_arg(array("paged", "key"), $request_uri) . "\">X</a>] "; ?>
-<?php if ($_GET['blocked']) echo "Blocked [<a href=\"" . remove_query_arg(array("paged", "blocked"), $request_uri) . "\">X</a>] "; ?>
+<?php if ($_GET['blocked']) echo "Blocked [<a href=\"" . remove_query_arg(array("paged", "blocked", "permitted"), $request_uri) . "\">X</a>] "; ?>
+<?php if ($_GET['permitted']) echo "Permitted [<a href=\"" . remove_query_arg(array("paged", "blocked", "permitted"), $request_uri) . "\">X</a>] "; ?>
 <?php if ($_GET['ip']) echo "IP [<a href=\"" . remove_query_arg(array("paged", "ip"), $request_uri) . "\">X</a>] "; ?>
 <?php if ($_GET['user_agent']) echo "User Agent [<a href=\"" . remove_query_arg(array("paged", "user_agent"), $request_uri) . "\">X</a>] "; ?>
 <?php if ($_GET['request_method']) echo "GET/POST [<a href=\"" . remove_query_arg(array("paged", "request_method"), $request_uri) . "\">X</a>] "; ?>
 <?php else: ?>
 Displaying all <strong><?php echo $totalcount; ?></strong> records<br/>
 <?php endif; ?>
-<?php if (!$_GET['key'] && !$_GET['blocked']) { ?><a href="<?php echo add_query_arg(array("blocked" => "true", "paged" => false), $request_uri); ?>">Show Blocked</a><?php } ?>
+<?php if (!$_GET['key'] && !$_GET['blocked']) { ?><a href="<?php echo add_query_arg(array("blocked" => "true", "permitted" => "false", "paged" => false), $request_uri); ?>">Show Blocked</a><?php } ?>
+<?php if (!$_GET['key'] && !$_GET['permitted']) { ?><a href="<?php echo add_query_arg(array("permitted" => "true", "blocked" => "false", "paged" => false), $request_uri); ?>">Show Permitted</a><?php } ?>
 </div>
 </div>
 
@@ -178,8 +181,8 @@ Displaying all <strong><?php echo $totalcount; ?></strong> records<br/>
 		} else {
 			$host .= "<br/>\n";
 		}
-		echo "<td><a href=\"" . add_query_arg("ip", $result["ip"], remove_query_arg("paged", $request_uri)) . "\">" . $result["ip"] . "</a><br/>$host<br/>\n" . $result["date"] . "<br/><br/><a href=\"" . add_query_arg("key", $result["key"], remove_query_arg(array("paged", "blocked"), $request_uri)) . "\">" . $key["log"] . "</a>\n";
-		if ($httpbl) echo "<br/><br/>http:BL:<br/>$httpbl\n";
+		echo "<td><a href=\"" . add_query_arg("ip", $result["ip"], remove_query_arg("paged", $request_uri)) . "\">" . $result["ip"] . "</a><br/>$host<br/>\n" . $result["date"] . "<br/><br/><a href=\"" . add_query_arg("key", $result["key"], remove_query_arg(array("paged", "blocked", "permitted"), $request_uri)) . "\">" . $key["log"] . "</a>\n";
+		if ($httpbl) echo "<br/><br/><a href=\"http://www.projecthoneypot.org/ip_{$result['ip']}\">http:BL</a>:<br/>$httpbl\n";
 		echo "</td>\n";
 		$headers = str_replace("\n", "<br/>\n", htmlspecialchars($result['http_headers']));
 		if (@strpos($headers, $result['user_agent']) !== FALSE) $headers = substr_replace($headers, "<a href=\"" . add_query_arg("user_agent", rawurlencode($result["user_agent"]), remove_query_arg("paged", $request_uri)) . "\">" . $result['user_agent'] . "</a>", strpos($headers, $result['user_agent']), strlen($result['user_agent']));
@@ -262,6 +265,21 @@ function bb2_options()
 		} else {
 			$settings['offsite_forms'] = false;
 		}
+		if ($_POST['reverse_proxy']) {
+			$settings['reverse_proxy'] = true;
+		} else {
+			$settings['reverse_proxy'] = false;
+		}
+		if ($_POST['reverse_proxy_header']) {
+			$settings['reverse_proxy_header'] = uc_all($_POST['reverse_proxy_header']);
+		} else {
+			$settings['reverse_proxy_header'] = 'X-Forwarded-For';
+		}
+		if ($_POST['reverse_proxy_addresses']) {
+			$settings['reverse_proxy_addresses'] = preg_split("/[\s,]+/m", $_POST['reverse_proxy_addresses']);
+		} else {
+			$settings['reverse_proxy_addresses'] = array();
+		}
 		bb2_write_settings($settings);
 ?>
 	<div id="message" class="updated fade"><p><strong><?php _e('Options saved.') ?></strong></p></div>
@@ -270,7 +288,7 @@ function bb2_options()
 ?>
 	<div class="wrap">
 	<h2><?php _e("Bad Behavior"); ?></h2>
-	<form method="post" action="<?php echo $request_uri; ?>">
+	<form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
 	<p>For more information please visit the <a href="http://www.bad-behavior.ioerror.us/">Bad Behavior</a> homepage.</p>
 	<p>If you find Bad Behavior valuable, please consider making a <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=error%40ioerror%2eus&item_name=Bad%20Behavior%20<?php echo BB2_VERSION; ?>%20%28From%20Admin%29&no_shipping=1&cn=Comments%20about%20Bad%20Behavior&tax=0&currency_code=USD&bn=PP%2dDonationsBF&charset=UTF%2d8">financial contribution</a> to further development of Bad Behavior.</p>
 
@@ -301,6 +319,16 @@ function bb2_options()
 	<tr><td><label><input type="text" size="3" maxlength="3" name="httpbl_maxage" value="<?php echo $settings['httpbl_maxage']; ?>" /> Maximum Age of Data (30 is recommended)</label></td></tr>
 	</table>
 
+	<h3><?php _e('Reverse Proxy/Load Balancer'); ?></h3>
+	<p>If you are using Bad Behavior behind a reverse proxy, load balancer, HTTP accelerator, content cache or similar technology, enable the Reverse Proxy option.</p>
+	<p>If you have a chain of two or more reverse proxies between your server and the public Internet, you must specify <em>all</em> of the IP address ranges (in CIDR format) of all of your proxy servers, load balancers, etc. Otherwise, Bad Behavior may be unable to determine the client's true IP address.</p>
+	<p>In addition, your reverse proxy servers must set the IP address of the Internet client from which they received the request in an HTTP header. If you don't specify a header, <a href="http://en.wikipedia.org/wiki/X-Forwarded-For">X-Forwarded-For</a> will be used. Most proxy servers already support X-Forwarded-For and you would then only need to ensure that it is enabled on your proxy servers. Some other header names in common use include <u>X-Real-Ip</u> (nginx) and <u>Cf-Connecting-Ip</u> (CloudFlare).</p>
+	<table class="form-table">
+	<tr><td><label><input type="checkbox" name="reverse_proxy" value="true" <?php if ($settings['reverse_proxy']) { ?>checked="checked" <?php } ?>/> <?php _e('Enable Reverse Proxy'); ?></label></td></tr>
+	<tr><td><label><input type="text" size="32" name="reverse_proxy_header" value="<?php echo $settings['reverse_proxy_header']; ?>" /> Header containing Internet clients' IP address</label></td></tr>
+	<tr><td><label>IP address or CIDR format address ranges for your proxy servers (one per line)<br/><textarea cols="24" rows="6" name="reverse_proxy_addresses"><?php echo implode("\n", $settings['reverse_proxy_addresses']); ?></textarea></td></tr>
+	</table>
+
 	<p class="submit"><input class="button" type="submit" name="submit" value="<?php _e('Update &raquo;'); ?>" /></p>
 	</form>
 	</div>
@@ -318,5 +346,3 @@ function bb2_plugin_action_links($links, $file) {
 	return $links;
 }
 add_filter("plugin_action_links", "bb2_plugin_action_links", 10, 2);
-
-?>
