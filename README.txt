@@ -44,12 +44,8 @@ Installing and configuring Bad Behavior on most platforms is simple and takes
 only a few minutes. In most cases, no configuration at all is needed. Simply
 turn it on and stop worrying about spam!
 
-The core of Bad Behavior is free software released under the GNU General
-Public License, version 2, or at your option, any later version. (On some
-non-free platforms, special license terms exist for Bad Behavior's platform
-connector.) The development version of Bad Behavior is free software released
-under the GNU Lesser General Public License, version 3, or at your option,
-any later version.
+The core of Bad Behavior is free software released under the GNU Lesser General
+Public License, version 3, or at your option, any later version.
 
 == Installation ==
 
