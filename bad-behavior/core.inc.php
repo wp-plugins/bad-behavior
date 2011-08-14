@@ -142,7 +142,7 @@ function bb2_screen($settings, $package)
 				return $r;
 			}
 			return false;
-		} elseif (stripos($ua, "Googlebot") !== FALSE || stripos($ua, "Mediapartners-Google") !== FALSE) {
+		} elseif (stripos($ua, "Googlebot") !== FALSE || stripos($ua, "Mediapartners-Google") !== FALSE || stripos($ua, "Google Web Preview") !== FALSE) {
 			require_once(BB2_CORE . "/searchengine.inc.php");
 			if ($r = bb2_google($package)) {
 				if ($r == 1) return false;	# whitelisted
