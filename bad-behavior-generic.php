@@ -96,7 +96,7 @@ function bb2_email() {
 function bb2_read_settings() {
 	global $bb2_settings_defaults;
 	$settings = @parse_ini_file(dirname(__FILE__) . "/settings.ini");
-	return array_merge($bb2_settings_defaults, $settings);
+	return @array_merge($bb2_settings_defaults, $settings);
 }
 
 // write settings to database

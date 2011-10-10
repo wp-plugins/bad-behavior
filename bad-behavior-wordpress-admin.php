@@ -107,6 +107,7 @@ function bb2_manage() {
 	$paged = 0 + $_GET['paged']; if (!$paged) $paged = 1;
 	if ($_GET['key']) $where .= "AND `key` = '" . $wpdb->escape($_GET['key']) . "' ";
 	if ($_GET['blocked']) $where .= "AND `key` != '00000000' ";
+	else if ($_GET['permitted']) $where .= "AND `key` = '00000000' ";
 	if ($_GET['ip']) $where .= "AND `ip` = '" . $wpdb->escape($_GET['ip']) . "' ";
 	if ($_GET['user_agent']) $where .= "AND `user_agent` = '" . $wpdb->escape($_GET['user_agent']) . "' ";
 	if ($_GET['request_method']) $where .= "AND `request_method` = '" . $wpdb->escape($_GET['request_method']) . "' ";
@@ -139,14 +140,16 @@ function bb2_manage() {
 <?php if ($count < $totalcount): ?>
 Displaying <strong><?php echo $count; ?></strong> of <strong><?php echo $totalcount; ?></strong> records filtered by:<br/>
 <?php if ($_GET['key']) echo "Status [<a href=\"" . remove_query_arg(array("paged", "key"), $request_uri) . "\">X</a>] "; ?>
-<?php if ($_GET['blocked']) echo "Blocked [<a href=\"" . remove_query_arg(array("paged", "blocked"), $request_uri) . "\">X</a>] "; ?>
+<?php if ($_GET['blocked']) echo "Blocked [<a href=\"" . remove_query_arg(array("paged", "blocked", "permitted"), $request_uri) . "\">X</a>] "; ?>
+<?php if ($_GET['permitted']) echo "Permitted [<a href=\"" . remove_query_arg(array("paged", "blocked", "permitted"), $request_uri) . "\">X</a>] "; ?>
 <?php if ($_GET['ip']) echo "IP [<a href=\"" . remove_query_arg(array("paged", "ip"), $request_uri) . "\">X</a>] "; ?>
 <?php if ($_GET['user_agent']) echo "User Agent [<a href=\"" . remove_query_arg(array("paged", "user_agent"), $request_uri) . "\">X</a>] "; ?>
 <?php if ($_GET['request_method']) echo "GET/POST [<a href=\"" . remove_query_arg(array("paged", "request_method"), $request_uri) . "\">X</a>] "; ?>
 <?php else: ?>
 Displaying all <strong><?php echo $totalcount; ?></strong> records<br/>
 <?php endif; ?>
-<?php if (!$_GET['key'] && !$_GET['blocked']) { ?><a href="<?php echo add_query_arg(array("blocked" => "true", "paged" => false), $request_uri); ?>">Show Blocked</a><?php } ?>
+<?php if (!$_GET['key'] && !$_GET['blocked']) { ?><a href="<?php echo add_query_arg(array("blocked" => "1", "permitted" => "0", "paged" => false), $request_uri); ?>">Show Blocked</a> <?php } ?>
+<?php if (!$_GET['key'] && !$_GET['permitted']) { ?><a href="<?php echo add_query_arg(array("permitted" => "1", "blocked" => "0", "paged" => false), $request_uri); ?>">Show Permitted</a> <?php } ?>
 </div>
 </div>
 
@@ -178,7 +181,7 @@ Displaying all <strong><?php echo $totalcount; ?></strong> records<br/>
 		} else {
 			$host .= "<br/>\n";
 		}
-		echo "<td><a href=\"" . add_query_arg("ip", $result["ip"], remove_query_arg("paged", $request_uri)) . "\">" . $result["ip"] . "</a><br/>$host<br/>\n" . $result["date"] . "<br/><br/><a href=\"" . add_query_arg("key", $result["key"], remove_query_arg(array("paged", "blocked"), $request_uri)) . "\">" . $key["log"] . "</a>\n";
+		echo "<td><a href=\"" . add_query_arg("ip", $result["ip"], remove_query_arg("paged", $request_uri)) . "\">" . $result["ip"] . "</a><br/>$host<br/>\n" . $result["date"] . "<br/><br/><a href=\"" . add_query_arg("key", $result["key"], remove_query_arg(array("paged", "blocked", "permitted"), $request_uri)) . "\">" . $key["log"] . "</a>\n";
 		if ($httpbl) echo "<br/><br/><a href=\"http://www.projecthoneypot.org/ip_{$result['ip']}\">http:BL</a>:<br/>$httpbl\n";
 		echo "</td>\n";
 		$headers = str_replace("\n", "<br/>\n", htmlspecialchars($result['http_headers']));
