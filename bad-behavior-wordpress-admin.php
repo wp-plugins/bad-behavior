@@ -175,7 +175,7 @@ Displaying all <strong><?php echo $totalcount; ?></strong> records<br/>
 		}
 		echo "<th scope=\"row\" class=\"check-column\"><input type=\"checkbox\" name=\"submit[]\" value=\"" . $result["id"] . "\" /></th>\n";
 		$httpbl = bb2_httpbl_lookup($result["ip"]);
-		$host = gethostbyaddr($result["ip"]);
+		$host = @gethostbyaddr($result["ip"]);
 		if (!strcmp($host, $result["ip"])) {
 			$host = "";
 		} else {
