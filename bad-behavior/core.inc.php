@@ -44,7 +44,9 @@ function bb2_approved($settings, $package)
 function bb2_reverse_proxy($settings, $headers_mixed)
 {
 	$addrs = array_reverse(preg_split("/[\s,]+/", $headers_mixed[$settings['reverse_proxy_header']]));
-	if (!empty($settings['reverse_proxy_addresses'])) {
+	if (empty($addrs) {
+		$addrs[] = $_SERVER['REMOTE_ADDR'];
+	} else if (!empty($settings['reverse_proxy_addresses'])) {
 		foreach ($addrs as $addr) {
 			if (!match_cidr($addr, $settings['reverse_proxy_addresses'])) {
 				return $addr;
