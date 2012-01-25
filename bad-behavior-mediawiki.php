@@ -99,7 +99,7 @@ function bb2_email() {
 function bb2_read_settings() {
 	global $bb2_settings_defaults;
 	$settings = @parse_ini_file(dirname(__FILE__) . "/settings.ini");
-	return array_merge($bb2_settings_defaults, $settings);
+	return @array_merge($bb2_settings_defaults, $settings);
 }
 
 // This Bad Behavior-related function is a stub. You can help MediaWiki by expanding it.
