@@ -3,7 +3,7 @@ Tags: comment,trackback,referrer,spam,robot,antispam
 Contributors: error, markjaquith, skeltoac
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=error%40ioerror%2eus&item_name=Bad%20Behavior%20%28From%20WordPress%20Page%29&no_shipping=1&cn=Comments%20about%20Bad%20Behavior&tax=0&currency_code=USD&bn=PP%2dDonationsBF&charset=UTF%2d8
 Requires at least: 2.7
-Tested up to: 3.2.1
+Tested up to: 3.3.1
 Stable tag: 2.2.0
 
 Bad Behavior prevents spammers from ever delivering their junk, and in many
@@ -44,12 +44,8 @@ Installing and configuring Bad Behavior on most platforms is simple and takes
 only a few minutes. In most cases, no configuration at all is needed. Simply
 turn it on and stop worrying about spam!
 
-The core of Bad Behavior is free software released under the GNU General
-Public License, version 2, or at your option, any later version. (On some
-non-free platforms, special license terms exist for Bad Behavior's platform
-connector.) The development version of Bad Behavior is free software released
-under the GNU Lesser General Public License, version 3, or at your option,
-any later version.
+The core of Bad Behavior is free software released under the GNU Lesser General
+Public License, version 3, or at your option, any later version.
 
 == Installation ==
 

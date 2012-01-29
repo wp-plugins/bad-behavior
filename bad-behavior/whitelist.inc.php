@@ -21,7 +21,8 @@ function bb2_whitelist($package)
 			$request_uri = substr($package['request_uri'], 0, strpos($package['request_uri'], "?"));
 		}
 		foreach ($whitelists['url'] as $url) {
-			if (!strcmp($request_uri, $url)) return true;
+			$pos = strpos($request_uri, $url);
+			if ($pos !== false && $pos == 0) return true;
 		}
 	}
 	return false;
