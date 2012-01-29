@@ -56,24 +56,31 @@ function bb2_db_date() {
 
 // Return affected rows from most recent query.
 function bb2_db_affected_rows($result) {
-	return wfAffectedRows($result);
+	$db = wfGetDB(DB_MASTER);
+	return $db->affectedRows();
 }
 
 // Escape a string for database usage
 function bb2_db_escape($string) {
-	// FIXME SECURITY: Get a straight answer from somebody on how MW escapes stuff
+	// TODO SECURITY: Convert to using safeQuery()
 	return addslashes($string);
 }
 
 // Return the number of rows in a particular query.
 function bb2_db_num_rows($result) {
-	return wfNumRows($result);
+	return $result->numRows();
 }
 
 // Run a query and return the results, if any.
 // Should return FALSE if an error occurred.
 function bb2_db_query($query) {
-	$bb2_last_query = wfQuery($query, DB_WRITE);
+	$db = wfGetDB(DB_MASTER);
+	try {
+		$bb2_last_query = $db->query($query);
+	} catch (DBQueryError $e) {
+		trigger_error("Bad Behavior DBQueryError " . $e->getMessage(), E_USER_WARNING);
+		return false;
+	}
 	return $bb2_last_query;
 }
 
@@ -82,8 +89,12 @@ function bb2_db_query($query) {
 // or equivalent and appending the result of each call to an array.
 function bb2_db_rows($result) {
 	$rows = array();
-	while ($row = wfFetchRow($result)) {
-		$rows[] = $row;
+	try {
+		while ($row = $result->fetchRow()) {
+			$rows[] = $row;
+		}
+	} catch (DBUnexpectedError $e) {
+		trigger_error("Bad Behavior DBUnexpectedError " . $e->getMessage(), E_USER_WARNING);
 	}
 	return $rows;
 }
@@ -133,7 +144,7 @@ function bb2_relative_path() {
 // Cute timer display
 function bb2_mediawiki_timer(&$parser, &$text) {
 	global $bb2_timer_total;
-	$text = "<!-- Bad Behavior " . BB2_VERSION . " run time: " . number_format(1000 * $bb2_timer_total, 3) . " ms -->" . $text;
+	$text .= "<!-- Bad Behavior " . BB2_VERSION . " run time: " . number_format(1000 * $bb2_timer_total, 3) . " ms -->";
 	return true;
 }
 
@@ -146,6 +157,11 @@ function bb2_mediawiki_entry() {
 	if (php_sapi_name() != 'cli') {
 		bb2_install();	// FIXME: see above
 		$settings = bb2_read_settings();
+		// FIXME: Need to make this multi-DB compatible eventually
+		$dbr = wfGetDB(DB_SLAVE);
+		if (get_class($dbr) != "DatabaseMysql") {
+			$settings['logging'] = false;
+		}
 		bb2_start($settings);
 	}
 
@@ -160,7 +176,7 @@ $wgExtensionCredits['other'][] = array(
 	'version' => BB2_VERSION,
 	'author' => 'Michael Hampton',
 	'description' => 'Detects and blocks unwanted Web accesses',
-	'url' => 'http://www.bad-behavior.ioerror.us/'
+	'url' => 'http://bad-behavior.ioerror.us/'
 );
 
 #$wgHooks['ParserAfterTidy'][] = 'bb2_mediawiki_timer';
