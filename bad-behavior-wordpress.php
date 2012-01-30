@@ -164,8 +164,10 @@ if (is_admin() || strstr($_SERVER['PHP_SELF'], 'wp-admin/')) {	// 1.5 kludge
 	require_once(BB2_CWD . "/bad-behavior-wordpress-admin.php");
 }
 
-if (!$_SESSION) session_start();
+// Some other plugins fail to call session_write_close()
+@session_start();
 $_SESSION['BB2_RESULT'] = bb2_start(bb2_read_settings());
+session_write_close();
 
 $bb2_mtime = explode(" ", microtime());
 $bb2_timer_stop = $bb2_mtime[1] + $bb2_mtime[0];
