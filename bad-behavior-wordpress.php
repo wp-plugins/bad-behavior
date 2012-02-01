@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Bad Behavior
-Version: 2.1.13
+Version: 2.2.1
 Description: Deny automated spambots access to your PHP-based Web site.
 Plugin URI: http://www.bad-behavior.ioerror.us/
 Author: Michael Hampton
@@ -31,6 +31,8 @@ http://www.bad-behavior.ioerror.us/
 ###############################################################################
 
 if (!defined('ABSPATH')) die("No cheating!");
+
+global $bb2_result;
 
 $bb2_mtime = explode(" ", microtime());
 $bb2_timer_start = $bb2_mtime[1] + $bb2_mtime[0];
@@ -127,8 +129,31 @@ function bb2_insert_head() {
 	echo $bb2_javascript;
 }
 
+function bb2_approved_callback($settings, $package) {
+	global $bb2_package;
+
+	// Save package for possible later use
+	$bb2_package = $package;
+}
+
+// Capture missed spam and log it
+function bb2_capture_spam($id, $comment) {
+	global $bb2_package;
+
+	// Capture only spam
+	if ('spam' != $comment->comment_approved) return;
+
+	// Don't capture if HTTP request no longer active
+	if (array_key_exists("request_entity", $bb2_package) && array_key_exists("author", $bb2_package['request_entity']) && $bb2_package['request_entity']['author'] == $comment->comment_author) {
+		bb2_db_query(bb2_insert(bb2_read_settings(), $bb2_package, "00000000"));
+	}
+	trigger_error("Bad Behavior spam capture", E_USER_WARNING);
+}
+
 // Display stats?
 function bb2_insert_stats($force = false) {
+	global $bb2_result;
+
 	$settings = bb2_read_settings();
 
 	if ($force || $settings['display_stats']) {
@@ -137,9 +162,9 @@ function bb2_insert_stats($force = false) {
 			echo sprintf('<p><a href="http://www.bad-behavior.ioerror.us/">%1$s</a> %2$s <strong>%3$s</strong> %4$s</p>', __('Bad Behavior'), __('has blocked'), $blocked[0]["COUNT(*)"], __('access attempts in the last 7 days.'));
 		}
 	}
-	if (@!empty($_SESSION['BB2_RESULT'])) {
-		echo sprintf("\n<!-- Bad Behavior result was %s! This request would have been blocked. -->\n", $_SESSION['BB2_RESULT']);
-		unset($_SESSION['BB2_RESULT']);
+	if (@!empty($bb2_result)) {
+		echo sprintf("\n<!-- Bad Behavior result was %s! This request would have been blocked. -->\n", $bb2_result);
+		unset($bb2_result);
 	}
 }
 
@@ -154,6 +179,7 @@ function bb2_relative_path() {
 //add_action('activate_bb2/bad-behavior-wordpress.php', 'bb2_install');
 add_action('wp_head', 'bb2_insert_head');
 add_action('wp_footer', 'bb2_insert_stats');
+add_action('wp_insert_comment', 'bb2_capture_spam', 99, 2);
 
 // Calls inward to Bad Behavor itself.
 require_once(BB2_CWD . "/bad-behavior/core.inc.php");
@@ -164,7 +190,7 @@ if (is_admin() || strstr($_SERVER['PHP_SELF'], 'wp-admin/')) {	// 1.5 kludge
 	require_once(BB2_CWD . "/bad-behavior-wordpress-admin.php");
 }
 
-$_SESSION['BB2_RESULT'] = bb2_start(bb2_read_settings());
+$bb2_result = bb2_start(bb2_read_settings());
 
 $bb2_mtime = explode(" ", microtime());
 $bb2_timer_stop = $bb2_mtime[1] + $bb2_mtime[0];
