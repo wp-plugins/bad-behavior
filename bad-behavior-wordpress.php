@@ -147,7 +147,6 @@ function bb2_capture_spam($id, $comment) {
 	if (array_key_exists("request_entity", $bb2_package) && array_key_exists("author", $bb2_package['request_entity']) && $bb2_package['request_entity']['author'] == $comment->comment_author) {
 		bb2_db_query(bb2_insert(bb2_read_settings(), $bb2_package, "00000000"));
 	}
-	trigger_error("Bad Behavior spam capture", E_USER_WARNING);
 }
 
 // Display stats?
