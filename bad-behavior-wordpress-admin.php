@@ -100,12 +100,10 @@ function bb2_donate_button($thispage) {
 			<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
 	<p>Bad Behavior is an important tool in the fight against web spam. Show your support by donating<br/>
 	<select name="amount">
-	<option value="1.99">$1.99 USD</option>
 	<option value="2.99">$2.99 USD</option>
-	<option value="3.99">$3.99 USD</option>
 	<option value="4.99">$4.99 USD</option>
-	<option value="6.99">$6.99 USD</option>
 	<option value="9.99">$9.99 USD</option>
+	<option value="19.99">$19.99 USD</option>
 	<option value="">Other...</option>
 	</select><br/>
 			<input type="hidden" name="cmd" value="_donations">
