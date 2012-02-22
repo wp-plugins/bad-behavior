@@ -45,11 +45,11 @@ function bb2_reverse_proxy($settings, $headers_mixed)
 {
 	# Detect if option is on when it should be off
 	$header = uc_all($settings['reverse_proxy_header']);
-	if (!array_key_exists($header, $headers)) {
+	if (!array_key_exists($header, $headers_mixed)) {
 		return false;
 	}
 	
-	$addrs = @array_reverse(preg_split("/[\s,]+/", $headers[$header]));
+	$addrs = @array_reverse(preg_split("/[\s,]+/", $headers_mixed[$header]));
 	# Skip our known reverse proxies and private addresses
 	if (!empty($settings['reverse_proxy_addresses'])) {
 		foreach ($addrs as $addr) {
