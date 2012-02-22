@@ -26,7 +26,7 @@ http://www.bad-behavior.ioerror.us/
 
 if (!defined('MEDIAWIKI')) die();
 
-$wgBadBehaviorTimer = true;
+$wgBadBehaviorTimer = false;
 
 // Settings you can adjust for Bad Behavior.
 // DO NOT EDIT HERE; instead make changes in settings.ini.
