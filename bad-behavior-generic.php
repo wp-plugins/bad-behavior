@@ -1,7 +1,7 @@
 <?php
 /*
 Bad Behavior - detects and blocks unwanted Web accesses
-Copyright (C) 2005,2006,2007,2008,2009,2010,2011 Michael Hampton
+Copyright (C) 2005,2006,2007,2008,2009,2010,2011,2012 Michael Hampton
 
 Bad Behavior is free software; you can redistribute it and/or modify it under
 the terms of the GNU Lesser General Public License as published by the Free
@@ -96,6 +96,7 @@ function bb2_email() {
 function bb2_read_settings() {
 	global $bb2_settings_defaults;
 	$settings = @parse_ini_file(dirname(__FILE__) . "/settings.ini");
+	if (!$settings) $settings = array();
 	return @array_merge($bb2_settings_defaults, $settings);
 }
 
