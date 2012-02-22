@@ -1,7 +1,7 @@
 <?php
 /*
 Bad Behavior - detects and blocks unwanted Web accesses
-Copyright (C) 2005,2006,2007,2008,2009,2010,2011 Michael Hampton
+Copyright (C) 2005,2006,2007,2008,2009,2010,2011,2012 Michael Hampton
 
 Bad Behavior is free software; you can redistribute it and/or modify it under
 the terms of the GNU Lesser General Public License as published by the Free
@@ -26,7 +26,7 @@ http://www.bad-behavior.ioerror.us/
 
 if (!defined('MEDIAWIKI')) die();
 
-$wgBadBehaviorTimer = true;
+$wgBadBehaviorTimer = false;
 
 // Settings you can adjust for Bad Behavior.
 // DO NOT EDIT HERE; instead make changes in settings.ini.

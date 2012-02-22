@@ -1,15 +1,15 @@
 <?php
 /*
 Plugin Name: Bad Behavior
-Version: 2.2.1
+Version: 2.2.2
 Description: Deny automated spambots access to your PHP-based Web site.
-Plugin URI: http://www.bad-behavior.ioerror.us/
+Plugin URI: http://bad-behavior.ioerror.us/
 Author: Michael Hampton
-Author URI: http://www.bad-behavior.ioerror.us/
+Author URI: http://bad-behavior.ioerror.us/
 License: LGPLv3
 
 Bad Behavior - detects and blocks unwanted Web accesses
-Copyright (C) 2005,2006,2007,2008,2009,2010,2011 Michael Hampton
+Copyright (C) 2005,2006,2007,2008,2009,2010,2011,2012 Michael Hampton
 
 Bad Behavior is free software; you can redistribute it and/or modify it under
 the terms of the GNU Lesser General Public License as published by the Free
@@ -147,7 +147,6 @@ function bb2_capture_spam($id, $comment) {
 	if (array_key_exists("request_entity", $bb2_package) && array_key_exists("author", $bb2_package['request_entity']) && $bb2_package['request_entity']['author'] == $comment->comment_author) {
 		bb2_db_query(bb2_insert(bb2_read_settings(), $bb2_package, "00000000"));
 	}
-	trigger_error("Bad Behavior spam capture", E_USER_WARNING);
 }
 
 // Display stats?
