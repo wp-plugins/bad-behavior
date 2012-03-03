@@ -170,7 +170,10 @@ function bb2_insert_stats($force = false) {
 // Return the top-level relative path of wherever we are (for cookies)
 function bb2_relative_path() {
 	$url = parse_url(get_bloginfo('url'));
-	return $url['path'] . '/';
+	if (array_key_exists('path', $url)) {
+		return $url['path'] . '/';
+	}
+	return '/';
 }
 
 // FIXME: figure out what's wrong on 2.0 that this doesn't work
