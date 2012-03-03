@@ -5,24 +5,9 @@ require_once("bad-behavior/responses.inc.php");
 function bb2_admin_pages() {
 	global $wp_db_version;
 
-	if (function_exists('current_user_can')) {
-		// The new 2.x way
-		if (current_user_can('manage_options')) {
-			$bb2_is_admin = true;
-		}
-	} else {
-		// The old 1.x way
-		global $user_ID;
-		if (user_can_edit_user($user_ID, 0)) {
-			$bb2_is_admin = true;
-		}
-	}
-
-	if ($bb2_is_admin) {
-		add_options_page(__("Bad Behavior"), __("Bad Behavior"), 8, 'bb2_options', 'bb2_options');
-		if ($wp_db_version >= 4772) {	// Version 2.1 or later
-			add_management_page(__("Bad Behavior Log"), __("Bad Behavior Log"), 8, 'bb2_manage', 'bb2_manage');
-		}
+	if (current_user_can('manage_options')) {
+		add_options_page(__("Bad Behavior"), __("Bad Behavior"), 'manage_options', 'bb2_options', 'bb2_options');
+		add_management_page(__("Bad Behavior Log"), __("Bad Behavior Log"), 'manage_options', 'bb2_manage', 'bb2_manage');
 		@session_start();
 	}
 }
