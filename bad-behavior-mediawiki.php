@@ -107,6 +107,11 @@ function bb2_email() {
 	return $wgEmergencyContact;
 }
 
+// retrieve whitelist
+function bb2_read_whitelist() {
+	return @parse_ini_file(dirname(BB2_CORE) . "/whitelist.ini");
+}
+
 // This Bad Behavior-related function is a stub. You can help MediaWiki by expanding it.
 // retrieve settings from database
 function bb2_read_settings() {

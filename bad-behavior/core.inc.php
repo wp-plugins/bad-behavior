@@ -123,7 +123,7 @@ function bb2_screen($settings, $package)
 
 	// First check the whitelist
 	require_once(BB2_CORE . "/whitelist.inc.php");
-	if (!bb2_whitelist($package)) {
+	if (!bb2_run_whitelist($package)) {
 		// Now check the blacklist
 		require_once(BB2_CORE . "/blacklist.inc.php");
 		if ($r = bb2_blacklist($package)) return $r;

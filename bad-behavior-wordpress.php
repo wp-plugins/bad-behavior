@@ -97,6 +97,11 @@ function bb2_email() {
 	return get_bloginfo('admin_email');
 }
 
+// retrieve whitelist
+function bb2_read_whitelist() {
+	return get_option('bad_behavior_whitelist');
+}
+
 // retrieve settings from database
 function bb2_read_settings() {
 	global $wpdb;
