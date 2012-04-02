@@ -91,6 +91,11 @@ function bb2_email() {
 	return "example@example.com";	// You need to change this.
 }
 
+// retrieve whitelist
+function bb2_read_whitelist() {
+	return @parse_ini_file(dirname(BB2_CORE) . "/whitelist.ini");
+}
+
 // retrieve settings from database
 // Settings are hard-coded for non-database use
 function bb2_read_settings() {

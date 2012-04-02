@@ -5,24 +5,10 @@ require_once("bad-behavior/responses.inc.php");
 function bb2_admin_pages() {
 	global $wp_db_version;
 
-	if (function_exists('current_user_can')) {
-		// The new 2.x way
-		if (current_user_can('manage_options')) {
-			$bb2_is_admin = true;
-		}
-	} else {
-		// The old 1.x way
-		global $user_ID;
-		if (user_can_edit_user($user_ID, 0)) {
-			$bb2_is_admin = true;
-		}
-	}
-
-	if ($bb2_is_admin) {
-		add_options_page(__("Bad Behavior"), __("Bad Behavior"), 8, 'bb2_options', 'bb2_options');
-		if ($wp_db_version >= 4772) {	// Version 2.1 or later
-			add_management_page(__("Bad Behavior Log"), __("Bad Behavior Log"), 8, 'bb2_manage', 'bb2_manage');
-		}
+	if (current_user_can('manage_options')) {
+		add_options_page(__("Bad Behavior"), __("Bad Behavior"), 'manage_options', 'bb2_options', 'bb2_options');
+		add_options_page(__("Bad Behavior Whitelist"), __("Bad Behavior Whitelist"), 'manage_options', 'bb2_whitelist', 'bb2_whitelist');
+		add_management_page(__("Bad Behavior Log"), __("Bad Behavior Log"), 'manage_options', 'bb2_manage', 'bb2_manage');
 		@session_start();
 	}
 }
@@ -165,7 +151,7 @@ function bb2_manage() {
 <h2><?php _e("Bad Behavior Log"); ?></h2>
 <form method="post" action="<?php echo $request_uri; ?>">
 	<p>For more information please visit the <a href="http://www.bad-behavior.ioerror.us/">Bad Behavior</a> homepage.</p>
-	<p>See also: <a href="<?php echo admin_url("options-general.php?page=bb2_options") ?>">Settings</a></p>
+	<p>See also: <a href="<?php echo admin_url("options-general.php?page=bb2_options") ?>">Settings</a> | <a href="<?php echo admin_url("options-general.php?page=bb2_whitelist") ?>">Whitelist</a></p>
 <div class="tablenav">
 <?php
 	$page_links = paginate_links(array('base' => add_query_arg("paged", "%#%"), 'format' => '', 'total' => $pages, 'current' => $paged));
@@ -242,6 +228,74 @@ Displaying all <strong><?php echo $totalcount; ?></strong> records<br/>
 <?php
 }
 
+
+function bb2_whitelist()
+{
+	$whitelists = bb2_read_whitelist();
+	if (empty($whitelists)) {
+		$whitelists = array();
+		$whitelists['ip'] = array();
+		$whitelists['url'] = array();
+		$whitelists['useragent'] = array();
+	}
+
+	$request_uri = $_SERVER["REQUEST_URI"];
+	if (!$request_uri) $request_uri = $_SERVER['SCRIPT_NAME'];	# IIS
+
+	if ($_POST) {
+		$_POST = array_map('stripslashes_deep', $_POST);
+		if ($_POST['ip']) {
+			$whitelists['ip'] = preg_split("/\s+/m", $_POST['ip']);
+		} else {
+			$whitelists['ip'] = array();
+		}
+		if ($_POST['url']) {
+			$whitelists['url'] = preg_split("/\s+/m", $_POST['url']);
+		} else {
+			$whitelists['url'] = array();
+		}
+		if ($_POST['useragent']) {
+			$whitelists['useragent'] = preg_split("/[\r\n]+/m", $_POST['useragent']);
+		} else {
+			$whitelists['useragent'] = array();
+		}
+		update_option('bad_behavior_whitelist', $whitelists);
+?>
+	<div id="message" class="updated fade"><p><strong><?php _e('Options saved.') ?></strong></p></div>
+<?php
+	}
+?>
+	<div class="wrap">
+<?php
+	echo bb2_donate_button(admin_url("options-general.php?page=bb2_whitelist"));
+?>
+	<h2><?php _e("Bad Behavior Whitelist"); ?></h2>
+	<form method="post" action="<?php echo $request_uri; ?>">
+	<p>Inappropriate whitelisting WILL expose you to spam, or cause Bad Behavior to stop functioning entirely! DO NOT WHITELIST unless you are 100% CERTAIN that you should.</p>
+	<p>For more information please visit the <a href="http://www.bad-behavior.ioerror.us/">Bad Behavior</a> homepage.</p>
+	<p>See also: <a href="<?php echo admin_url("options-general.php?page=bb2_options") ?>">Settings</a> | <a href="<?php echo admin_url("tools.php?page=bb2_manage"); ?>">Log</a></p>
+
+	<h3><?php _e('IP Address'); ?></h3>
+	<table class="form-table">
+	<tr><td><label>IP address or CIDR format address ranges to be whitelisted (one per line)<br/><textarea cols="24" rows="6" name="ip"><?php echo implode("\n", $whitelists['ip']); ?></textarea></td></tr>
+	</table>
+
+	<h3><?php _e('URL'); ?></h3>
+	<table class="form-table">
+	<tr><td><label>URL fragments beginning with the / after your web site hostname (one per line)<br/><textarea cols="48" rows="6" name="url"><?php echo implode("\n", $whitelists['url']); ?></textarea></td></tr>
+	</table>
+
+	<h3><?php _e('User Agent'); ?></h3>
+	<table class="form-table">
+	<tr><td><label>User agent strings to be whitelisted (one per line)<br/><textarea cols="48" rows="6" name="useragent"><?php echo implode("\n", $whitelists['useragent']); ?></textarea></td></tr>
+	</table>
+
+	<p class="submit"><input class="button" type="submit" name="submit" value="<?php _e('Update &raquo;'); ?>" /></p>
+	</form>
+<?php
+}
+
+
 function bb2_options()
 {
 	$settings = bb2_read_settings();
@@ -250,6 +304,7 @@ function bb2_options()
 	if (!$request_uri) $request_uri = $_SERVER['SCRIPT_NAME'];	# IIS
 
 	if ($_POST) {
+		$_POST = array_map('stripslashes_deep', $_POST);
 		if ($_POST['display_stats']) {
 			$settings['display_stats'] = true;
 		} else {
@@ -328,7 +383,7 @@ function bb2_options()
 	<h2><?php _e("Bad Behavior"); ?></h2>
 	<form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
 	<p>For more information please visit the <a href="http://www.bad-behavior.ioerror.us/">Bad Behavior</a> homepage.</p>
-	<p>See also: <a href="<?php echo admin_url("tools.php?page=bb2_manage"); ?>">Log</a></p>
+	<p>See also: <a href="<?php echo admin_url("tools.php?page=bb2_manage"); ?>">Log</a> | <a href="<?php echo admin_url("options-general.php?page=bb2_whitelist") ?>">Whitelist</a></p>
 
 	<h3><?php _e('Statistics'); ?></h3>
 	<?php bb2_insert_stats(true); ?>
@@ -379,7 +434,8 @@ function bb2_plugin_action_links($links, $file) {
 	if ($file == "bad-behavior/bad-behavior-wordpress.php" && function_exists("admin_url")) {
 		$log_link = '<a href="' . admin_url("tools.php?page=bb2_manage") . '">Log</a>';
 		$settings_link = '<a href="' . admin_url("options-general.php?page=bb2_options") . '">Settings</a>';
-		array_unshift($links, $settings_link, $log_link);
+		$whitelist_link = '<a href="' . admin_url("options-general.php?page=bb2_whitelist") . '">Whitelist</a>';
+		array_unshift($links, $settings_link, $log_link, $whitelist_link);
 	}
 	return $links;
 }

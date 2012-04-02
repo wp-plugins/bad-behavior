@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Bad Behavior
-Version: 2.2.2
+Version: 2.2.3
 Description: Deny automated spambots access to your PHP-based Web site.
 Plugin URI: http://bad-behavior.ioerror.us/
 Author: Michael Hampton
@@ -97,6 +97,11 @@ function bb2_email() {
 	return get_bloginfo('admin_email');
 }
 
+// retrieve whitelist
+function bb2_read_whitelist() {
+	return get_option('bad_behavior_whitelist');
+}
+
 // retrieve settings from database
 function bb2_read_settings() {
 	global $wpdb;
@@ -170,7 +175,10 @@ function bb2_insert_stats($force = false) {
 // Return the top-level relative path of wherever we are (for cookies)
 function bb2_relative_path() {
 	$url = parse_url(get_bloginfo('url'));
-	return $url['path'] . '/';
+	if (array_key_exists('path', $url)) {
+		return $url['path'] . '/';
+	}
+	return '/';
 }
 
 // FIXME: figure out what's wrong on 2.0 that this doesn't work
