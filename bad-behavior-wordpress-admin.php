@@ -5,24 +5,10 @@ require_once("bad-behavior/responses.inc.php");
 function bb2_admin_pages() {
 	global $wp_db_version;
 
-	if (function_exists('current_user_can')) {
-		// The new 2.x way
-		if (current_user_can('manage_options')) {
-			$bb2_is_admin = true;
-		}
-	} else {
-		// The old 1.x way
-		global $user_ID;
-		if (user_can_edit_user($user_ID, 0)) {
-			$bb2_is_admin = true;
-		}
-	}
-
-	if ($bb2_is_admin) {
-		add_options_page(__("Bad Behavior"), __("Bad Behavior"), 8, 'bb2_options', 'bb2_options');
-		if ($wp_db_version >= 4772) {	// Version 2.1 or later
-			add_management_page(__("Bad Behavior"), __("Bad Behavior"), 8, 'bb2_manage', 'bb2_manage');
-		}
+	if (current_user_can('manage_options')) {
+		add_options_page(__("Bad Behavior"), __("Bad Behavior"), 'manage_options', 'bb2_options', 'bb2_options');
+		add_options_page(__("Bad Behavior Whitelist"), __("Bad Behavior Whitelist"), 'manage_options', 'bb2_whitelist', 'bb2_whitelist');
+		add_management_page(__("Bad Behavior Log"), __("Bad Behavior Log"), 'manage_options', 'bb2_manage', 'bb2_manage');
 		@session_start();
 	}
 }
@@ -94,6 +80,39 @@ function bb2_httpbl_lookup($ip) {
 	return $d;
 }
 
+function bb2_donate_button($thispage) {
+	return
+	'		<div style="float: right; clear: right; width: 200px; border: 1px solid #e6db55; color: #333; background-color: lightYellow; padding: 0 10px">
+			<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+	<p>Bad Behavior is an important tool in the fight against web spam. Show your support by donating<br/>
+	<select name="amount">
+	<option value="2.99">$2.99 USD</option>
+	<option value="4.99">$4.99 USD</option>
+	<option value="9.99">$9.99 USD</option>
+	<option value="19.99">$19.99 USD</option>
+	<option value="">Other...</option>
+	</select><br/>
+			<input type="hidden" name="cmd" value="_donations">
+			<input type="hidden" name="business" value="EAZGZZV7RE4QJ">
+			<input type="hidden" name="lc" value="US">
+			<input type="hidden" name="item_name" value="Bad Behavior '.BB2_VERSION.' (WordPress)">
+			<input type="hidden" name="currency_code" value="USD">
+			<input type="hidden" name="no_note" value="0">
+			<input type="hidden" name="cn" value="Comments about Bad Behavior">
+			<input type="hidden" name="no_shipping" value="1">
+			<input type="hidden" name="rm" value="1">
+			<input type="hidden" name="return" value="'.$thispage.'">
+			<input type="hidden" name="cancel_return" value="'.$thispage.'">
+			<input type="hidden" name="currency_code" value="USD">
+			<input type="hidden" name="bn" value="PP-DonationsBF:btn_donate_LG.gif:NonHosted">
+			<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+			<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+			</p>
+			</form>
+			</div>
+';
+}
+
 function bb2_manage() {
 	global $wpdb;
 
@@ -113,12 +132,12 @@ function bb2_manage() {
 	if ($_GET['request_method']) $where .= "AND `request_method` = '" . $wpdb->escape($_GET['request_method']) . "' ";
 
 	// Query the DB based on variables selected
-	$r = bb2_db_query("SELECT COUNT(*) FROM `" . $settings['log_table']);
+	$r = bb2_db_query("SELECT COUNT(id) FROM `" . $settings['log_table']);
 	$results = bb2_db_rows($r);
-	$totalcount = $results[0]["COUNT(*)"];
-	$r = bb2_db_query("SELECT COUNT(*) FROM `" . $settings['log_table'] . "` WHERE 1=1 " . $where);
+	$totalcount = $results[0]["COUNT(id)"];
+	$r = bb2_db_query("SELECT COUNT(id) FROM `" . $settings['log_table'] . "` WHERE 1=1 " . $where);
 	$results = bb2_db_rows($r);
-	$count = $results[0]["COUNT(*)"];
+	$count = $results[0]["COUNT(id)"];
 	$pages = ceil($count / 100);
 	$r = bb2_db_query("SELECT * FROM `" . $settings['log_table'] . "` WHERE 1=1 " . $where . "ORDER BY `date` DESC LIMIT " . ($paged - 1) * $rows_per_page . "," . $rows_per_page);
 	$results = bb2_db_rows($r);
@@ -126,11 +145,13 @@ function bb2_manage() {
 	// Display rows to the user
 ?>
 <div class="wrap">
-<h2><?php _e("Bad Behavior"); ?></h2>
+<?php
+	echo bb2_donate_button(admin_url("tools.php?page=bb2_manage"));
+?>
+<h2><?php _e("Bad Behavior Log"); ?></h2>
 <form method="post" action="<?php echo $request_uri; ?>">
 	<p>For more information please visit the <a href="http://www.bad-behavior.ioerror.us/">Bad Behavior</a> homepage.</p>
-	<p>If you find Bad Behavior valuable, please consider <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=error%40ioerror%2eus&item_name=Bad%20Behavior%20<?php echo BB2_VERSION; ?>%20%28From%20Admin%29&no_shipping=1&cn=Comments%20about%20Bad%20Behavior&tax=0&currency_code=USD&bn=PP%2dDonationsBF&charset=UTF%2d8">donating</a> to help further development of Bad Behavior.</p>
-
+	<p>See also: <a href="<?php echo admin_url("options-general.php?page=bb2_options") ?>">Settings</a> | <a href="<?php echo admin_url("options-general.php?page=bb2_whitelist") ?>">Whitelist</a></p>
 <div class="tablenav">
 <?php
 	$page_links = paginate_links(array('base' => add_query_arg("paged", "%#%"), 'format' => '', 'total' => $pages, 'current' => $paged));
@@ -148,8 +169,8 @@ Displaying <strong><?php echo $count; ?></strong> of <strong><?php echo $totalco
 <?php else: ?>
 Displaying all <strong><?php echo $totalcount; ?></strong> records<br/>
 <?php endif; ?>
-<?php if (!$_GET['key'] && !$_GET['blocked']) { ?><a href="<?php echo add_query_arg(array("blocked" => "true", "permitted" => "false", "paged" => false), $request_uri); ?>">Show Blocked</a><?php } ?>
-<?php if (!$_GET['key'] && !$_GET['permitted']) { ?><a href="<?php echo add_query_arg(array("permitted" => "true", "blocked" => "false", "paged" => false), $request_uri); ?>">Show Permitted</a><?php } ?>
+<?php if (!$_GET['key'] && !$_GET['blocked']) { ?><a href="<?php echo add_query_arg(array("blocked" => "1", "permitted" => "0", "paged" => false), $request_uri); ?>">Show Blocked</a> <?php } ?>
+<?php if (!$_GET['key'] && !$_GET['permitted']) { ?><a href="<?php echo add_query_arg(array("permitted" => "1", "blocked" => "0", "paged" => false), $request_uri); ?>">Show Permitted</a> <?php } ?>
 </div>
 </div>
 
@@ -175,7 +196,7 @@ Displaying all <strong><?php echo $totalcount; ?></strong> records<br/>
 		}
 		echo "<th scope=\"row\" class=\"check-column\"><input type=\"checkbox\" name=\"submit[]\" value=\"" . $result["id"] . "\" /></th>\n";
 		$httpbl = bb2_httpbl_lookup($result["ip"]);
-		$host = gethostbyaddr($result["ip"]);
+		$host = @gethostbyaddr($result["ip"]);
 		if (!strcmp($host, $result["ip"])) {
 			$host = "";
 		} else {
@@ -207,6 +228,74 @@ Displaying all <strong><?php echo $totalcount; ?></strong> records<br/>
 <?php
 }
 
+
+function bb2_whitelist()
+{
+	$whitelists = bb2_read_whitelist();
+	if (empty($whitelists)) {
+		$whitelists = array();
+		$whitelists['ip'] = array();
+		$whitelists['url'] = array();
+		$whitelists['useragent'] = array();
+	}
+
+	$request_uri = $_SERVER["REQUEST_URI"];
+	if (!$request_uri) $request_uri = $_SERVER['SCRIPT_NAME'];	# IIS
+
+	if ($_POST) {
+		$_POST = array_map('stripslashes_deep', $_POST);
+		if ($_POST['ip']) {
+			$whitelists['ip'] = preg_split("/\s+/m", $_POST['ip']);
+		} else {
+			$whitelists['ip'] = array();
+		}
+		if ($_POST['url']) {
+			$whitelists['url'] = preg_split("/\s+/m", $_POST['url']);
+		} else {
+			$whitelists['url'] = array();
+		}
+		if ($_POST['useragent']) {
+			$whitelists['useragent'] = preg_split("/[\r\n]+/m", $_POST['useragent']);
+		} else {
+			$whitelists['useragent'] = array();
+		}
+		update_option('bad_behavior_whitelist', $whitelists);
+?>
+	<div id="message" class="updated fade"><p><strong><?php _e('Options saved.') ?></strong></p></div>
+<?php
+	}
+?>
+	<div class="wrap">
+<?php
+	echo bb2_donate_button(admin_url("options-general.php?page=bb2_whitelist"));
+?>
+	<h2><?php _e("Bad Behavior Whitelist"); ?></h2>
+	<form method="post" action="<?php echo $request_uri; ?>">
+	<p>Inappropriate whitelisting WILL expose you to spam, or cause Bad Behavior to stop functioning entirely! DO NOT WHITELIST unless you are 100% CERTAIN that you should.</p>
+	<p>For more information please visit the <a href="http://www.bad-behavior.ioerror.us/">Bad Behavior</a> homepage.</p>
+	<p>See also: <a href="<?php echo admin_url("options-general.php?page=bb2_options") ?>">Settings</a> | <a href="<?php echo admin_url("tools.php?page=bb2_manage"); ?>">Log</a></p>
+
+	<h3><?php _e('IP Address'); ?></h3>
+	<table class="form-table">
+	<tr><td><label>IP address or CIDR format address ranges to be whitelisted (one per line)<br/><textarea cols="24" rows="6" name="ip"><?php echo implode("\n", $whitelists['ip']); ?></textarea></td></tr>
+	</table>
+
+	<h3><?php _e('URL'); ?></h3>
+	<table class="form-table">
+	<tr><td><label>URL fragments beginning with the / after your web site hostname (one per line)<br/><textarea cols="48" rows="6" name="url"><?php echo implode("\n", $whitelists['url']); ?></textarea></td></tr>
+	</table>
+
+	<h3><?php _e('User Agent'); ?></h3>
+	<table class="form-table">
+	<tr><td><label>User agent strings to be whitelisted (one per line)<br/><textarea cols="48" rows="6" name="useragent"><?php echo implode("\n", $whitelists['useragent']); ?></textarea></td></tr>
+	</table>
+
+	<p class="submit"><input class="button" type="submit" name="submit" value="<?php _e('Update &raquo;'); ?>" /></p>
+	</form>
+<?php
+}
+
+
 function bb2_options()
 {
 	$settings = bb2_read_settings();
@@ -215,6 +304,7 @@ function bb2_options()
 	if (!$request_uri) $request_uri = $_SERVER['SCRIPT_NAME'];	# IIS
 
 	if ($_POST) {
+		$_POST = array_map('stripslashes_deep', $_POST);
 		if ($_POST['display_stats']) {
 			$settings['display_stats'] = true;
 		} else {
@@ -265,6 +355,11 @@ function bb2_options()
 		} else {
 			$settings['offsite_forms'] = false;
 		}
+		if ($_POST['eu_cookie']) {
+			$settings['eu_cookie'] = true;
+		} else {
+			$settings['eu_cookie'] = false;
+		}
 		if ($_POST['reverse_proxy']) {
 			$settings['reverse_proxy'] = true;
 		} else {
@@ -287,10 +382,13 @@ function bb2_options()
 	}
 ?>
 	<div class="wrap">
+<?php
+	echo bb2_donate_button(admin_url("options-general.php?page=bb2_options"));
+?>
 	<h2><?php _e("Bad Behavior"); ?></h2>
 	<form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
 	<p>For more information please visit the <a href="http://www.bad-behavior.ioerror.us/">Bad Behavior</a> homepage.</p>
-	<p>If you find Bad Behavior valuable, please consider making a <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=error%40ioerror%2eus&item_name=Bad%20Behavior%20<?php echo BB2_VERSION; ?>%20%28From%20Admin%29&no_shipping=1&cn=Comments%20about%20Bad%20Behavior&tax=0&currency_code=USD&bn=PP%2dDonationsBF&charset=UTF%2d8">financial contribution</a> to further development of Bad Behavior.</p>
+	<p>See also: <a href="<?php echo admin_url("tools.php?page=bb2_manage"); ?>">Log</a> | <a href="<?php echo admin_url("options-general.php?page=bb2_whitelist") ?>">Whitelist</a></p>
 
 	<h3><?php _e('Statistics'); ?></h3>
 	<?php bb2_insert_stats(true); ?>
@@ -319,6 +417,12 @@ function bb2_options()
 	<tr><td><label><input type="text" size="3" maxlength="3" name="httpbl_maxage" value="<?php echo $settings['httpbl_maxage']; ?>" /> Maximum Age of Data (30 is recommended)</label></td></tr>
 	</table>
 
+	<h3><?php _e('European Union Cookie'); ?></h3>
+	<p>Select this option if you believe Bad Behavior's site security cookie is not exempt from the 2012 EU cookie regulation. <a href="">More info</a></p>
+	<table class="form-table">
+	<tr><td><label><input type="checkbox" name="eu_cookie" value="true" <?php if ($settings['eu_cookie']) { ?>checked="checked" <?php } ?>/> <?php _e('EU cookie handling'); ?></label></td></tr>
+	</table>
+
 	<h3><?php _e('Reverse Proxy/Load Balancer'); ?></h3>
 	<p>If you are using Bad Behavior behind a reverse proxy, load balancer, HTTP accelerator, content cache or similar technology, enable the Reverse Proxy option.</p>
 	<p>If you have a chain of two or more reverse proxies between your server and the public Internet, you must specify <em>all</em> of the IP address ranges (in CIDR format) of all of your proxy servers, load balancers, etc. Otherwise, Bad Behavior may be unable to determine the client's true IP address.</p>
@@ -341,7 +445,8 @@ function bb2_plugin_action_links($links, $file) {
 	if ($file == "bad-behavior/bad-behavior-wordpress.php" && function_exists("admin_url")) {
 		$log_link = '<a href="' . admin_url("tools.php?page=bb2_manage") . '">Log</a>';
 		$settings_link = '<a href="' . admin_url("options-general.php?page=bb2_options") . '">Settings</a>';
-		array_unshift($links, $settings_link, $log_link);
+		$whitelist_link = '<a href="' . admin_url("options-general.php?page=bb2_whitelist") . '">Whitelist</a>';
+		array_unshift($links, $settings_link, $log_link, $whitelist_link);
 	}
 	return $links;
 }
