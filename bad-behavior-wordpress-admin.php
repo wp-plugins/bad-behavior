@@ -149,7 +149,7 @@ function bb2_manage() {
 	echo bb2_donate_button(admin_url("tools.php?page=bb2_manage"));
 ?>
 <h2><?php _e("Bad Behavior Log"); ?></h2>
-<form method="post" action="<?php echo $request_uri; ?>">
+<form method="post" action="<?php echo admin_url("tools.php?page=bb2_manage") ?>">
 	<p>For more information please visit the <a href="http://www.bad-behavior.ioerror.us/">Bad Behavior</a> homepage.</p>
 	<p>See also: <a href="<?php echo admin_url("options-general.php?page=bb2_options") ?>">Settings</a> | <a href="<?php echo admin_url("options-general.php?page=bb2_whitelist") ?>">Whitelist</a></p>
 <div class="tablenav">
@@ -160,17 +160,17 @@ function bb2_manage() {
 <div class="alignleft">
 <?php if ($count < $totalcount): ?>
 Displaying <strong><?php echo $count; ?></strong> of <strong><?php echo $totalcount; ?></strong> records filtered by:<br/>
-<?php if ($_GET['key']) echo "Status [<a href=\"" . remove_query_arg(array("paged", "key"), $request_uri) . "\">X</a>] "; ?>
-<?php if ($_GET['blocked']) echo "Blocked [<a href=\"" . remove_query_arg(array("paged", "blocked", "permitted"), $request_uri) . "\">X</a>] "; ?>
-<?php if ($_GET['permitted']) echo "Permitted [<a href=\"" . remove_query_arg(array("paged", "blocked", "permitted"), $request_uri) . "\">X</a>] "; ?>
-<?php if ($_GET['ip']) echo "IP [<a href=\"" . remove_query_arg(array("paged", "ip"), $request_uri) . "\">X</a>] "; ?>
-<?php if ($_GET['user_agent']) echo "User Agent [<a href=\"" . remove_query_arg(array("paged", "user_agent"), $request_uri) . "\">X</a>] "; ?>
-<?php if ($_GET['request_method']) echo "GET/POST [<a href=\"" . remove_query_arg(array("paged", "request_method"), $request_uri) . "\">X</a>] "; ?>
+<?php if ($_GET['key']) echo "Status [<a href=\"" . esc_url( remove_query_arg(array("paged", "key"), $request_uri) ) . "\">X</a>] "; ?>
+<?php if ($_GET['blocked']) echo "Blocked [<a href=\"" . esc_url( remove_query_arg(array("paged", "blocked", "permitted"), $request_uri) ) . "\">X</a>] "; ?>
+<?php if ($_GET['permitted']) echo "Permitted [<a href=\"" . esc_url( remove_query_arg(array("paged", "blocked", "permitted"), $request_uri) ) . "\">X</a>] "; ?>
+<?php if ($_GET['ip']) echo "IP [<a href=\"" . esc_url( remove_query_arg(array("paged", "ip"), $request_uri) ) . "\">X</a>] "; ?>
+<?php if ($_GET['user_agent']) echo "User Agent [<a href=\"" . esc_url( remove_query_arg(array("paged", "user_agent"), $request_uri) ) . "\">X</a>] "; ?>
+<?php if ($_GET['request_method']) echo "GET/POST [<a href=\"" . esc_url( remove_query_arg(array("paged", "request_method"), $request_uri) ) . "\">X</a>] "; ?>
 <?php else: ?>
 Displaying all <strong><?php echo $totalcount; ?></strong> records<br/>
 <?php endif; ?>
-<?php if (!$_GET['key'] && !$_GET['blocked']) { ?><a href="<?php echo add_query_arg(array("blocked" => "1", "permitted" => "0", "paged" => false), $request_uri); ?>">Show Blocked</a> <?php } ?>
-<?php if (!$_GET['key'] && !$_GET['permitted']) { ?><a href="<?php echo add_query_arg(array("permitted" => "1", "blocked" => "0", "paged" => false), $request_uri); ?>">Show Permitted</a> <?php } ?>
+<?php if (!$_GET['key'] && !$_GET['blocked']) { ?><a href="<?php echo esc_url( add_query_arg(array("blocked" => "1", "permitted" => "0", "paged" => false), $request_uri) ); ?>">Show Blocked</a> <?php } ?>
+<?php if (!$_GET['key'] && !$_GET['permitted']) { ?><a href="<?php echo esc_url( add_query_arg(array("permitted" => "1", "blocked" => "0", "paged" => false), $request_uri) ); ?>">Show Permitted</a> <?php } ?>
 </div>
 </div>
 
@@ -202,12 +202,12 @@ Displaying all <strong><?php echo $totalcount; ?></strong> records<br/>
 		} else {
 			$host .= "<br/>\n";
 		}
-		echo "<td><a href=\"" . add_query_arg("ip", $result["ip"], remove_query_arg("paged", $request_uri)) . "\">" . $result["ip"] . "</a><br/>$host<br/>\n" . $result["date"] . "<br/><br/><a href=\"" . add_query_arg("key", $result["key"], remove_query_arg(array("paged", "blocked", "permitted"), $request_uri)) . "\">" . $key["log"] . "</a>\n";
+		echo "<td><a href=\"" . esc_url( add_query_arg("ip", $result["ip"], remove_query_arg("paged", $request_uri)) ) . "\">" . $result["ip"] . "</a><br/>$host<br/>\n" . $result["date"] . "<br/><br/><a href=\"" . esc_url( add_query_arg("key", $result["key"], remove_query_arg(array("paged", "blocked", "permitted"), $request_uri)) ) . "\">" . $key["log"] . "</a>\n";
 		if ($httpbl) echo "<br/><br/><a href=\"http://www.projecthoneypot.org/ip_{$result['ip']}\">http:BL</a>:<br/>$httpbl\n";
 		echo "</td>\n";
 		$headers = str_replace("\n", "<br/>\n", htmlspecialchars($result['http_headers']));
-		if (@strpos($headers, $result['user_agent']) !== FALSE) $headers = substr_replace($headers, "<a href=\"" . add_query_arg("user_agent", rawurlencode($result["user_agent"]), remove_query_arg("paged", $request_uri)) . "\">" . $result['user_agent'] . "</a>", strpos($headers, $result['user_agent']), strlen($result['user_agent']));
-		if (@strpos($headers, $result['request_method']) !== FALSE) $headers = substr_replace($headers, "<a href=\"" . add_query_arg("request_method", rawurlencode($result["request_method"]), remove_query_arg("paged", $request_uri)) . "\">" . $result['request_method'] . "</a>", strpos($headers, $result['request_method']), strlen($result['request_method']));
+		if (@strpos($headers, $result['user_agent']) !== FALSE) $headers = substr_replace($headers, "<a href=\"" . esc_url( add_query_arg("user_agent", rawurlencode($result["user_agent"]), remove_query_arg("paged", $request_uri)) ) . "\">" . $result['user_agent'] . "</a>", strpos($headers, $result['user_agent']), strlen($result['user_agent']));
+		if (@strpos($headers, $result['request_method']) !== FALSE) $headers = substr_replace($headers, "<a href=\"" . esc_url( add_query_arg("request_method", rawurlencode($result["request_method"]), remove_query_arg("paged", $request_uri)) ) . "\">" . $result['request_method'] . "</a>", strpos($headers, $result['request_method']), strlen($result['request_method']));
 		echo "<td>$headers</td>\n";
 		echo "<td>" . str_replace("\n", "<br/>\n", htmlspecialchars($result["request_entity"])) . "</td>\n";
 		echo "</tr>\n";
@@ -270,7 +270,7 @@ function bb2_whitelist()
 	echo bb2_donate_button(admin_url("options-general.php?page=bb2_whitelist"));
 ?>
 	<h2><?php _e("Bad Behavior Whitelist"); ?></h2>
-	<form method="post" action="<?php echo $request_uri; ?>">
+	<form method="post" action="<?php echo admin_url("options-general.php?page=bb2_whitelist"); ?>">
 	<p>Inappropriate whitelisting WILL expose you to spam, or cause Bad Behavior to stop functioning entirely! DO NOT WHITELIST unless you are 100% CERTAIN that you should.</p>
 	<p>For more information please visit the <a href="http://www.bad-behavior.ioerror.us/">Bad Behavior</a> homepage.</p>
 	<p>See also: <a href="<?php echo admin_url("options-general.php?page=bb2_options") ?>">Settings</a> | <a href="<?php echo admin_url("tools.php?page=bb2_manage"); ?>">Log</a></p>
@@ -336,17 +336,21 @@ function bb2_options()
 			$settings['logging'] = false;
 		}
 		if ($_POST['httpbl_key']) {
-			$settings['httpbl_key'] = $_POST['httpbl_key'];
+			if (preg_match("/^[:alpha:]{12}$/", $_POST['httpbl_key'])) {
+				$settings['httpbl_key'] = $_POST['httpbl_key'];
+			} else {
+				$settings['httpbl_key'] = '';
+			}
 		} else {
 			$settings['httpbl_key'] = '';
 		}
 		if ($_POST['httpbl_threat']) {
-			$settings['httpbl_threat'] = $_POST['httpbl_threat'];
+			$settings['httpbl_threat'] = intval($_POST['httpbl_threat']);
 		} else {
 			$settings['httpbl_threat'] = '25';
 		}
 		if ($_POST['httpbl_maxage']) {
-			$settings['httpbl_maxage'] = $_POST['httpbl_maxage'];
+			$settings['httpbl_maxage'] = intval($_POST['httpbl_maxage']);
 		} else {
 			$settings['httpbl_maxage'] = '30';
 		}
@@ -366,12 +370,13 @@ function bb2_options()
 			$settings['reverse_proxy'] = false;
 		}
 		if ($_POST['reverse_proxy_header']) {
-			$settings['reverse_proxy_header'] = uc_all($_POST['reverse_proxy_header']);
+			$settings['reverse_proxy_header'] = sanitize_text_field(uc_all($_POST['reverse_proxy_header']));
 		} else {
 			$settings['reverse_proxy_header'] = 'X-Forwarded-For';
 		}
 		if ($_POST['reverse_proxy_addresses']) {
 			$settings['reverse_proxy_addresses'] = preg_split("/[\s,]+/m", $_POST['reverse_proxy_addresses']);
+			$settings['reverse_proxy_addresses'] = array_map('sanitize_text_field', $settings['reverse_proxy_addresses']);
 		} else {
 			$settings['reverse_proxy_addresses'] = array();
 		}
@@ -386,7 +391,7 @@ function bb2_options()
 	echo bb2_donate_button(admin_url("options-general.php?page=bb2_options"));
 ?>
 	<h2><?php _e("Bad Behavior"); ?></h2>
-	<form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
+	<form method="post" action="<?php echo admin_url("options-general.php?page=bb2_options"); ?>">
 	<p>For more information please visit the <a href="http://www.bad-behavior.ioerror.us/">Bad Behavior</a> homepage.</p>
 	<p>See also: <a href="<?php echo admin_url("tools.php?page=bb2_manage"); ?>">Log</a> | <a href="<?php echo admin_url("options-general.php?page=bb2_whitelist") ?>">Whitelist</a></p>
 
@@ -412,9 +417,9 @@ function bb2_options()
 	<h3><?php _e('http:BL'); ?></h3>
 	<p>To use Bad Behavior's http:BL features you must have an <a href="http://www.projecthoneypot.org/httpbl_configure.php?rf=24694">http:BL Access Key</a>.</p>
 	<table class="form-table">
-	<tr><td><label><input type="text" size="12" maxlength="12" name="httpbl_key" value="<?php echo $settings['httpbl_key']; ?>" /> http:BL Access Key</label></td></tr>
-	<tr><td><label><input type="text" size="3" maxlength="3" name="httpbl_threat" value="<?php echo $settings['httpbl_threat']; ?>" /> Minimum Threat Level (25 is recommended)</label></td></tr>
-	<tr><td><label><input type="text" size="3" maxlength="3" name="httpbl_maxage" value="<?php echo $settings['httpbl_maxage']; ?>" /> Maximum Age of Data (30 is recommended)</label></td></tr>
+	<tr><td><label><input type="text" size="12" maxlength="12" name="httpbl_key" value="<?php echo sanitize_text_field($settings['httpbl_key']); ?>" /> http:BL Access Key</label></td></tr>
+	<tr><td><label><input type="text" size="3" maxlength="3" name="httpbl_threat" value="<?php echo intval($settings['httpbl_threat']); ?>" /> Minimum Threat Level (25 is recommended)</label></td></tr>
+	<tr><td><label><input type="text" size="3" maxlength="3" name="httpbl_maxage" value="<?php echo intval($settings['httpbl_maxage']); ?>" /> Maximum Age of Data (30 is recommended)</label></td></tr>
 	</table>
 
 	<h3><?php _e('European Union Cookie'); ?></h3>
@@ -429,8 +434,8 @@ function bb2_options()
 	<p>In addition, your reverse proxy servers must set the IP address of the Internet client from which they received the request in an HTTP header. If you don't specify a header, <a href="http://en.wikipedia.org/wiki/X-Forwarded-For">X-Forwarded-For</a> will be used. Most proxy servers already support X-Forwarded-For and you would then only need to ensure that it is enabled on your proxy servers. Some other header names in common use include <u>X-Real-Ip</u> (nginx) and <u>Cf-Connecting-Ip</u> (CloudFlare).</p>
 	<table class="form-table">
 	<tr><td><label><input type="checkbox" name="reverse_proxy" value="true" <?php if ($settings['reverse_proxy']) { ?>checked="checked" <?php } ?>/> <?php _e('Enable Reverse Proxy'); ?></label></td></tr>
-	<tr><td><label><input type="text" size="32" name="reverse_proxy_header" value="<?php echo $settings['reverse_proxy_header']; ?>" /> Header containing Internet clients' IP address</label></td></tr>
-	<tr><td><label>IP address or CIDR format address ranges for your proxy servers (one per line)<br/><textarea cols="24" rows="6" name="reverse_proxy_addresses"><?php echo implode("\n", $settings['reverse_proxy_addresses']); ?></textarea></td></tr>
+	<tr><td><label><input type="text" size="32" name="reverse_proxy_header" value="<?php echo sanitize_text_field($settings['reverse_proxy_header']); ?>" /> Header containing Internet clients' IP address</label></td></tr>
+	<tr><td><label>IP address or CIDR format address ranges for your proxy servers (one per line)<br/><textarea cols="24" rows="6" name="reverse_proxy_addresses"><?php echo esc_textarea(implode("\n", $settings['reverse_proxy_addresses'])); ?></textarea></td></tr>
 	</table>
 
 	<p class="submit"><input class="button" type="submit" name="submit" value="<?php _e('Update &raquo;'); ?>" /></p>
