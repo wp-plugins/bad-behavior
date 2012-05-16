@@ -11,7 +11,7 @@ the Free Software Foundation; either version 2 of the License, or
 As a special exemption, you may link this program with any of the
 programs listed below, regardless of the license terms of those
 programs, and distribute the resulting program, without including the
-source code for such programs: ExpressionEngine
+source code for such programs: ExpressionEngine; Simple Machines Forum
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -42,6 +42,7 @@ $bb2_settings_defaults = array(
 	'httpbl_threat' => '25',
 	'httpbl_maxage' => '30',
 	'offsite_forms' => false,
+	'eu_cookie' => false,
 );
 
 // Bad Behavior callback functions.
