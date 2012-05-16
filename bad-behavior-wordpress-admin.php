@@ -336,7 +336,7 @@ function bb2_options()
 			$settings['logging'] = false;
 		}
 		if ($_POST['httpbl_key']) {
-			if (preg_match("/^[:alpha:]{12}$/", $_POST['httpbl_key'])) {
+			if (preg_match("/^[a-z]{12}$/", $_POST['httpbl_key'])) {
 				$settings['httpbl_key'] = $_POST['httpbl_key'];
 			} else {
 				$settings['httpbl_key'] = '';
