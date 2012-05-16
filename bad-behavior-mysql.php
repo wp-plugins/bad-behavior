@@ -24,6 +24,7 @@ function bb2_table_structure($name)
 // Insert a new record
 function bb2_insert($settings, $package, $key)
 {
+	if (!$settings['logging']) return "";
 	$ip = bb2_db_escape($package['ip']);
 	$date = bb2_db_date();
 	$request_method = bb2_db_escape($package['request_method']);
