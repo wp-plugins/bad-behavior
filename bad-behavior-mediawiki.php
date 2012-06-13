@@ -151,10 +151,10 @@ function bb2_relative_path() {
 }
 
 // Cute timer display
-function bb2_mediawiki_timer(&$parser, &$text) {
+function bb2_mediawiki_timer(&$out, &$skin) {
 	global $bb2_timer_total, $wgBadBehaviorTimer;
 	if ($wgBadBehaviorTimer) {
-		$text .= "<!-- Bad Behavior " . BB2_VERSION . " run time: " . number_format(1000 * $bb2_timer_total, 3) . " ms -->";
+		$out->addHTML("<!-- Bad Behavior " . BB2_VERSION . " run time: " . number_format(1000 * $bb2_timer_total, 3) . " ms -->");
 	}
 	return true;
 }
@@ -190,5 +190,5 @@ $wgExtensionCredits['other'][] = array(
 	'url' => 'http://bad-behavior.ioerror.us/'
 );
 
-$wgHooks['ParserAfterTidy'][] = 'bb2_mediawiki_timer';
+$wgHooks['BeforePageDisplay'][] = 'bb2_mediawiki_timer';
 $wgExtensionFunctions[] = 'bb2_mediawiki_entry';
