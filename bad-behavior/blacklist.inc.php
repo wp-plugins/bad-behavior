@@ -5,11 +5,11 @@ function bb2_blacklist($package) {
 	// Blacklisted user agents
 	// These user agent strings occur at the beginning of the line.
 	$bb2_spambots_0 = array(
-		"<sc",			// XSS exploit attempts
 		"8484 Boston Project",	// video poker/porn spam
 		"adwords",		// referrer spam
 		"autoemailspider",	// spam harvester
 		"blogsearchbot-martin",	// from honeypot
+		"BrowserEmulator/",	// open proxy software
 		"CherryPicker",		// spam harvester
 		"core-project/",	// FrontPage extension exploits
 		"Diamond",		// delivers spyware/adware
@@ -28,15 +28,21 @@ function bb2_blacklist($package) {
 		"Java/1.",		// unidentified robots
 		"libwww-perl",		// unidentified robots
 		"LWP",			// unidentified robots
+		"lwp",			// unidentified robots
+		"Microsoft Internet Explorer/",	// too old; assumed robot
 		"Microsoft URL",	// unidentified robots
 		"Missigua",		// spam harvester
 		"MJ12bot/v1.0.8",	// malicious botnet
 		"Movable Type",		// customised spambots
 		"Mozilla ",		// malicious software
+		"Mozilla/0",		// malicious software
+		"Mozilla/1",		// malicious software
 		"Mozilla/2",		// malicious software
+		"Mozilla/3",		// malicious software
 		"Mozilla/4.0(",		// from honeypot
 		"Mozilla/4.0+(compatible;+",	// suspicious harvester
 		"MSIE",			// malicious software
+		"MVAClient",		// automated hacking attempts
 		"NutchCVS",		// unidentified robots
 		"Nutscrape/",		// misc comment spam
 		"OmniExplorer",		// spam harvester
@@ -61,6 +67,7 @@ function bb2_blacklist($package) {
 	// These user agent strings occur anywhere within the line.
 	$bb2_spambots = array(
 		"\r",			// A really dumb bot
+		"<sc",			// XSS exploit attempts
 		"; Widows ",		// misc comment/email spam
 		"a href=",		// referrer spam
 		"Bad Behavior Test",	// Add this to your user-agent to test BB
@@ -68,6 +75,7 @@ function bb2_blacklist($package) {
 		"compatible-",		// misc comment/email spam
 		"DTS Agent",		// misc comment/email spam
 		"Email Extractor",	// spam harvester
+		"Firebird/",		// too old; assumed robot
 		"Gecko/25",		// revisit this in 500 years
 		"grub-client",		// search engine ignores robots.txt
 		"hanzoweb",		// very badly behaved crawler
@@ -75,6 +83,8 @@ function bb2_blacklist($package) {
 		"MSIE 7.0;  Windows NT 5.2",	// Cyveillance
 		"Murzillo compatible",	// comment spam bot
 		".NET CLR 1)",		// free poker, etc.
+		".NET CLR1",		// spam harvester
+		"Perman Surfer",	// old and very broken harvester
 		"POE-Component-Client",	// free poker, etc.
 		"Turing Machine",	// www.anonymizer.com abuse
 		"Ubuntu/9.25",		// comment spam bot
@@ -83,7 +93,16 @@ function bb2_blacklist($package) {
 		"WebaltBot",		// spam harvester
 		"WISEbot",		// spam harvester
 		"WISEnutbot",		// spam harvester
-		"Windows NT 4.0;)",	// wikispam bot
+		"Win95",		// too old; assumed robot
+		"Win98",		// too old; assumed robot
+		"WinME",		// too old; assumed robot
+		"Win 9x 4.90",		// too old; assumed robot
+		"Windows 3",		// too old; assumed robot
+		"Windows 95",		// too old; assumed robot
+		"Windows 98",		// too old; assumed robot
+		"Windows NT 4",		// too old; assumed robot
+		"Windows NT;",		// too old; assumed robot
+		#"Windows NT 4.0;)",	// wikispam bot
 		"Windows NT 5.0;)",	// wikispam bot
 		"Windows NT 5.1;)",	// wikispam bot
 		"Windows XP 5",		// spam harvester
@@ -100,6 +119,7 @@ function bb2_blacklist($package) {
 		"/[bcdfghjklmnpqrstvwxz ]{8,}/",
 //		"/(;\){1,2}$/",		// misc spammers/harvesters
 //		"/MSIE.*Windows XP/",	// misc comment spam
+		"/MSIE [2345]/",	// too old; assumed robot
 	);
 
 	// Do not edit below this line.
