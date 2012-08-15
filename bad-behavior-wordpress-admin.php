@@ -267,6 +267,7 @@ function bb2_whitelist()
 ?>
 	<div class="wrap">
 <?php
+	$whitelists = bb2_read_whitelist();
 	echo bb2_donate_button(admin_url("options-general.php?page=bb2_whitelist"));
 ?>
 	<h2><?php _e("Bad Behavior Whitelist"); ?></h2>
