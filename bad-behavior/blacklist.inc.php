@@ -173,7 +173,7 @@ function bb2_blacklist($package) {
 		}
 	}
 
-	foreach ($bb2_spambots_utl as $spambot) {
+	foreach ($bb2_spambots_url as $spambot) {
 		if (stripos($uri, $spambot) !== FALSE) {
 			return "96c0bd29";
 		}
