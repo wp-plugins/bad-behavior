@@ -79,6 +79,7 @@ function bb2_blacklist($package) {
 		"Gecko/25",		// revisit this in 500 years
 		"grub-client",		// search engine ignores robots.txt
 		"hanzoweb",		// very badly behaved crawler
+		"Havij",		// SQL injection tool
 		"Indy Library",		// misc comment/email spam
 		"MSIE 7.0;  Windows NT 5.2",	// Cyveillance
 		"Murzillo compatible",	// comment spam bot
@@ -108,6 +109,7 @@ function bb2_blacklist($package) {
 		"Windows XP 5",		// spam harvester
 		"WordPress/4.01",	// pingback spam
 		"Xedant Human Emulator",// spammer script engine
+		"ZmEu",			// exploit scanner
 		"\\\\)",		// spam harvester
 	);
 
@@ -122,9 +124,35 @@ function bb2_blacklist($package) {
 		"/MSIE [2345]/",	// too old; assumed robot
 	);
 
+	// Blacklisted URL strings
+	// These strings are considered case-insensitive.
+	$bb2_spambots_url = array(
+		"0x31303235343830303536",	// Havij
+		"../",				// path traversal
+		"..\\",				// path traversal
+		"%60information_schema%60",	// SQL injection probe
+		"+%2F*%21",			// SQL injection probe
+		"+and+%",			// SQL injection probe
+		"+and+1%",			// SQL injection probe
+		"+and+if",			// SQL injection probe
+		"%27--",			// SQL injection
+		"%27 --",			// SQL injection
+		"%27%23",			// SQL injection
+		"%27 %23",			// SQL injection
+		"benchmark%28",			// SQL injection probe
+		"insert+into+",			// SQL injection
+		"r3dm0v3",			// SQL injection probe
+		"select+1+from",		// SQL injection probe
+		"union+all+select",		// SQL injection probe
+		"union+select",			// SQL injection probe
+		"waitfor+delay+",		// SQL injection probe
+		"w00tw00t",			// vulnerability scanner
+	);
+
 	// Do not edit below this line.
 
 	@$ua = $package['headers_mixed']['User-Agent'];
+	@$uri = $package['request_uri'];
 
 	foreach ($bb2_spambots_0 as $spambot) {
 		$pos = strpos($ua, $spambot);
@@ -142,6 +170,12 @@ function bb2_blacklist($package) {
 	foreach ($bb2_spambots_regex as $spambot) {
 		if (preg_match($spambot, $ua)) {
 			return "17f4e8c8";
+		}
+	}
+
+	foreach ($bb2_spambots_utl as $spambot) {
+		if (stripos($uri, $spambot) !== FALSE) {
+			return "96c0bd29";
 		}
 	}
 
