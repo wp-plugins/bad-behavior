@@ -41,8 +41,10 @@ function bb2_blacklist($package) {
 		"Mozilla/3",		// malicious software
 		"Mozilla/4.0(",		// from honeypot
 		"Mozilla/4.0+(compatible;+",	// suspicious harvester
+		"Mozilla/4.0 (Hydra)",	// brute force tool
 		"MSIE",			// malicious software
 		"MVAClient",		// automated hacking attempts
+		"Nessus",		// vulnerability scanner
 		"NutchCVS",		// unidentified robots
 		"Nutscrape/",		// misc comment spam
 		"OmniExplorer",		// spam harvester
@@ -53,11 +55,13 @@ function bb2_blacklist($package) {
 		"Python-urllib",	// commonly abused
 //		WP 2.5 now has Flash; FIXME
 //		"Shockwave Flash",	// spam harvester
+		"sqlmap/",		// SQL injection
 		"Super Happy Fun ",	// spam harvester
 		"TrackBack/",		// trackback spam
 		"user",			// suspicious harvester
 		"User Agent: ",		// spam harvester
 		"User-Agent: ",		// spam harvester
+		"w3af",			// vulnerability scanner
 		"WebSite-X Suite",	// misc comment spam
 		"Winnie Poh",		// Automated Coppermine hacks
 		"Wordpress",		// malicious software
@@ -81,12 +85,15 @@ function bb2_blacklist($package) {
 		"hanzoweb",		// very badly behaved crawler
 		"Havij",		// SQL injection tool
 		"Indy Library",		// misc comment/email spam
+		"Ming Mong",		// brute force tool
 		"MSIE 7.0;  Windows NT 5.2",	// Cyveillance
 		"Murzillo compatible",	// comment spam bot
 		".NET CLR 1)",		// free poker, etc.
 		".NET CLR1",		// spam harvester
+		"Nikto/"		// vulnerability scanner
 		"Perman Surfer",	// old and very broken harvester
 		"POE-Component-Client",	// free poker, etc.
+		"Teh Forest Lobster",	// brute force tool
 		"Turing Machine",	// www.anonymizer.com abuse
 		"Ubuntu/9.25",		// comment spam bot
 		"unspecified.mail",	// stealth harvesters
