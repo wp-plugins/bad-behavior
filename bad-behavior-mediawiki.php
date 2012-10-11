@@ -1,7 +1,7 @@
 <?php
 /*
 Bad Behavior - detects and blocks unwanted Web accesses
-Copyright (C) 2005,2006,2007,2008,2009,2010,2011 Michael Hampton
+Copyright (C) 2005,2006,2007,2008,2009,2010,2011,2012 Michael Hampton
 
 Bad Behavior is free software; you can redistribute it and/or modify it under
 the terms of the GNU Lesser General Public License as published by the Free
@@ -26,6 +26,8 @@ http://www.bad-behavior.ioerror.us/
 
 if (!defined('MEDIAWIKI')) die();
 
+$wgBadBehaviorTimer = false;
+
 // Settings you can adjust for Bad Behavior.
 // DO NOT EDIT HERE; instead make changes in settings.ini.
 // These settings are used when settings.ini is not present.
@@ -39,6 +41,7 @@ $bb2_settings_defaults = array(
 	'httpbl_threat' => '25',
 	'httpbl_maxage' => '30',
 	'offsite_forms' => false,
+	'eu_cookie' => false,
 	'reverse_proxy' => false,
 	'reverse_proxy_header' => 'X-Forwarded-For',
 	'reverse_proxy_addresses' => array(),
@@ -56,24 +59,31 @@ function bb2_db_date() {
 
 // Return affected rows from most recent query.
 function bb2_db_affected_rows($result) {
-	return wfAffectedRows($result);
+	$db = wfGetDB(DB_MASTER);
+	return $db->affectedRows();
 }
 
 // Escape a string for database usage
 function bb2_db_escape($string) {
-	// FIXME SECURITY: Get a straight answer from somebody on how MW escapes stuff
+	// TODO SECURITY: Convert to using safeQuery()
 	return addslashes($string);
 }
 
 // Return the number of rows in a particular query.
 function bb2_db_num_rows($result) {
-	return wfNumRows($result);
+	return $result->numRows();
 }
 
 // Run a query and return the results, if any.
 // Should return FALSE if an error occurred.
 function bb2_db_query($query) {
-	$bb2_last_query = wfQuery($query, DB_WRITE);
+	$db = wfGetDB(DB_MASTER);
+	try {
+		$bb2_last_query = $db->query($query);
+	} catch (DBQueryError $e) {
+		trigger_error("Bad Behavior DBQueryError " . $e->getMessage(), E_USER_WARNING);
+		return false;
+	}
 	return $bb2_last_query;
 }
 
@@ -82,8 +92,12 @@ function bb2_db_query($query) {
 // or equivalent and appending the result of each call to an array.
 function bb2_db_rows($result) {
 	$rows = array();
-	while ($row = wfFetchRow($result)) {
-		$rows[] = $row;
+	try {
+		while ($row = $result->fetchRow()) {
+			$rows[] = $row;
+		}
+	} catch (DBUnexpectedError $e) {
+		trigger_error("Bad Behavior DBUnexpectedError " . $e->getMessage(), E_USER_WARNING);
 	}
 	return $rows;
 }
@@ -94,12 +108,18 @@ function bb2_email() {
 	return $wgEmergencyContact;
 }
 
+// retrieve whitelist
+function bb2_read_whitelist() {
+	return @parse_ini_file(dirname(BB2_CORE) . "/whitelist.ini");
+}
+
 // This Bad Behavior-related function is a stub. You can help MediaWiki by expanding it.
 // retrieve settings from database
 function bb2_read_settings() {
 	global $bb2_settings_defaults;
 	$settings = @parse_ini_file(dirname(__FILE__) . "/settings.ini");
-	return array_merge($bb2_settings_defaults, $settings);
+	if (!$settings) $settings = array();
+	return @array_merge($bb2_settings_defaults, $settings);
 }
 
 // This Bad Behavior-related function is a stub. You can help MediaWiki by expanding it.
@@ -131,9 +151,11 @@ function bb2_relative_path() {
 }
 
 // Cute timer display
-function bb2_mediawiki_timer(&$parser, &$text) {
-	global $bb2_timer_total;
-	$text = "<!-- Bad Behavior " . BB2_VERSION . " run time: " . number_format(1000 * $bb2_timer_total, 3) . " ms -->" . $text;
+function bb2_mediawiki_timer(&$out, &$skin) {
+	global $bb2_timer_total, $wgBadBehaviorTimer;
+	if ($wgBadBehaviorTimer) {
+		$out->addHTML("<!-- Bad Behavior " . BB2_VERSION . " run time: " . number_format(1000 * $bb2_timer_total, 3) . " ms -->");
+	}
 	return true;
 }
 
@@ -146,6 +168,11 @@ function bb2_mediawiki_entry() {
 	if (php_sapi_name() != 'cli') {
 		bb2_install();	// FIXME: see above
 		$settings = bb2_read_settings();
+		// FIXME: Need to make this multi-DB compatible eventually
+		$dbr = wfGetDB(DB_SLAVE);
+		if (get_class($dbr) != "DatabaseMysql") {
+			$settings['logging'] = false;
+		}
 		bb2_start($settings);
 	}
 
@@ -160,8 +187,8 @@ $wgExtensionCredits['other'][] = array(
 	'version' => BB2_VERSION,
 	'author' => 'Michael Hampton',
 	'description' => 'Detects and blocks unwanted Web accesses',
-	'url' => 'http://www.bad-behavior.ioerror.us/'
+	'url' => 'http://bad-behavior.ioerror.us/'
 );
 
-#$wgHooks['ParserAfterTidy'][] = 'bb2_mediawiki_timer';
+$wgHooks['BeforePageDisplay'][] = 'bb2_mediawiki_timer';
 $wgExtensionFunctions[] = 'bb2_mediawiki_entry';
