@@ -245,17 +245,17 @@ function bb2_whitelist()
 	if ($_POST) {
 		$_POST = array_map('stripslashes_deep', $_POST);
 		if ($_POST['ip']) {
-			$whitelists['ip'] = preg_split("/\s+/m", $_POST['ip']);
+			$whitelists['ip'] = array_filter(preg_split("/\s+/m", $_POST['ip']));
 		} else {
 			$whitelists['ip'] = array();
 		}
 		if ($_POST['url']) {
-			$whitelists['url'] = preg_split("/\s+/m", $_POST['url']);
+			$whitelists['url'] = array_filter(preg_split("/\s+/m", $_POST['url']));
 		} else {
 			$whitelists['url'] = array();
 		}
 		if ($_POST['useragent']) {
-			$whitelists['useragent'] = preg_split("/[\r\n]+/m", $_POST['useragent']);
+			$whitelists['useragent'] = array_filter(preg_split("/[\r\n]+/m", $_POST['useragent']));
 		} else {
 			$whitelists['useragent'] = array();
 		}
