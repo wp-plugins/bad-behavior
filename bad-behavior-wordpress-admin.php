@@ -126,7 +126,7 @@ function bb2_manage() {
 ?>
 <div class="wrap">
 <h2><?php _e("Bad Behavior"); ?></h2>
-<form method="post" action="<?php echo $request_uri; ?>">
+<form method="post" action="<?php echo admin_url("tools.php?page=bb2_manage"); ?>">
 	<p>For more information please visit the <a href="http://www.bad-behavior.ioerror.us/">Bad Behavior</a> homepage.</p>
 	<p>If you find Bad Behavior valuable, please consider <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=error%40ioerror%2eus&item_name=Bad%20Behavior%20<?php echo BB2_VERSION; ?>%20%28From%20Admin%29&no_shipping=1&cn=Comments%20about%20Bad%20Behavior&tax=0&currency_code=USD&bn=PP%2dDonationsBF&charset=UTF%2d8">donating</a> to help further development of Bad Behavior.</p>
 
@@ -138,15 +138,15 @@ function bb2_manage() {
 <div class="alignleft">
 <?php if ($count < $totalcount): ?>
 Displaying <strong><?php echo $count; ?></strong> of <strong><?php echo $totalcount; ?></strong> records filtered by:<br/>
-<?php if ($_GET['key']) echo "Status [<a href=\"" . remove_query_arg(array("paged", "key"), $request_uri) . "\">X</a>] "; ?>
-<?php if ($_GET['blocked']) echo "Blocked [<a href=\"" . remove_query_arg(array("paged", "blocked"), $request_uri) . "\">X</a>] "; ?>
-<?php if ($_GET['ip']) echo "IP [<a href=\"" . remove_query_arg(array("paged", "ip"), $request_uri) . "\">X</a>] "; ?>
-<?php if ($_GET['user_agent']) echo "User Agent [<a href=\"" . remove_query_arg(array("paged", "user_agent"), $request_uri) . "\">X</a>] "; ?>
-<?php if ($_GET['request_method']) echo "GET/POST [<a href=\"" . remove_query_arg(array("paged", "request_method"), $request_uri) . "\">X</a>] "; ?>
+<?php if ($_GET['key']) echo "Status [<a href=\"" . esc_url(remove_query_arg(array("paged", "key"), $request_uri)) . "\">X</a>] "; ?>
+<?php if ($_GET['blocked']) echo "Blocked [<a href=\"" . esc_url(remove_query_arg(array("paged", "blocked"), $request_uri)) . "\">X</a>] "; ?>
+<?php if ($_GET['ip']) echo "IP [<a href=\"" . esc_url(remove_query_arg(array("paged", "ip"), $request_uri)) . "\">X</a>] "; ?>
+<?php if ($_GET['user_agent']) echo "User Agent [<a href=\"" . esc_url(remove_query_arg(array("paged", "user_agent"), $request_uri)) . "\">X</a>] "; ?>
+<?php if ($_GET['request_method']) echo "GET/POST [<a href=\"" . esc_url(remove_query_arg(array("paged", "request_method"), $request_uri)) . "\">X</a>] "; ?>
 <?php else: ?>
 Displaying all <strong><?php echo $totalcount; ?></strong> records<br/>
 <?php endif; ?>
-<?php if (!$_GET['key'] && !$_GET['blocked']) { ?><a href="<?php echo add_query_arg(array("blocked" => "true", "paged" => false), $request_uri); ?>">Show Blocked</a><?php } ?>
+<?php if (!$_GET['key'] && !$_GET['blocked']) { ?><a href="<?php echo esc_url(add_query_arg(array("blocked" => "true", "paged" => false), $request_uri)); ?>">Show Blocked</a><?php } ?>
 </div>
 </div>
 
@@ -178,12 +178,12 @@ Displaying all <strong><?php echo $totalcount; ?></strong> records<br/>
 		} else {
 			$host .= "<br/>\n";
 		}
-		echo "<td><a href=\"" . add_query_arg("ip", $result["ip"], remove_query_arg("paged", $request_uri)) . "\">" . $result["ip"] . "</a><br/>$host<br/>\n" . $result["date"] . "<br/><br/><a href=\"" . add_query_arg("key", $result["key"], remove_query_arg(array("paged", "blocked"), $request_uri)) . "\">" . $key["log"] . "</a>\n";
+		echo "<td><a href=\"" . esc_url(add_query_arg("ip", $result["ip"], remove_query_arg("paged", $request_uri))) . "\">" . $result["ip"] . "</a><br/>$host<br/>\n" . $result["date"] . "<br/><br/><a href=\"" . esc_url(add_query_arg("key", $result["key"], remove_query_arg(array("paged", "blocked"), $request_uri))) . "\">" . $key["log"] . "</a>\n";
 		if ($httpbl) echo "<br/><br/>http:BL:<br/>$httpbl\n";
 		echo "</td>\n";
 		$headers = str_replace("\n", "<br/>\n", htmlspecialchars($result['http_headers']));
-		if (@strpos($headers, $result['user_agent']) !== FALSE) $headers = substr_replace($headers, "<a href=\"" . add_query_arg("user_agent", rawurlencode($result["user_agent"]), remove_query_arg("paged", $request_uri)) . "\">" . $result['user_agent'] . "</a>", strpos($headers, $result['user_agent']), strlen($result['user_agent']));
-		if (@strpos($headers, $result['request_method']) !== FALSE) $headers = substr_replace($headers, "<a href=\"" . add_query_arg("request_method", rawurlencode($result["request_method"]), remove_query_arg("paged", $request_uri)) . "\">" . $result['request_method'] . "</a>", strpos($headers, $result['request_method']), strlen($result['request_method']));
+		if (@strpos($headers, $result['user_agent']) !== FALSE) $headers = substr_replace($headers, "<a href=\"" . esc_url(add_query_arg("user_agent", rawurlencode($result["user_agent"]), remove_query_arg("paged", $request_uri))) . "\">" . $result['user_agent'] . "</a>", strpos($headers, $result['user_agent']), strlen($result['user_agent']));
+		if (@strpos($headers, $result['request_method']) !== FALSE) $headers = substr_replace($headers, "<a href=\"" . esc_url(add_query_arg("request_method", rawurlencode($result["request_method"]), remove_query_arg("paged", $request_uri))) . "\">" . $result['request_method'] . "</a>", strpos($headers, $result['request_method']), strlen($result['request_method']));
 		echo "<td>$headers</td>\n";
 		echo "<td>" . str_replace("\n", "<br/>\n", htmlspecialchars($result["request_entity"])) . "</td>\n";
 		echo "</tr>\n";
@@ -243,17 +243,21 @@ function bb2_options()
 			$settings['logging'] = false;
 		}
 		if ($_POST['httpbl_key']) {
-			$settings['httpbl_key'] = $_POST['httpbl_key'];
+			if (preg_match("/^[a-z]{12}$/", $_POST['httpbl_key'])) {
+				$settings['httpbl_key'] = $_POST['httpbl_key'];
+			} else {
+				$settings['httpbl_key'] = '';
+			}
 		} else {
 			$settings['httpbl_key'] = '';
 		}
 		if ($_POST['httpbl_threat']) {
-			$settings['httpbl_threat'] = $_POST['httpbl_threat'];
+			$settings['httpbl_threat'] = intval($_POST['httpbl_threat']);
 		} else {
 			$settings['httpbl_threat'] = '25';
 		}
 		if ($_POST['httpbl_maxage']) {
-			$settings['httpbl_maxage'] = $_POST['httpbl_maxage'];
+			$settings['httpbl_maxage'] = intval($_POST['httpbl_maxage']);
 		} else {
 			$settings['httpbl_maxage'] = '30';
 		}
@@ -261,6 +265,11 @@ function bb2_options()
 			$settings['offsite_forms'] = true;
 		} else {
 			$settings['offsite_forms'] = false;
+		}
+		if ($_POST['eu_cookie']) {
+			$settings['eu_cookie'] = true;
+		} else {
+			$settings['eu_cookie'] = false;
 		}
 		bb2_write_settings($settings);
 ?>
@@ -270,7 +279,7 @@ function bb2_options()
 ?>
 	<div class="wrap">
 	<h2><?php _e("Bad Behavior"); ?></h2>
-	<form method="post" action="<?php echo $request_uri; ?>">
+	<form method="post" action="<?php echo admin_url("options-general.php?page=bb2_options"); ?>">
 	<p>For more information please visit the <a href="http://www.bad-behavior.ioerror.us/">Bad Behavior</a> homepage.</p>
 	<p>If you find Bad Behavior valuable, please consider making a <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=error%40ioerror%2eus&item_name=Bad%20Behavior%20<?php echo BB2_VERSION; ?>%20%28From%20Admin%29&no_shipping=1&cn=Comments%20about%20Bad%20Behavior&tax=0&currency_code=USD&bn=PP%2dDonationsBF&charset=UTF%2d8">financial contribution</a> to further development of Bad Behavior.</p>
 
@@ -296,9 +305,15 @@ function bb2_options()
 	<h3><?php _e('http:BL'); ?></h3>
 	<p>To use Bad Behavior's http:BL features you must have an <a href="http://www.projecthoneypot.org/httpbl_configure.php?rf=24694">http:BL Access Key</a>.</p>
 	<table class="form-table">
-	<tr><td><label><input type="text" size="12" maxlength="12" name="httpbl_key" value="<?php echo $settings['httpbl_key']; ?>" /> http:BL Access Key</label></td></tr>
-	<tr><td><label><input type="text" size="3" maxlength="3" name="httpbl_threat" value="<?php echo $settings['httpbl_threat']; ?>" /> Minimum Threat Level (25 is recommended)</label></td></tr>
-	<tr><td><label><input type="text" size="3" maxlength="3" name="httpbl_maxage" value="<?php echo $settings['httpbl_maxage']; ?>" /> Maximum Age of Data (30 is recommended)</label></td></tr>
+	<tr><td><label><input type="text" size="12" maxlength="12" name="httpbl_key" value="<?php echo sanitize_text_field($settings['httpbl_key']); ?>" /> http:BL Access Key</label></td></tr>
+	<tr><td><label><input type="text" size="3" maxlength="3" name="httpbl_threat" value="<?php echo intval($settings['httpbl_threat']); ?>" /> Minimum Threat Level (25 is recommended)</label></td></tr>
+	<tr><td><label><input type="text" size="3" maxlength="3" name="httpbl_maxage" value="<?php echo intval($settings['httpbl_maxage']); ?>" /> Maximum Age of Data (30 is recommended)</label></td></tr>
+	</table>
+
+	<h3><?php _e('European Union Cookie'); ?></h3>
+	<p>Select this option if you believe Bad Behavior's site security cookie is not exempt from the 2012 EU cookie regulation. <a href="http://bad-behavior.ioerror.us/2012/05/03/bad-behavior-2-2-4/">More info</a></p>
+	<table class="form-table">
+	<tr><td><label><input type="checkbox" name="eu_cookie" value="true" <?php if ($settings['eu_cookie']) { ?>checked="checked" <?php } ?>/> <?php _e('EU cookie handling'); ?></label></td></tr>
 	</table>
 
 	<p class="submit"><input class="button" type="submit" name="submit" value="<?php _e('Update &raquo;'); ?>" /></p>
