@@ -33,6 +33,7 @@ function bb2_blacklist($package) {
 		"Microsoft URL",	// unidentified robots
 		"Missigua",		// spam harvester
 		"MJ12bot/v1.0.8",	// malicious botnet
+		"Morfeus",		// vulnerability scanner
 		"Movable Type",		// customised spambots
 		//"Mozilla ",		// malicious software
 		"Mozilla/0",		// malicious software
