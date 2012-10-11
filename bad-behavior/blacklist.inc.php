@@ -91,7 +91,7 @@ function bb2_blacklist($package) {
 		"Murzillo compatible",	// comment spam bot
 		".NET CLR 1)",		// free poker, etc.
 		".NET CLR1",		// spam harvester
-		"Nikto/"		// vulnerability scanner
+		"Nikto/",		// vulnerability scanner
 		"Perman Surfer",	// old and very broken harvester
 		"POE-Component-Client",	// free poker, etc.
 		"Teh Forest Lobster",	// brute force tool
