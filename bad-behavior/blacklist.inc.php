@@ -91,7 +91,7 @@ function bb2_blacklist($package) {
 		"Murzillo compatible",	// comment spam bot
 		".NET CLR 1)",		// free poker, etc.
 		".NET CLR1",		// spam harvester
-		"Nikto/"		// vulnerability scanner
+		"Nikto/",		// vulnerability scanner
 		"Perman Surfer",	// old and very broken harvester
 		"POE-Component-Client",	// free poker, etc.
 		"Teh Forest Lobster",	// brute force tool
@@ -140,9 +140,6 @@ function bb2_blacklist($package) {
 		"..\\",				// path traversal
 		"%60information_schema%60",	// SQL injection probe
 		"+%2F*%21",			// SQL injection probe
-		"+and+%",			// SQL injection probe
-		"+and+1%",			// SQL injection probe
-		"+and+if",			// SQL injection probe
 		"%27--",			// SQL injection
 		"%27 --",			// SQL injection
 		"%27%23",			// SQL injection
