@@ -87,10 +87,12 @@ block reason to filter results.
 
 == Release Notes ==
 
-= Bad Behavior 2.0 Known Issues =
+= Bad Behavior 2.2 Known Issues =
 
-* Bad Behavior 2.0 requires MySQL 4.1 or later and PHP 4.3 or later. Bad
-Behavior 2.1 requires MySQL 5.0 or later and PHP 5.2 or later.
+* Bad Behavior 2.2 requires MySQL 5.0 or later and PHP 5.2 or later.
+
+* CloudFlare users must enable the Reverse Proxy option in Bad Behavior's
+settings. See the documentation for further details.
 
 * Bad Behavior is unable to protect internally cached pages on MediaWiki.
 Only form submissions will be protected.
@@ -100,7 +102,7 @@ you must remove the old version of Bad Behavior from your system manually
 before manually installing the new version. Other platforms are not
 affected by this issue.
 
-* Bad Behavior on WordPress requires version 2.7 or later. Users of older
+* Bad Behavior on WordPress requires version 3.1 or later. Users of older
 versions should upgrade WordPress prior to installing Bad Behavior.
 
 * On WordPress when using WP-Super Cache, Bad Behavior must be enabled in
@@ -113,8 +115,3 @@ warnings when Spam Karma 2 displays its internally generated CAPTCHA. This
 is a design problem in Spam Karma 2. Contact the author of Spam Karma 2 for
 a fix.
 
-== Upgrade Notice ==
-
-= 2.0.40 =
-
-This release fixes a security issue. Upgrade as soon as possible.
