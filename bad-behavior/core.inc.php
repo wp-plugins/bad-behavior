@@ -165,6 +165,13 @@ function bb2_screen($settings, $package)
 				return $r;
 			}
 			return false;
+		} elseif (stripos($ua, "Yahoo! Slurp") !== FALSE || stripos($ua, "Yahoo! SearchMonkey") !== FALSE) {
+			require_once(BB2_CORE . "/searchengine.inc.php");
+			if ($r = bb2_baidu($package)) {
+				if ($r == 1) return false;	# whitelisted
+				return $r;
+			}
+			return false;
 		}
 		// MSIE checks
 		if (stripos($ua, "; MSIE") !== FALSE) {
