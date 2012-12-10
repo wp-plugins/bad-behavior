@@ -165,7 +165,7 @@ function bb2_screen($settings, $package)
 				return $r;
 			}
 			return false;
-		} elseif (stripos($ua, "Yahoo! Slurp") !== FALSE || stripos($ua, "Yahoo! SearchMonkey") !== FALSE) {
+		} elseif (stripos($ua, "Baidu") !== FALSE) {
 			require_once(BB2_CORE . "/searchengine.inc.php");
 			if ($r = bb2_baidu($package)) {
 				if ($r == 1) return false;	# whitelisted
