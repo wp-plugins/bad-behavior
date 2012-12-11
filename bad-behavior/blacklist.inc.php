@@ -136,8 +136,8 @@ function bb2_blacklist($package) {
 	// These strings are considered case-insensitive.
 	$bb2_spambots_url = array(
 		"0x31303235343830303536",	// Havij
-		"../",				// path traversal
-		"..\\",				// path traversal
+		"/../",				// path traversal
+		"\\..\\",			// path traversal
 		"%60information_schema%60",	// SQL injection probe
 		"+%2F*%21",			// SQL injection probe
 		"%27--",			// SQL injection
