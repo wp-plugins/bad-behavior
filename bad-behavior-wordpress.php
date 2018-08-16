@@ -180,7 +180,7 @@ function bb2_relative_path() {
 }
 
 // FIXME: figure out what's wrong on 2.0 that this doesn't work
-// register_activation_hook(__FILE__, 'bb2_install');
+register_activation_hook(__FILE__, 'bb2_install');
 //add_action('activate_bb2/bad-behavior-wordpress.php', 'bb2_install');
 add_action('wp_head', 'bb2_insert_head');
 add_action('wp_footer', 'bb2_insert_stats');
@@ -188,7 +188,7 @@ add_action('wp_insert_comment', 'bb2_capture_spam', 99, 2);
 
 // Calls inward to Bad Behavor itself.
 require_once(BB2_CWD . "/bad-behavior/core.inc.php");
-bb2_install();	// FIXME: see above
+//bb2_install();	// FIXME: see above - now it's called on  plugin activation_hook
 
 if (is_admin() || strstr($_SERVER['PHP_SELF'], 'wp-admin/')) {	// 1.5 kludge
 	#wp_enqueue_script("admin-forms");
